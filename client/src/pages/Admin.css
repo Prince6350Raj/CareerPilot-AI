@@ -1,0 +1,156 @@
+.admin-view-container {
+  width: 100%;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.admin-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-header-icon {
+  color: var(--accent-error);
+  filter: drop-shadow(0 0 10px hsla(0, 85%, 60%, 0.4));
+  width: 36px;
+  height: 36px;
+}
+
+.analytics-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.analytic-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.analytic-card .meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.metric-icon.blue-theme { color: var(--accent-info); }
+.metric-icon.cyan-theme { color: var(--secondary); }
+.metric-icon.purple-theme { color: var(--primary); }
+.metric-icon.gold-theme { color: var(--accent-warning); }
+
+.analytic-card h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+/* User management Table */
+.users-table-card {
+  padding: 2rem;
+}
+
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.admin-users-table th {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-users-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.admin-users-table tbody tr:hover td {
+  background: hsla(222, 28%, 15%, 0.15);
+  color: var(--text-primary);
+}
+
+.user-name-col {
+  font-weight: 600;
+  color: var(--text-primary) !important;
+}
+
+.role-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.role-badge.admin {
+  background: hsla(0, 85%, 60%, 0.1);
+  color: var(--accent-red);
+  border: 1px solid hsla(0, 85%, 60%, 0.2);
+}
+
+.role-badge.user {
+  background: hsla(222, 28%, 20%, 0.3);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.verify-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verify-badge.verified {
+  background: hsla(142, 70%, 45%, 0.1);
+  color: var(--accent-success);
+}
+
+.verify-badge.pending {
+  background: hsla(38, 92%, 50%, 0.1);
+  color: var(--accent-warning);
+}
+
+.date-col {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+}
+
+.empty-table-row {
+  text-align: center;
+  padding: 2.5rem !important;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1024px) {
+  .analytics-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .analytics-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,330 @@
+/* Company Preparation Styles */
+.company-prep-view-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.search-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.prep-search-form {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.search-input-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0 1rem;
+  flex: 1;
+  height: 46px;
+  transition: var(--transition-smooth);
+}
+
+.search-input-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.search-icon-decor {
+  color: var(--text-secondary);
+}
+
+.search-input-field {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.search-submit-btn {
+  height: 46px;
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+}
+
+.company-preset-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.preset-lbl {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.preset-chip-btn {
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 50px;
+  padding: 0.35rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.preset-chip-btn:hover {
+  background: var(--bg-item-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* Hero Section */
+.prep-company-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.hero-avatar-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2rem;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.hero-meta-details h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.salary-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.salary-tag-row .tag-icon {
+  color: var(--accent-success);
+}
+
+/* Details splits */
+.details-columns-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.details-column-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  min-height: 380px;
+}
+
+.card-header-icon-lbl {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.card-header-icon-lbl h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-header-icon-lbl .header-icon {
+  color: var(--primary);
+}
+
+/* Pattern steps trail */
+.pattern-steps-trail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pattern-step-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.step-num-bubble {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary-glow);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+  padding-top: 0.15rem;
+}
+
+/* Skill sections */
+.skills-group-section h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+/* HR questions */
+.hr-questions-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.hr-q-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.quote-mark {
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+  color: var(--primary);
+  line-height: 1;
+  margin-top: -0.25rem;
+}
+
+.hr-q-item p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Prep links stack */
+.prep-links-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.prep-resource-link-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.prep-resource-link-item:hover {
+  background: var(--bg-item-hover);
+  border-color: var(--primary);
+  transform: translateX(3px);
+}
+
+/* Loaders and Empty states */
+.prep-loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.prep-loader-wrapper p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.empty-results-prep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.empty-prep-icon {
+  color: var(--border-color);
+  margin-bottom: 1rem;
+}
+
+.empty-results-prep h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-results-prep p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+}
+
+@media (max-width: 960px) {
+  .details-columns-layout {
+    grid-template-columns: 1fr;
+  }
+  .details-column-card {
+    min-height: auto;
+  }
+}

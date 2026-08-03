@@ -1,0 +1,174 @@
+/* Coding Challenge Styles */
+.coding-challenge-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 120px);
+}
+
+.selector-config-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 480px;
+  margin: 2rem auto 0 auto;
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.generate-challenge-btn {
+  width: 100%;
+  justify-content: center;
+  height: 44px;
+}
+
+/* Split workspace layout */
+.challenge-workspace-split {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1.5rem;
+  flex: 1;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  height: 100%;
+}
+
+.workspace-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.workspace-panel.description-side {
+  padding: 1.5rem;
+}
+
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.85rem;
+}
+
+.panel-header-row h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.diff-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.diff-tag.easy {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.diff-tag.medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.diff-tag.hard {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Editor side styles */
+.editor-window-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 380px;
+  margin-bottom: 1.5rem;
+}
+
+.editor-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: hsla(222, 28%, 5%, 0.4);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.editor-mode-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.lang-select-control {
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  outline: none;
+  font-weight: 600;
+}
+
+.code-editor-area-wrapper {
+  flex: 1;
+  width: 100%;
+}
+
+.code-textarea-editor {
+  width: 100%;
+  height: 100%;
+  background: hsla(222, 28%, 3%, 0.7);
+  border: none;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 1rem;
+  outline: none;
+  resize: none;
+  line-height: 1.5;
+}
+
+.editor-footer-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem 1rem;
+  background: hsla(222, 28%, 5%, 0.4);
+  border-top: 1px solid var(--border-color);
+}
+
+.submit-code-btn {
+  gap: 0.5rem;
+  height: 36px;
+}
+
+.evaluation-report-card {
+  padding: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .challenge-workspace-split {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}

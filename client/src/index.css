@@ -1,0 +1,394 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  
+  /* Deep Space Color Palette (HSL) */
+  --bg-dark: hsl(225, 40%, 10%); /* Vibrant space-blue/purple background */
+  --bg-card: hsla(225, 40%, 14%, 0.65); /* Translucent space-blue card */
+  --border-color: hsla(225, 40%, 30%, 0.3);
+  
+  --primary: hsl(265, 85%, 60%);
+  --primary-glow: hsla(265, 85%, 60%, 0.3);
+  --primary-hover: hsl(265, 85%, 65%);
+  
+  --secondary: hsl(190, 90%, 50%);
+  --secondary-glow: hsla(190, 90%, 50%, 0.3);
+  
+  --text-primary: hsl(210, 20%, 98%);
+  --text-secondary: hsl(215, 15%, 80%);
+  --text-muted: hsl(215, 12%, 55%);
+  
+  /* Status Accent Colors */
+  --accent-success: hsl(142, 70%, 45%);
+  --accent-error: hsl(0, 84%, 60%);
+  --accent-warning: hsl(38, 92%, 50%);
+  --accent-info: hsl(200, 95%, 50%);
+  
+  /* Glassmorphism Settings */
+  --glass-blur: blur(16px);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.08);
+  
+  /* Sub-Item Box Backgrounds */
+  --bg-item: hsla(222, 28%, 5%, 0.4);
+  --bg-item-hover: hsla(222, 28%, 15%, 0.45);
+  
+  --bg-input: hsla(222, 28%, 5%, 0.8);
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Mode Overrides (Frosted Glass & Pastel Gradient Theme) */
+:root[data-theme="light"] {
+  --bg-dark: hsl(215, 30%, 94%); /* Pastel slate-blue base */
+  --bg-card: hsla(215, 30%, 98%, 0.7); /* Translucent frosted glass card */
+  --border-color: hsla(215, 20%, 80%, 0.4);
+  --text-primary: hsl(220, 40%, 12%);
+  --text-secondary: hsl(220, 20%, 28%);
+  --text-muted: hsl(220, 15%, 48%);
+  
+  --primary: hsl(265, 85%, 45%);
+  --primary-glow: hsla(265, 85%, 45%, 0.08);
+  --primary-hover: hsl(265, 85%, 50%);
+  
+  --secondary: hsl(195, 95%, 32%);
+  --secondary-glow: hsla(195, 95%, 32%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6); /* Clean white glass border */
+  --glass-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.12);
+  
+  --bg-item: hsla(0, 0%, 100%, 0.55); /* Clean floating white glass */
+  --bg-item-hover: hsla(0, 0%, 100%, 0.85);
+  
+  --bg-input: hsla(0, 0%, 100%, 0.85); /* Soft frosted input in light mode */
+}
+
+/* Cyberpunk Neon Theme Overrides */
+:root[data-theme="cyberpunk"] {
+  --bg-dark: hsl(280, 50%, 8%); /* Rich dark violet background */
+  --bg-card: hsla(280, 50%, 12%, 0.7); /* Frosted violet card */
+  --border-color: hsla(320, 100%, 60%, 0.25); /* Neon rose border */
+  --text-primary: hsl(180, 100%, 95%); /* Bright cyan-blue text */
+  --text-secondary: hsl(320, 100%, 80%); /* Neon pink-violet text */
+  --text-muted: hsl(280, 25%, 55%); /* Muted violet */
+  
+  --primary: hsl(320, 100%, 55%); /* Neon Hot Pink */
+  --primary-glow: hsla(320, 100%, 55%, 0.25);
+  --primary-hover: hsl(320, 100%, 65%);
+  
+  --secondary: hsl(180, 100%, 50%); /* Neon Cyber Cyan */
+  --secondary-glow: hsla(180, 100%, 50%, 0.25);
+  
+  --glass-border: 1px solid hsla(320, 100%, 60%, 0.25);
+  --glass-shadow: 0 8px 32px 0 rgba(244, 63, 94, 0.15);
+  
+  --bg-item: hsla(280, 50%, 5%, 0.6);
+  --bg-item-hover: hsla(320, 100%, 60%, 0.15);
+  --bg-input: hsla(280, 50%, 4%, 0.9);
+}
+
+/* Emerald Forest Theme Overrides */
+:root[data-theme="emerald"] {
+  --bg-dark: hsl(155, 45%, 8%); /* Rich forest emerald background */
+  --bg-card: hsla(155, 45%, 12%, 0.7);
+  --border-color: hsla(150, 60%, 40%, 0.2);
+  --text-primary: hsl(150, 30%, 95%); /* Warm sage text */
+  --text-secondary: hsl(150, 15%, 80%);
+  --text-muted: hsl(165, 12%, 50%);
+  
+  --primary: hsl(150, 80%, 40%); /* Rich Emerald Green */
+  --primary-glow: hsla(150, 80%, 40%, 0.2);
+  --primary-hover: hsl(150, 80%, 45%);
+  
+  --secondary: hsl(45, 90%, 50%); /* Amber Gold */
+  --secondary-glow: hsla(45, 90%, 50%, 0.2);
+  
+  --glass-border: 1px solid hsla(150, 60%, 40%, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.1);
+  
+  --bg-item: hsla(155, 45%, 5%, 0.6);
+  --bg-item-hover: hsla(150, 80%, 40%, 0.12);
+  --bg-input: hsla(155, 45%, 4%, 0.9);
+}
+
+/* Aura Obsidian Theme Overrides (Frosted Slate Variant) */
+:root[data-theme="sakura"] {
+  --bg-dark: hsl(220, 15%, 94%); /* Soft Slate Off-White */
+  --bg-card: hsla(220, 15%, 87%, 0.75); /* Darker Frosted Gray Glass */
+  --border-color: hsla(220, 15%, 75%, 0.35); /* Softer Slate Gray Border */
+  --text-primary: hsl(220, 35%, 15%); /* Deep Slate Charcoal Text */
+  --text-secondary: hsl(220, 20%, 30%);
+  --text-muted: hsl(220, 10%, 52%);
+  
+  --primary: hsl(45, 95%, 42%); /* Rich Amber Gold */
+  --primary-glow: hsla(45, 95%, 42%, 0.15);
+  --primary-hover: hsl(45, 95%, 48%);
+  
+  --secondary: hsl(190, 100%, 32%); /* Deep Aqua Cyan */
+  --secondary-glow: hsla(190, 100%, 32%, 0.15);
+  
+  --glass-border: 1px solid hsla(220, 15%, 75%, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
+  
+  --bg-item: hsla(220, 15%, 91%, 0.8);
+  --bg-item-hover: hsla(220, 15%, 83%, 0.9);
+  --bg-input: hsla(220, 15%, 96%, 0.9);
+}
+
+/* Ocean Classic Theme Overrides (White Cards, Blue Accents) */
+:root[data-theme="ocean"] {
+  --bg-dark: hsl(215, 25%, 86%); /* Softer ice-slate background, clearly not white */
+  --bg-card: hsla(215, 30%, 93%, 0.98); /* Light gray-blue card background */
+  --border-color: hsla(215, 20%, 76%, 0.5); /* Soft slate-blue card border */
+  --text-primary: hsl(217, 60%, 12%); /* Dark navy blue text */
+  --text-secondary: hsl(217, 30%, 25%); /* Deep blue text */
+  --text-muted: hsl(217, 15%, 48%);
+  
+  --primary: hsl(217, 65%, 36%); /* Lighter Navy Blue */
+  --primary-glow: hsla(217, 65%, 36%, 0.12);
+  --primary-hover: hsl(217, 65%, 42%);
+  
+  --secondary: hsl(24, 95%, 50%); /* Warm Sunset Orange */
+  --secondary-glow: hsla(24, 95%, 50%, 0.15);
+  
+  --glass-border: 1px solid hsla(215, 30%, 78%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04); /* Soft shadow */
+  
+  --bg-item: hsl(215, 25%, 82%); /* Soft light blue-gray for checklist items/history */
+  --bg-item-hover: hsl(215, 25%, 78%);
+  --bg-input: hsl(0, 0%, 100%); /* Pure white inputs */
+}
+
+/* Global Reset & Base Styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(265, 85%, 60%, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(190, 90%, 50%, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+}
+
+:root[data-theme="light"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(265, 90%, 85%, 0.55) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(195, 90%, 85%, 0.55) 0px, transparent 50%);
+}
+
+:root[data-theme="cyberpunk"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(320, 100%, 55%, 0.22) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(180, 100%, 50%, 0.22) 0px, transparent 50%);
+}
+
+:root[data-theme="emerald"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(150, 80%, 40%, 0.18) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(45, 90%, 50%, 0.18) 0px, transparent 50%);
+}
+
+:root[data-theme="sakura"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(45, 95%, 42%, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(190, 100%, 32%, 0.06) 0px, transparent 50%);
+}
+
+:root[data-theme="ocean"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(217, 75%, 20%, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(24, 95%, 50%, 0.08) 0px, transparent 50%);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Layout Utilities */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+/* Glassmorphic Card Container */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+.glass-card:hover {
+  border-color: hsla(265, 85%, 60%, 0.35);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow);
+}
+
+/* Interactive Elements & Buttons */
+.btn {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 0 25px var(--primary-glow);
+  transform: translateY(-2px);
+}
+.btn-primary:disabled {
+  background: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+}
+.btn-secondary:hover {
+  background: hsla(190, 90%, 50%, 0.1);
+  box-shadow: 0 0 15px var(--secondary-glow);
+  transform: translateY(-2px);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.spinner-loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--secondary);
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+/* End of Stylesheet */
+
+/* Solid blue active navigation item in the sidebar */
+:root[data-theme="ocean"] .nav-item.active {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  border-left: none !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 12px -3px rgba(15, 23, 42, 0.1) !important;
+}
+
+:root[data-theme="ocean"] .nav-item.active svg {
+  color: #ffffff !important;
+  filter: none !important;
+}

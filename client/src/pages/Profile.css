@@ -1,0 +1,58 @@
+.profile-view-container {
+  width: 100%;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.profile-card {
+  margin-top: 2rem;
+  padding: 2.5rem;
+}
+
+.profile-edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.section-title-minor {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  border-left: 3px solid var(--secondary);
+  padding-left: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-form-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-profile-btn {
+  min-width: 150px;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .profile-card {
+    padding: 1.5rem;
+  }
+}
