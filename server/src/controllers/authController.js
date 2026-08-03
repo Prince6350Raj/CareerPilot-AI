@@ -23,6 +23,23 @@ exports.register = async (req, res, next) => {
       password
     });
 
+    // If email configuration is missing, auto-verify the user so demos work instantly for your friends!
+    if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
+      user.isVerified = true;
+      await user.save();
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful. Account active.',
+        token: generateToken(user._id),
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      });
+    }
+
     // Generate email verification token
     const verificationToken = user.getVerificationToken();
 
