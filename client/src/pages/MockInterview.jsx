@@ -727,79 +727,161 @@ const MockInterview = () => {
               ) : (
                 <>
                   <p className="extra-card-desc">
-                    {scorecard.overallScore >= 7.0 
-                      ? 'Excellent score! You are prepared to apply. Here are direct vacancy search pages for top tech companies:'
-                      : 'Good effort. We recommend applying for internships or junior roles. Here are direct openings profiles:'}
+                    {scorecard.overallScore > 8.5 
+                      ? 'Outstanding performance! You earned a GOLD Badge. Here are direct hiring links for Tier-1 Tech Giants:'
+                      : scorecard.overallScore >= 7.0
+                      ? 'Great effort! You earned a SILVER Badge. Here are career opportunities at top national tech leaders:'
+                      : 'Good job! You earned a BRONZE/PASS Badge. Expand your experience at fast-growing local startups:'}
                   </p>
 
                   <div className="company-vacancies-list">
                     {(() => {
                       const roleQuery = encodeURIComponent(scorecard.role);
-                      const isHighValuation = (scorecard.overallScore || 0) >= 5.0; // 50% or above
+                      const score = scorecard.overallScore || 0;
 
-                      const companies = isHighValuation
-                        ? [
-                            {
-                              name: 'Google Careers',
-                              logo: 'G',
-                              color: '#4285F4',
-                              url: `https://www.google.com/about/careers/applications/jobs/results/?q=${roleQuery}`,
-                              desc: 'Search active openings on Google Careers'
-                            },
-                            {
-                              name: 'Microsoft Careers',
-                              logo: 'M',
-                              color: '#F25022',
-                              url: `https://careers.microsoft.com/us/en/search-results?keywords=${roleQuery}`,
-                              desc: 'Explore engineering roles at Microsoft'
-                            },
-                            {
-                              name: 'Amazon Jobs',
-                              logo: 'A',
-                              color: '#FF9900',
-                              url: `https://www.amazon.jobs/en/search?base_query=${roleQuery}`,
-                              desc: 'Apply directly via Amazon Jobs portal'
-                            },
-                            {
-                              name: 'Meta Careers',
-                              logo: 'Me',
-                              color: '#0668E1',
-                              url: `https://www.metacareers.com/jobs?q=${roleQuery}`,
-                              desc: 'Explore engineering roles at Meta'
-                            }
-                          ]
-                        : [
-                            {
-                              name: 'TCS Careers',
-                              logo: 'T',
-                              color: '#1E3A8A',
-                              url: `https://www.tcs.com/careers/search-results?keyword=${roleQuery}`,
-                              desc: 'Explore entry-level & graduate roles at TCS'
-                            },
-                            {
-                              name: 'Infosys Careers',
-                              logo: 'I',
-                              color: '#007cc3',
-                              url: `https://www.infosys.com/careers/apply.html?q=${roleQuery}`,
-                              desc: 'Apply to developer positions at Infosys'
-                            },
-                            {
-                              name: 'Wellfound (AngelList)',
-                              logo: 'W',
-                              color: '#000000',
-                              url: `https://wellfound.com/jobs?q=${roleQuery}`,
-                              desc: 'Apply to high-growth tech startups on Wellfound'
-                            },
-                            {
-                              name: 'Wipro Careers',
-                              logo: 'Wi',
-                              color: '#5b21b6',
-                              url: `https://careers.wipro.com/careers-home/search?q=${roleQuery}`,
-                              desc: 'Search active tech vacancies at Wipro'
-                            }
-                          ];
-
-                      return companies;
+                      if (score > 8.5) {
+                        return [
+                          {
+                            name: 'Google Careers',
+                            logo: 'G',
+                            color: '#4285F4',
+                            url: `https://www.google.com/about/careers/applications/jobs/results/?q=${roleQuery}`,
+                            desc: 'Apply for elite roles at Google'
+                          },
+                          {
+                            name: 'Microsoft Careers',
+                            logo: 'M',
+                            color: '#F25022',
+                            url: `https://careers.microsoft.com/us/en/search-results?keywords=${roleQuery}`,
+                            desc: 'Explore engineering roles at Microsoft'
+                          },
+                          {
+                            name: 'Amazon Jobs',
+                            logo: 'A',
+                            color: '#FF9900',
+                            url: `https://www.amazon.jobs/en/search?base_query=${roleQuery}`,
+                            desc: 'Search direct opportunities at Amazon'
+                          },
+                          {
+                            name: 'Meta Careers',
+                            logo: 'Me',
+                            color: '#0668E1',
+                            url: `https://www.metacareers.com/jobs?q=${roleQuery}`,
+                            desc: 'Explore product engineering at Meta'
+                          },
+                          {
+                            name: 'Samsung Careers',
+                            logo: 'S',
+                            color: '#034EA2',
+                            url: `https://sec.careers.samsung.com/`,
+                            desc: 'Apply for core tech roles at Samsung Global'
+                          },
+                          {
+                            name: 'Accenture Jobs',
+                            logo: 'Ac',
+                            color: '#A100FF',
+                            url: `https://www.accenture.com/in-en/careers/jobsearch?jk=${roleQuery}`,
+                            desc: 'Explore consultant and systems developer roles'
+                          }
+                        ];
+                      } else if (score >= 7.0) {
+                        return [
+                          {
+                            name: 'Flipkart Careers',
+                            logo: 'F',
+                            color: '#2874F0',
+                            url: `https://www.flipkartcareers.com/#!/joblist?search=${roleQuery}`,
+                            desc: 'Apply to top e-commerce roles at Flipkart'
+                          },
+                          {
+                            name: 'Zomato Careers',
+                            logo: 'Z',
+                            color: '#CB202D',
+                            url: `https://www.zomato.com/careers`,
+                            desc: 'Explore tech developer roles at Zomato'
+                          },
+                          {
+                            name: 'Lenskart Jobs',
+                            logo: 'L',
+                            color: '#000045',
+                            url: `https://lenskart.peoplestrong.com/portal/home`,
+                            desc: 'Search active tech vacancies at Lenskart'
+                          },
+                          {
+                            name: 'TCS Careers',
+                            logo: 'T',
+                            color: '#1E3A8A',
+                            url: `https://www.tcs.com/careers/search-results?keyword=${roleQuery}`,
+                            desc: 'Search enterprise roles at Tata Consultancy Services'
+                          },
+                          {
+                            name: 'Uber Careers',
+                            logo: 'U',
+                            color: '#000000',
+                            url: `https://www.uber.com/global/en/careers/list/?q=${roleQuery}`,
+                            desc: 'Search ride-sharing tech roles at Uber'
+                          },
+                          {
+                            name: 'Ola Cabs Careers',
+                            logo: 'O',
+                            color: '#4CA64C',
+                            url: `https://www.olacabs.com/careers`,
+                            desc: 'Explore mobility developer roles at Ola Cabs'
+                          },
+                          {
+                            name: 'boAt Lifestyle',
+                            logo: 'bA',
+                            color: '#E31E24',
+                            url: `https://www.boat-lifestyle.com/pages/careers`,
+                            desc: 'Apply for direct product & developer roles at boAt'
+                          }
+                        ];
+                      } else {
+                        return [
+                          {
+                            name: 'Meesho Careers',
+                            logo: 'Me',
+                            color: '#F43F5E',
+                            url: `https://www.meesho.careers/`,
+                            desc: 'Explore developer roles at Meesho social commerce'
+                          },
+                          {
+                            name: 'Zepto Careers',
+                            logo: 'Zp',
+                            color: '#3B0764',
+                            url: `https://www.zepto.careers/`,
+                            desc: 'Apply for quick-commerce roles at Zepto'
+                          },
+                          {
+                            name: 'Razorpay Jobs',
+                            logo: 'Rp',
+                            color: '#0B72E7',
+                            url: `https://razorpay.com/jobs/`,
+                            desc: 'Explore fintech engineer roles at Razorpay'
+                          },
+                          {
+                            name: 'ShareChat Jobs',
+                            logo: 'Sc',
+                            color: '#FF6E14',
+                            url: `https://sharechat.com/careers`,
+                            desc: 'Search social platform engineering at ShareChat'
+                          },
+                          {
+                            name: 'Paytm Careers',
+                            logo: 'Py',
+                            color: '#002E6E',
+                            url: `https://careers.paytm.com/`,
+                            desc: 'Apply to dynamic fintech slots at Paytm'
+                          },
+                          {
+                            name: 'Dunzo Careers',
+                            logo: 'Dn',
+                            color: '#00BFA5',
+                            url: `https://www.dunzo.com/careers`,
+                            desc: 'Search localized delivery roles at Dunzo'
+                          }
+                        ];
+                      }
                     })().map((company, idx) => (
                       <a 
                         key={idx}
