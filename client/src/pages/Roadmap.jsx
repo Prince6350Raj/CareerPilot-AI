@@ -222,13 +222,6 @@ const Roadmap = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="resource-link-card"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  if (resource.url) {
-                                    window.open(resource.url, '_blank', 'noopener,noreferrer');
-                                  }
-                                }}
                               >
                                 {getResourceIcon(resource.type)}
                                 <span className="resource-title-text">{resource.title}</span>
