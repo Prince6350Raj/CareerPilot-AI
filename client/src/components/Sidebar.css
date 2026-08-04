@@ -187,13 +187,7 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
-  .sidebar-container {
-    width: calc(100vw - 2rem);
-    height: auto;
-    margin: 1rem;
-  }
-}
+
 
 /* About Modal Overlay */
 .about-modal-overlay {

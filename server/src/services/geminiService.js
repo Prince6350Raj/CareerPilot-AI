@@ -1223,8 +1223,10 @@ exports.getCompanyPrep = async (companyName) => {
         "dsaTopics": [string],
         "systemDesign": [string],
         "hrQuestions": [string],
-        "salary": string (e.g. "$120,000 - $180,000 base"),
-        "resources": [string]
+        "resources": [{
+          "name": string,
+          "url": string
+        }]
       }
     `;
 
@@ -1426,6 +1428,400 @@ CareerPilot Candidate`
 }
 
 function getMockCompanyPrep(companyName) {
+  const nameKey = (companyName || '').toLowerCase();
+  
+  const companyData = {
+    'google': {
+      companyName: 'Google',
+      interviewPattern: [
+        '1. Online Coding Assessment (2 questions, 90 mins)',
+        '2. Technical Phone Screen (45 mins)',
+        '3. 3x DSA & Algorithm Coding Rounds (45 mins each)',
+        '4. 1x Googleyness & Leadership Round (45 mins)'
+      ],
+      dsaTopics: ['Trees (Red-Black, Trie)', 'Dynamic Programming (DP)', 'Graph Theory (Dijkstra, MST)', 'Hash Tables & Hash Maps'],
+      systemDesign: ['Design Google Maps (LBS)', 'Design Google Search Auto-Suggest', 'Design YouTube Video Streaming', 'Global Load Balancing'],
+      hrQuestions: [
+        'Tell me about a time you went above and beyond for a user.',
+        'How do you handle ambiguous project requirements?',
+        'Describe a time you disagreed with a colleague and how you reached a compromise.'
+      ],
+      salary: '₹18,00,000 - ₹38,00,000 base + Stocks',
+      resources: [
+        { name: 'Google Tech Dev Guide', url: 'https://techdevguide.withgoogle.com/' },
+        { name: 'LeetCode Google Interview Card', url: 'https://leetcode.com/discuss/interview-question/125078/google-interview-questions' },
+        { name: 'STAR Interview Method Tutorial', url: 'https://www.themuse.com/advice/star-interview-method' }
+      ]
+    },
+    'microsoft': {
+      companyName: 'Microsoft',
+      interviewPattern: [
+        '1. Online Assessment (3 Coding Questions, 90 mins)',
+        '2. Technical Round 1: Array/String Algorithms (45 mins)',
+        '3. Technical Round 2: Data Structures & System Design (60 mins)',
+        '4. Round 3: Hiring Manager fitment interview (45 mins)'
+      ],
+      dsaTopics: ['Linked Lists', 'Binary Search Trees', 'Tries & Prefix Trees', 'Recursion & Backtracking'],
+      systemDesign: ['Design OneDrive Cloud Storage', 'Design Microsoft Teams Chat API', 'Scalable Event-Driven Notifications'],
+      hrQuestions: [
+        'What is your career goal for the next 3 years?',
+        'Tell me about a project where you demonstrated a growth mindset.',
+        'Why Microsoft and not other tech companies?'
+      ],
+      salary: '₹16,0,000 - ₹32,00,000 base + Stocks',
+      resources: [
+        { name: 'Microsoft Learn Platform Documentation', url: 'https://learn.microsoft.com/' },
+        { name: 'LeetCode Microsoft Prep Card', url: 'https://leetcode.com/discuss/interview-question?q=microsoft' },
+        { name: 'TechInterview Handbook', url: 'https://www.techinterviewhandbook.org/' }
+      ]
+    },
+    'amazon': {
+      companyName: 'Amazon',
+      interviewPattern: [
+        '1. Online Assessment (2 Coding + Code Review, 120 mins)',
+        '2. Technical Round 1: DSA + Leadership Principles (60 mins)',
+        '3. Technical Round 2: System Design + Leadership Principles (60 mins)',
+        '4. Bar Raiser Round: Coding & deep behavioral analysis (60 mins)'
+      ],
+      dsaTopics: ['Heaps & Priority Queues', 'LRU Caching & Hash Maps', 'Depth First Search & BFS', 'String manipulations'],
+      systemDesign: ['Design Amazon Shopping Cart service', 'Design Warehouse inventory management', 'Design DynamoDB key-value store'],
+      hrQuestions: [
+        'Tell me about a time you had to make a decision without all the data (Bias for Action).',
+        'Give me an example of when you had to say no to a customer (Customer Obsession).',
+        'Tell me about a time you failed and what you learned.'
+      ],
+      salary: '₹15,00,000 - ₹30,00,000 base + target bonuses',
+      resources: [
+        { name: 'Amazon Leadership Principles Guide', url: 'https://www.amazon.jobs/en/principles' },
+        { name: 'LeetCode Amazon Prep Questions', url: 'https://leetcode.com/discuss/interview-question?q=amazon' },
+        { name: 'STAR Behavioral Interview Prep', url: 'https://www.themuse.com/advice/star-interview-method' }
+      ]
+    },
+    'meta': {
+      companyName: 'Meta',
+      interviewPattern: [
+        '1. Coding Phone Screen (2 DSA questions, 45 mins)',
+        '2. 2x Technical Onsite Coding rounds (45 mins each)',
+        '3. 1x Product Architecture/System Design round (45 mins)',
+        '4. 1x Behavioral (Jedi) fitment round (45 mins)'
+      ],
+      dsaTopics: ['Two Pointers / Sliding Window', 'Binary Tree Traversals', 'Graphs & Node Relations', 'String Pattern Matching'],
+      systemDesign: ['Design Facebook News Feed', 'Design Instagram Photo Upload Service', 'Design Facebook Messenger Chatbot System'],
+      hrQuestions: [
+        'What are you most proud of in your technical career?',
+        'How do you handle tight project deadlines?',
+        'Tell me about a time you mentored a junior engineer.'
+      ],
+      salary: '₹22,00,000 - ₹45,00,000 base + equity grants',
+      resources: [
+        { name: 'Meta Careers Prep Portal', url: 'https://www.metacareers.com/' },
+        { name: 'Alex Xu System Design Guides', url: 'https://bytebytego.com/' },
+        { name: 'LeetCode Meta Interview Card', url: 'https://leetcode.com/discuss/interview-question?q=facebook' }
+      ]
+    },
+    'samsung': {
+      companyName: 'Samsung',
+      interviewPattern: [
+        '1. Samsung Advanced Coding Test (1 problem, 3 hours)',
+        '2. Technical Interview 1: Memory optimization & OS concepts (60 mins)',
+        '3. Technical Interview 2: DSA & C/C++ fundamentals (45 mins)',
+        '4. HR Round (30 mins)'
+      ],
+      dsaTopics: ['Bit Manipulation', 'Backtracking (N-Queens, Sudoku)', 'Graphs (DFS/BFS)', 'Arrays Optimization'],
+      systemDesign: ['Design Firmware update service for smartphones', 'Design Mobile camera image storage system', 'Design SmartThings IoT cloud platform'],
+      hrQuestions: [
+        'Why do you want to work in R&D?',
+        'Describe a situation where you had to work with hardware limits.',
+        'What is your research interest?'
+      ],
+      salary: '₹12,00,000 - ₹24,00,000 base + performance pay',
+      resources: [
+        { name: 'Samsung Software Competency Guide', url: 'https://research.samsung.com/' },
+        { name: 'GeeksforGeeks Samsung Preparation', url: 'https://www.geeksforgeeks.org/samsung-interview-experience/' },
+        { name: 'Operating Systems Core Tutorials', url: 'https://www.geeksforgeeks.org/operating-systems/' }
+      ]
+    },
+    'accenture': {
+      companyName: 'Accenture',
+      interviewPattern: [
+        '1. Cognitive & Technical Assessment (90 questions, 90 mins)',
+        '2. Coding Assessment (2 questions, 45 mins)',
+        '3. Technical & Behavioral Interview (30 mins)'
+      ],
+      dsaTopics: ['Array sorting and search algorithms', 'Basic Linked Lists operations', 'Strings reversing and parsing', 'Stacks & Queues'],
+      systemDesign: ['Design Online Ticket Booking System', 'Design Client Relationship Manager (CRM) Database', 'Enterprise Cloud migration architecture'],
+      hrQuestions: [
+        'Tell me about yourself and your final year project.',
+        'Why do you want to join Accenture consulting?',
+        'Are you open to relocate and work in shifts?'
+      ],
+      salary: '₹4,50,000 - ₹12,00,000 base',
+      resources: [
+        { name: 'Accenture Placement Papers GFG', url: 'https://www.geeksforgeeks.org/accenture-recruitment-process/' },
+        { name: 'Basic SQL and OOP Fundamentals', url: 'https://www.geeksforgeeks.org/sql-tutorial/' }
+      ]
+    },
+    'flipkart': {
+      companyName: 'Flipkart',
+      interviewPattern: [
+        '1. Online Coding Round (3 questions, 90 mins)',
+        '2. Machine Coding Round: Build a working backend application (120 mins)',
+        '3. Technical Interview 1: Machine Coding Review & DSA (60 mins)',
+        '4. Technical Interview 2: System Design (60 mins)',
+        '5. HM Fitment Round (45 mins)'
+      ],
+      dsaTopics: ['Tries & Autocomplete', 'Dynamic Programming (Knapsack)', 'Heaps & Priority Queues', 'Design Patterns (Factory, Singleton)'],
+      systemDesign: ['Design Flipkart Big Billion Day Flash Sale system', 'Design Logistics tracking api', 'Design Promotion & Coupon service'],
+      hrQuestions: [
+        'How do you handle scaling bottlenecks under extreme load?',
+        'Tell me about a time you took ownership of a failed project.',
+        'Why e-commerce?'
+      ],
+      salary: '₹16,00,000 - ₹28,00,000 base + ESOPs',
+      resources: [
+        { name: 'Flipkart Machine Coding Guide', url: 'https://www.geeksforgeeks.org/flipkart-interview-experience/' },
+        { name: 'System Design by Gaurav Sen', url: 'https://www.youtube.com/@GauravSensei' },
+        { name: 'LeetCode Flipkart Card', url: 'https://leetcode.com/discuss/interview-question?q=flipkart' }
+      ]
+    },
+    'zomato': {
+      companyName: 'Zomato',
+      interviewPattern: [
+        '1. Online MCQ & Coding Round (90 mins)',
+        '2. Round 1: Problem Solving & Advanced DSA (60 mins)',
+        '3. Round 2: System Design & Database Schema Planning (60 mins)',
+        '4. Culture Fitment & HR Interview (30 mins)'
+      ],
+      dsaTopics: ['Graphs (Breadth First Search, Shortest Path)', 'Heaps', 'Sliding Window', 'Concurrency & Locks'],
+      systemDesign: ['Design Zomato Delivery Agent Tracking System', 'Design Restaurant Search & Rating Engine', 'Design Notification service for orders'],
+      hrQuestions: [
+        'What makes you fit for Zomato culture?',
+        'Describe how you handle food delivery logistics challenges technically.',
+        'Why Zomato and not Swiggy?'
+      ],
+      salary: '₹14,00,000 - ₹26,00,000 base + stock options',
+      resources: [
+        { name: 'Zomato Engineering Blog Insights', url: 'https://blog.zomato.com/' },
+        { name: 'Redis Cache Architecture Guides', url: 'https://redis.io/docs/' }
+      ]
+    },
+    'lenskart': {
+      companyName: 'Lenskart',
+      interviewPattern: [
+        '1. Technical Screening phone call (30 mins)',
+        '2. Technical Interview 1: Javascript core & React/Node fundamentals (60 mins)',
+        '3. Technical Interview 2: Medium DSA & Schema Design (60 mins)',
+        '4. HR Round (30 mins)'
+      ],
+      dsaTopics: ['Array manipulation', 'String parsing', 'Dynamic UI Rendering states', 'Search and Filters algorithms'],
+      systemDesign: ['Design Lenskart 3D Try-On asset manager', 'Design Inventory distribution network database', 'Design Retail POS billing system'],
+      hrQuestions: [
+        'Tell me about a project where you optimized frontend load time.',
+        'Why Lenskart retail-tech?',
+        'Describe a time you received constructive feedback.'
+      ],
+      salary: '₹10,00,000 - ₹20,00,000 base',
+      resources: [
+        { name: 'Lenskart Official Career Portal', url: 'https://www.lenskart.com/life-at-lenskart' },
+        { name: 'Modern Javascript Reference Info', url: 'https://javascript.info/' },
+        { name: 'React Development Best Practices', url: 'https://react.dev/' }
+      ]
+    },
+    'tcs': {
+      companyName: 'TCS',
+      interviewPattern: [
+        '1. TCS NQT (National Qualifier Test): Aptitude, Reasoning, Verbal & Coding (180 mins)',
+        '2. Technical Interview (30 mins)',
+        '3. Managerial & HR Round (20 mins)'
+      ],
+      dsaTopics: ['String reversal and checking', 'Array operations (duplicates, sorting)', 'Basic SQL queries', 'Object-Oriented Programming (OOP) concepts'],
+      systemDesign: ['Design ATM Database system', 'Design Library management system backend', 'Client-Server network model'],
+      hrQuestions: [
+        'Introduce yourself and mention your key coding projects.',
+        'Are you ready to sign a service bond?',
+        'Why should TCS hire you over others?'
+      ],
+      salary: '₹3,36,000 - ₹7,00,000 base',
+      resources: [
+        { name: 'TCS Experienced Candidate Portal (iBegin)', url: 'https://ibegin.tcs.com/iBegin/' },
+        { name: 'TCS Placement Papers GFG Guide', url: 'https://www.geeksforgeeks.org/tcs-interview-experience/' },
+        { name: 'SQL Query Guide for Beginners', url: 'https://www.geeksforgeeks.org/sql-tutorial/' }
+      ]
+    },
+    'uber': {
+      companyName: 'Uber',
+      interviewPattern: [
+        '1. Codesignal Online Coding (4 questions, 70 mins)',
+        '2. Technical Round 1: DSA Algorithms & Complexity (60 mins)',
+        '3. Technical Round 2: System Design & Concurrency (60 mins)',
+        '4. HM Behavioral & Architecture alignment (60 mins)'
+      ],
+      dsaTopics: ['Graphs (A* search, Dijkstra)', 'Segment Trees & Fenwick Trees', 'LRU cache', 'Heap algorithms'],
+      systemDesign: ['Design Uber Ride-Hailing Matchmaker dispatch service', 'Design Realtime Driver Location tracker', 'Design Surge Pricing microservice'],
+      hrQuestions: [
+        'Tell me about a time you had to deal with an outage.',
+        'How do you prioritize technical debt?',
+        'Why Uber and how do you feel about moving people/things?'
+      ],
+      salary: '₹24,0,000 - ₹48,00,000 base + Uber stock units',
+      resources: [
+        { name: 'Uber Engineering Blog', url: 'https://www.uber.com/blog/engineering/' },
+        { name: 'System Design Primer GitHub Hub', url: 'https://github.com/donnemartin/system-design-primer' }
+      ]
+    },
+    'ola': {
+      companyName: 'Ola',
+      interviewPattern: [
+        '1. Online Coding Round (2 questions, 90 mins)',
+        '2. Technical Interview 1: Core backend development & Java/Python (60 mins)',
+        '3. Technical Interview 2: Intermediate DSA & system bottlenecks (60 mins)',
+        '4. HR Round (30 mins)'
+      ],
+      dsaTopics: ['Arrays & HashMaps', 'Stack queues operations', 'Dynamic Programming basic grids', 'Graph traversals'],
+      systemDesign: ['Design Ola Cab Booking API gateway', 'Design Driver assignment queuing service', 'Design Payment gateway checkout integration'],
+      hrQuestions: [
+        'Tell me about your tech achievements in college.',
+        'Why Ola mobility?',
+        'How do you handle shift timings and active deadlines?'
+      ],
+      salary: '₹12,0,000 - ₹22,00,000 base',
+      resources: [
+        { name: 'Ola Mobility Careers Site', url: 'https://www.olacabs.com/careers' },
+        { name: 'Database Indexes and Optimization', url: 'https://www.geeksforgeeks.org/sql-indexes/' }
+      ]
+    },
+    'meesho': {
+      companyName: 'Meesho',
+      interviewPattern: [
+        '1. Online Coding Round (2 questions, 90 mins)',
+        '2. Round 1: DSA Problem Solving (60 mins)',
+        '3. Round 2: Low Level System Design (LLD) (60 mins)',
+        '4. Culture & Managerial Round (45 mins)'
+      ],
+      dsaTopics: ['Heaps & Priority queues', 'Greedy algorithms', 'Two pointers', 'Matrix searches'],
+      systemDesign: ['Design Meesho Reseller Catalog cache database', 'Design Cart & checkout microservice', 'Design Feed personalization service'],
+      hrQuestions: [
+        'Tell me about a time you optimized a slow query.',
+        'What interests you in social e-commerce?',
+        'How do you prioritize features?'
+      ],
+      salary: '₹14,00,000 - ₹24,00,000 base + stocks',
+      resources: [
+        { name: 'Meesho Careers & Jobs portal', url: 'https://www.meesho.io/jobs' },
+        { name: 'Low Level Design Patterns Tutorial', url: 'https://refactoring.guru/design-patterns' }
+      ]
+    },
+    'zepto': {
+      companyName: 'Zepto',
+      interviewPattern: [
+        '1. Online Hackerrank test (2 questions, 90 mins)',
+        '2. Round 1: Javascript/Go programming & DSA (60 mins)',
+        '3. Round 2: LLD & High Level System Design (60 mins)',
+        '4. Founder / HM Fitment Round (30 mins)'
+      ],
+      dsaTopics: ['Queue scheduling algorithms', 'Binary Search arrays', 'HashMaps & HashTables', 'Sliding Window bounds'],
+      systemDesign: ['Design Zepto 10-Min Delivery routing engine', 'Design Dark Store inventory management', 'Design Realtime driver availability map'],
+      hrQuestions: [
+        'Are you comfortable working in a fast-paced hyper-growth environment?',
+        'Why Zepto quick commerce?',
+        'Tell me about a project you delivered in 1 week.'
+      ],
+      salary: '₹15,00,000 - ₹26,00,000 base + equity',
+      resources: [
+        { name: 'Zepto Official Careers Site', url: 'https://www.zeptonow.com/careers' },
+        { name: 'Go Language Concurrency Patterns', url: 'https://go.dev/tour/concurrency' }
+      ]
+    },
+    'razorpay': {
+      companyName: 'Razorpay',
+      interviewPattern: [
+        '1. Hackerrank Coding Round (3 questions, 90 mins)',
+        '2. Technical Round 1: Algorithmic Problem Solving (60 mins)',
+        '3. Technical Round 2: System Design & API Security (60 mins)',
+        '4. HR Round (30 mins)'
+      ],
+      dsaTopics: ['Dynamic Programming', 'Tries & Autocomplete systems', 'Graph traversals', 'Hash Tables hashing'],
+      systemDesign: ['Design Razorpay Payment Gateway integration API', 'Design Idempotency layer for transactions', 'Design Financial ledger transactions database'],
+      hrQuestions: [
+        'Tell me about a time you handled secure user data.',
+        'Why fintech?',
+        'How do you handle disagreement with product managers?'
+      ],
+      salary: '₹14,00,000 - ₹25,00,000 base + stock options',
+      resources: [
+        { name: 'Razorpay Jobs & Careers Portal', url: 'https://razorpay.com/jobs/' },
+        { name: 'API Security Guidelines OWASP', url: 'https://owasp.org/www-project-api-security/' }
+      ]
+    },
+    'sharechat': {
+      companyName: 'ShareChat',
+      interviewPattern: [
+        '1. Online Coding Round (3 questions, 90 mins)',
+        '2. Round 1: DSA Problems (60 mins)',
+        '3. Round 2: System Design & Caching (60 mins)',
+        '4. HM Alignment Round (45 mins)'
+      ],
+      dsaTopics: ['Graphs & Network connection links', 'Dynamic Programming', 'Heaps & Priority arrays', 'Tries'],
+      systemDesign: ['Design ShareChat Video Recommendation feed', 'Design Scalable post creation and upload backend', 'Design Chat Room service for millions of users'],
+      hrQuestions: [
+        'How do you manage platform moderation challenges technically?',
+        'Why social media tech?',
+        'Describe a time you resolved a tech stack issue.'
+      ],
+      salary: '₹16,00,000 - ₹30,00,000 base + ESOPs',
+      resources: [
+        { name: 'ShareChat Official Careers Portal', url: 'https://sharechat.com/careers' },
+        { name: 'NoSQL Databases Introduction', url: 'https://www.geeksforgeeks.org/introduction-to-nosql/' }
+      ]
+    },
+    'paytm': {
+      companyName: 'Paytm',
+      interviewPattern: [
+        '1. Online Coding Assessment (2 questions, 90 mins)',
+        '2. Round 1: DSA Coding algorithms (60 mins)',
+        '3. Round 2: Core Java/Spring Boot & DBMS questions (60 mins)',
+        '4. Managerial & HR fitment (30 mins)'
+      ],
+      dsaTopics: ['Binary Trees', 'Linked Lists manipulation', 'Array indices mapping', 'Stacks and Queues'],
+      systemDesign: ['Design Paytm Digital Wallet transaction database', 'Design QR Code merchant payment resolver', 'Design Cashback reward distribution queue'],
+      hrQuestions: [
+        'How do you handle transactional failures in your code?',
+        'Why fintech careers?',
+        'Describe your contribution to your previous project.'
+      ],
+      salary: '₹10,00,000 - ₹18,00,000 base',
+      resources: [
+        { name: 'Paytm Candidate Recruitment Site', url: 'https://paytm.com/careers' },
+        { name: 'ACID Properties in DBMS Guide', url: 'https://www.geeksforgeeks.org/acid-properties-in-dbms/' }
+      ]
+    },
+    'dunzo': {
+      companyName: 'Dunzo',
+      interviewPattern: [
+        '1. Online Coding Test (2 questions, 90 mins)',
+        '2. Round 1: Algorithmic DSA (60 mins)',
+        '3. Round 2: Schema Design & API logic (60 mins)',
+        '4. HR Round (30 mins)'
+      ],
+      dsaTopics: ['Greedy algorithms', 'Sorting and Search indices', 'Arrays partitions', 'Basic Graphs'],
+      systemDesign: ['Design Dunzo Delivery Task Assignment solver', 'Design Merchant partner portal dashboard api', 'Design Geolocation proximity search engine'],
+      hrQuestions: [
+        'Tell me about a project you built from scratch.',
+        'Why Dunzo hyper-local logistics?',
+        'Are you open to cross-team assignments?'
+      ],
+      salary: '₹11,00,000 - ₹18,00,000 base',
+      resources: [
+        { name: 'Dunzo Main Careers Platform', url: 'https://www.dunzo.com/' },
+        { name: 'Geohashing Systems Concept', url: 'https://www.geeksforgeeks.org/geohash-in-system-design/' }
+      ]
+    }
+  };
+
+  const matched = companyData[nameKey];
+  if (matched) return matched;
+
+  // Fallback default
   return {
     companyName: companyName,
     interviewPattern: [
@@ -1443,9 +1839,9 @@ function getMockCompanyPrep(companyName) {
     ],
     salary: '$110,000 - $165,000 base + stock options',
     resources: [
-      'LeetCode Top Interview 150',
-      'System Design Primer by Donne Martin',
-      'Behavioral Interview Guide Star Method'
+      { name: 'LeetCode Top Interview 150', url: 'https://leetcode.com/studyplan/top-interview-150/' },
+      { name: 'System Design Primer by Donne Martin', url: 'https://github.com/donnemartin/system-design-primer' },
+      { name: 'Behavioral Interview Guide Star Method', url: 'https://www.themuse.com/advice/star-interview-method' }
     ]
   };
 }

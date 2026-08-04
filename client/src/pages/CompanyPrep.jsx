@@ -36,51 +36,56 @@ const CompanyPrep = () => {
     }
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      fetchPrepData(searchQuery.trim());
-    }
-  };
+  const companiesList = [
+    'Google', 'Microsoft', 'Amazon', 'Meta', 'Samsung', 'Accenture',
+    'Flipkart', 'Zomato', 'Lenskart', 'TCS', 'Uber', 'Ola',
+    'Meesho', 'Zepto', 'Razorpay', 'ShareChat', 'Paytm', 'Dunzo'
+  ];
 
   return (
     <div className="company-prep-view-details">
       <h1 className="page-title">Company Preparation Guides</h1>
       <p className="page-subtitle">Get detailed interview structures, top DSA concepts, system design topics, and salary stats for top tech companies.</p>
 
-      {/* Search and Presets */}
-      <div className="search-header-container glass-card">
-        <form onSubmit={handleSearchSubmit} className="prep-search-form">
-          <div className="search-input-box">
-            <Search className="search-icon-decor" size={20} />
-            <input
-              type="text"
-              placeholder="Search company (e.g. Google, Microsoft, Netflix, Swiggy)..."
+      {/* Dropdown Selection Grid */}
+      <div className="search-header-container glass-card" style={{ padding: '1.25rem 1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+          <label htmlFor="company-dropdown-select" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Select Target Company:
+          </label>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%', flexWrap: 'wrap', alignItems: 'center' }}>
+            <select
+              id="company-dropdown-select"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input-field"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary search-submit-btn" disabled={loading}>
-            {loading ? 'Searching...' : 'Search Guide'}
-          </button>
-        </form>
-
-        <div className="company-preset-chips">
-          <span className="preset-lbl">Popular:</span>
-          {['Google', 'Microsoft', 'Amazon', 'Meta', 'TCS'].map((name) => (
-            <button
-              key={name}
-              onClick={() => {
-                setSearchQuery(name);
-                fetchPrepData(name);
+              onChange={(e) => {
+                const val = e.target.value;
+                setSearchQuery(val);
+                if (val) {
+                  fetchPrepData(val);
+                }
               }}
-              className="preset-chip-btn"
+              style={{
+                flex: 1,
+                minWidth: '260px',
+                padding: '0.75rem 1rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--bg-item)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-primary)',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                outline: 'none',
+                cursor: 'pointer',
+                appearance: 'auto'
+              }}
               disabled={loading}
             >
-              {name}
-            </button>
-          ))}
+              <option value="">-- Choose Company --</option>
+              {companiesList.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -179,16 +184,16 @@ const CompanyPrep = () => {
                   <h4>Preparation Resources</h4>
                 </div>
                 <div className="prep-links-stack">
-                  {prepData.resources?.map((resName, i) => (
+                  {prepData.resources?.map((res, i) => (
                     <a
                       key={i}
-                      href="https://www.geeksforgeeks.org/"
+                      href={res.url || 'https://www.geeksforgeeks.org/'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="prep-resource-link-item"
                     >
                       <Compass size={14} />
-                      <span>{resName}</span>
+                      <span>{res.name || res}</span>
                     </a>
                   ))}
                 </div>
