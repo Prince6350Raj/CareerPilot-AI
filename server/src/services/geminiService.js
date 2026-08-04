@@ -356,7 +356,8 @@ function getMockRoadmap(role, current, missing) {
   const finalMissing = missing.length > 0 ? missing : ['React Native', 'TypeScript', 'Node.js & Express', 'MongoDB Atlas', 'Jest Testing'];
   const roleName = (role || '').toLowerCase();
   
-  if (roleName.includes('frontend')) {
+  // 1. FRONTEND DEVELOPER
+  if (roleName.includes('frontend') || roleName.includes('ui developer')) {
     return {
       targetRole: role || 'Frontend Developer',
       currentSkills: current.length > 0 ? current : ['HTML', 'CSS', 'JavaScript'],
@@ -365,11 +366,12 @@ function getMockRoadmap(role, current, missing) {
       phases: [
         {
           phaseNumber: 1,
-          title: 'Advanced UI Styling & Framework Foundations',
+          title: 'Advanced UI Styling & React Foundations',
           duration: 'Weeks 1-3',
           objectives: ['Master modern CSS Grid and Flexbox layouts', 'Learn React components lifecycle and hooks', 'Integrate state management using Context API'],
           resources: [
-            { title: 'React Crash Course by NetNinja', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9gZD-TeeM-eUTFLUAzNZsz1', type: 'video' },
+            { title: 'HTML & CSS Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9ivBXP9aAeZiodDrA2yXs68', type: 'video' },
+            { title: 'React Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-TeeM-eUTFLUAzNZsz1', type: 'video' },
             { title: 'React Official Documentation', url: 'https://react.dev', type: 'documentation' }
           ],
           projects: [
@@ -382,7 +384,7 @@ function getMockRoadmap(role, current, missing) {
           duration: 'Weeks 4-6',
           objectives: ['Implement type safety with TypeScript', 'Configure store and slices with Redux Toolkit', 'Fetch data cleanly using RTK Query or Axios'],
           resources: [
-            { title: 'TypeScript Masterclass by NetNinja', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9gUgrPsgo3RQY545aJD878t', type: 'video' },
+            { title: 'TypeScript Masterclass by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gUgrPsgo3RQY545aJD878t', type: 'video' },
             { title: 'TypeScript Handbook', url: 'https://www.typescriptlang.org/docs/', type: 'documentation' }
           ],
           projects: [
@@ -395,7 +397,7 @@ function getMockRoadmap(role, current, missing) {
           duration: 'Weeks 7-8',
           objectives: ['Write unit tests for hooks and components with Jest/React Testing Library', 'Audit and optimize core web vitals (LCP, FID)', 'Deploy to Vercel/Netlify with CI/CD'],
           resources: [
-            { title: 'React Testing Tutorial', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosjaFsz97', type: 'video' }
+            { title: 'React Testing Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosjaFsz97', type: 'video' }
           ],
           projects: [
             { title: 'Production Ready Portfolio App', description: 'Optimize your portfolio website for mobile and publish with Vercel deployment pipeline.', difficulty: 'Advanced' }
@@ -405,20 +407,123 @@ function getMockRoadmap(role, current, missing) {
     };
   }
 
-  if (roleName.includes('python')) {
+  // 2. BACKEND DEVELOPER
+  if (roleName.includes('backend')) {
     return {
-      targetRole: role || 'Python & Data Engineer',
-      currentSkills: current.length > 0 ? current : ['Python Core', 'Basic SQL'],
-      missingSkills: missing.length > 0 ? missing : ['Django', 'FastAPI', 'Pandas & NumPy', 'PostgreSQL'],
+      targetRole: role || 'Backend Developer',
+      currentSkills: current.length > 0 ? current : ['JavaScript', 'Basic SQL', 'OOP Basics'],
+      missingSkills: missing.length > 0 ? missing : ['Node.js', 'Express.js', 'MongoDB', 'Redis', 'Docker'],
       weeksEstimate: 8,
       phases: [
         {
           phaseNumber: 1,
-          title: 'API Development Foundations with FastAPI',
+          title: 'Asynchronous Runtime & REST API Design',
+          duration: 'Weeks 1-3',
+          objectives: ['Understand Node.js asynchronous event loop', 'Configure routes, controllers, and middlewares in Express', 'Connect server to MongoDB using Mongoose'],
+          resources: [
+            { title: 'Node.js Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymhLOyfBUw', type: 'video' },
+            { title: 'MongoDB Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9jBcybLF8CDAo54JbSPgUbF', type: 'video' },
+            { title: 'Express.js Official Guide', url: 'https://expressjs.com', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'RESTful Task Manager API', description: 'Design a backend server with JWT user authentication, schemas validation, and Mongoose database storage.', difficulty: 'Beginner' }
+          ]
+        },
+        {
+          phaseNumber: 2,
+          title: 'Caching, Security & Databases Scaling',
+          duration: 'Weeks 4-6',
+          objectives: ['Implement caching mechanisms using Redis', 'Implement password hashing (bcrypt) and CORS headers security', 'Write optimized database index rules'],
+          resources: [
+            { title: 'Node.js Auth Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9g8OhpOZxTOUXhpz7pHmOkv', type: 'video' },
+            { title: 'Redis Official Getting Started', url: 'https://redis.io/docs/latest/develop/get-started/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Secure Chat API Engine', description: 'Build an API supporting private channels, database persistence, and Redis session stores.', difficulty: 'Intermediate' }
+          ]
+        },
+        {
+          phaseNumber: 3,
+          title: 'Testing, Docker & Deployment Pipelines',
+          duration: 'Weeks 7-8',
+          objectives: ['Write endpoint integration tests using Supertest and Jest', 'Dockerize the Express web server setup', 'Deploy the backend as a Render Web Service'],
+          resources: [
+            { title: 'Docker Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeJoM5F87SdfFCdiY5-y', type: 'video' }
+          ],
+          projects: [
+            { title: 'Containerized Production Deployment', description: 'Package your backend API in Docker and deploy to Render with automated logs monitoring.', difficulty: 'Advanced' }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 3. FULLSTACK DEVELOPER
+  if (roleName.includes('fullstack') || roleName.includes('full stack')) {
+    return {
+      targetRole: role || 'Fullstack Software Engineer',
+      currentSkills: current.length > 0 ? current : ['JavaScript', 'HTML & CSS', 'Git'],
+      missingSkills: missing.length > 0 ? missing : ['MERN Stack', 'React', 'Node.js & Express', 'MongoDB Atlas', 'JWT Auth'],
+      weeksEstimate: 10,
+      phases: [
+        {
+          phaseNumber: 1,
+          title: 'Backend API Foundation',
+          duration: 'Weeks 1-4',
+          objectives: ['Master Node.js asynchronous event loops', 'Setup REST APIs with Express.js', 'Connect and structure MongoDB schemas'],
+          resources: [
+            { title: 'Node.js Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymhLOyfBUw', type: 'video' },
+            { title: 'Express.js Official Guide', url: 'https://expressjs.com', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Task Manager API', description: 'Build a secure RESTful API for task operations with JWT auth and Mongoose DB storage.', difficulty: 'Beginner' }
+          ]
+        },
+        {
+          phaseNumber: 2,
+          title: 'React Client Integration',
+          duration: 'Weeks 5-7',
+          objectives: ['Interface frontend with backend tokens', 'Implement client side state management', 'Integrate Tailwind CSS and variables styling system'],
+          resources: [
+            { title: 'React Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-TeeM-eUTFLUAzNZsz1', type: 'video' },
+            { title: 'React Router Official Guides', url: 'https://reactrouter.com', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Personal Career Dashboard', description: 'Connect fullstack endpoints to render stats, roadmaps, and profile updates.', difficulty: 'Intermediate' }
+          ]
+        },
+        {
+          phaseNumber: 3,
+          title: 'Testing & Containerized Cloud Deployment',
+          duration: 'Weeks 8-10',
+          objectives: ['Write unit and integration tests with Jest', 'Dockerize express servers and client configurations', 'Deploy apps to Render/Vercel with CI/CD'],
+          resources: [
+            { title: 'Docker Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeJoM5F87SdfFCdiY5-y', type: 'video' },
+            { title: 'Vercel Deployment Documentation', url: 'https://vercel.com/docs', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Production Ready MERN App Launch', description: 'Containerize and publish career tools to Render and Vercel hostings.', difficulty: 'Advanced' }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 4. PYTHON DEVELOPER
+  if (roleName.includes('python')) {
+    return {
+      targetRole: role || 'Python Developer',
+      currentSkills: current.length > 0 ? current : ['Python Core', 'Basic CLI'],
+      missingSkills: missing.length > 0 ? missing : ['Django', 'FastAPI', 'Pandas & NumPy', 'Python OOPs', 'PostgreSQL'],
+      weeksEstimate: 8,
+      phases: [
+        {
+          phaseNumber: 1,
+          title: 'FastAPI Microservices & Asynchronous Python',
           duration: 'Weeks 1-3',
           objectives: ['Master Python asynchronous routines (async/await)', 'Build high-performance REST APIs using FastAPI', 'Validate schemas using Pydantic'],
           resources: [
-            { title: 'FastAPI Tutorial by NetNinja', url: 'https://youtube.com/playlist?list=PL5gLrcv8JE6Dvn7gYZF8B1T69Y9Y45uK8', type: 'video' },
+            { title: 'Python OOPs Course by Corey Schafer', url: 'https://www.youtube.com/playlist?list=PL-osiE80TeTskrapNbGDhPJWZQsRJ6R5c', type: 'video' },
             { title: 'FastAPI Official Docs', url: 'https://fastapi.tiangolo.com', type: 'documentation' }
           ],
           projects: [
@@ -427,11 +532,11 @@ function getMockRoadmap(role, current, missing) {
         },
         {
           phaseNumber: 2,
-          title: 'Advanced Web Architectures with Django',
+          title: 'Monolithic Web Architectures with Django',
           duration: 'Weeks 4-6',
           objectives: ['Configure Django project structure and settings', 'Design database schemas using Django ORM', 'Build admin dashboard and authentication logic'],
           resources: [
-            { title: 'Django Tutorial by NetNinja', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9ib4IIcELTvMCeg8YgugGp1', type: 'video' },
+            { title: 'Django Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9ib4IIcELTvMCeg8YgugGp1', type: 'video' },
             { title: 'Django Documentation', url: 'https://docs.djangoproject.com', type: 'documentation' }
           ],
           projects: [
@@ -444,7 +549,7 @@ function getMockRoadmap(role, current, missing) {
           duration: 'Weeks 7-8',
           objectives: ['Analyze and clean datasets using Pandas and NumPy', 'Setup database connections with PostgreSQL', 'Deploy Python servers using Docker'],
           resources: [
-            { title: 'Data Analysis with Python', url: 'https://youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdD_athkGcED', type: 'video' }
+            { title: 'Pandas & NumPy Tutorial by Corey Schafer', url: 'https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdD_athkGcED', type: 'video' }
           ],
           projects: [
             { title: 'Analytics Reports Service', description: 'Write a background script that parses raw CSV files, aggregates metrics in Pandas, and inserts summaries into Postgres.', difficulty: 'Advanced' }
@@ -454,98 +559,251 @@ function getMockRoadmap(role, current, missing) {
     };
   }
 
-  if (roleName.includes('devops') || roleName.includes('cloud')) {
+  // 5. CLOUD DEVELOPER
+  if (roleName.includes('cloud developer') || roleName.includes('cloud engineer')) {
     return {
-      targetRole: role || 'DevOps & Cloud Engineer',
-      currentSkills: current.length > 0 ? current : ['Linux CLI', 'Git', 'Networking Basics'],
-      missingSkills: missing.length > 0 ? missing : ['Docker', 'Kubernetes', 'Terraform', 'GitHub Actions', 'AWS Services'],
+      targetRole: role || 'Cloud Developer',
+      currentSkills: current.length > 0 ? current : ['JavaScript', 'Linux CLI', 'Git'],
+      missingSkills: missing.length > 0 ? missing : ['AWS IAM/EC2', 'Docker', 'Serverless framework', 'AWS Lambda', 'DynamoDB'],
       weeksEstimate: 8,
       phases: [
         {
           phaseNumber: 1,
-          title: 'Containerization & Infrastructure Basics',
+          title: 'Cloud Core Compute & Networking',
           duration: 'Weeks 1-3',
-          objectives: ['Write robust Dockerfiles for multiple runtimes', 'Minimize container image sizes using multi-stage builds', 'Learn basic AWS EC2 and VPC architecture'],
+          objectives: ['Understand AWS VPC (Subnets, Route Tables, Security Groups)', 'Provision and connect to AWS EC2 linux servers', 'Configure secure storage using AWS S3'],
           resources: [
-            { title: 'Docker Containerization Course', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9hxjeJoM5F87SdfFCdiY5-y', type: 'video' },
-            { title: 'Docker Docs', url: 'https://docs.docker.com', type: 'documentation' }
+            { title: 'AWS Cloud Practitioner Course', url: 'https://www.youtube.com/playlist?list=PL8wY813RNXqqM6fR5O76Y54mS_rA_xwhU', type: 'video' },
+            { title: 'AWS EC2 Getting Started', url: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html', type: 'documentation' }
           ],
           projects: [
-            { title: 'Multi-container App Deployment', description: 'Dockerize a React frontend and Node backend, linking them securely using Docker Compose network.', difficulty: 'Beginner' }
+            { title: 'Cloud-hosted Portfolio Site', description: 'Host a static website in an AWS S3 bucket behind CloudFront CDN with SSL certificate configurations.', difficulty: 'Beginner' }
           ]
         },
         {
           phaseNumber: 2,
-          title: 'CI/CD Automation & Orchestration',
+          title: 'Containerization & Serverless APIs',
           duration: 'Weeks 4-6',
-          objectives: ['Write automated GitHub Actions pipelines', 'Learn Kubernetes pod structures, services, and configs', 'Orchestrate containers locally using Minikube'],
+          objectives: ['Write multi-stage Dockerfiles for Node APIs', 'Write serverless lambda functions using Node/Python', 'Integrate DynamoDB database layers with AWS SDK'],
           resources: [
-            { title: 'Kubernetes Tutorial by NetNinja', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9j07lpSjIL5fW82G1L7aK2o', type: 'video' },
-            { title: 'GitHub Actions Documentation', url: 'https://docs.github.com/en/actions', type: 'documentation' }
+            { title: 'Docker Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeJoM5F87SdfFCdiY5-y', type: 'video' },
+            { title: 'Serverless Framework Documentation', url: 'https://www.serverless.com/framework/docs', type: 'documentation' }
           ],
           projects: [
-            { title: 'Self-Healing Kubernetes Cluster', description: 'Deploy a web server configuration that automatically auto-scales and restarts on pod crashes.', difficulty: 'Intermediate' }
+            { title: 'Serverless REST API', description: 'Create an AWS API Gateway linked to Lambda functions that stores requests into a DynamoDB table.', difficulty: 'Intermediate' }
           ]
         },
         {
           phaseNumber: 3,
-          title: 'Infrastructure as Code (IaC) & Cloud Provisioning',
+          title: 'Monitoring & CI/CD Cloud Pipelines',
           duration: 'Weeks 7-8',
-          objectives: ['Provision cloud servers dynamically using Terraform', 'Deploy build triggers from code repositories to cloud instances', 'Setup centralized logging using Prometheus/Grafana'],
+          objectives: ['Write automated GitHub Actions pipelines to deploy to Lambda', 'Setup AWS CloudWatch alarms and metrics logs', 'Implement IAM least-privilege configurations'],
           resources: [
-            { title: 'Terraform Full Course', url: 'https://youtube.com/playlist?list=PL8wY813RNXqqM6fR5O76Y54mS_rA_xwhU', type: 'video' }
+            { title: 'AWS Solutions Architect Course', url: 'https://www.youtube.com/playlist?list=PL8wY813RNXqyL_3t8Xn4O5U-9Jxw4Ld0x', type: 'video' }
           ],
           projects: [
-            { title: 'Automated Terraform Infrastructure', description: 'Create Terraform scripts to deploy a secure load-balanced app server on AWS EC2.', difficulty: 'Advanced' }
+            { title: 'Fully Automated Lambda Service', description: 'Implement an API that auto-deploys via GitHub Actions, sends metrics logs to CloudWatch, and utilizes custom IAM roles.', difficulty: 'Advanced' }
           ]
         }
       ]
     };
   }
 
-  if (roleName.includes('machine learning') || roleName.includes('ml') || roleName.includes('ai') || roleName.includes('data science')) {
+  // 6. DEVOPS DEVELOPER
+  if (roleName.includes('devops')) {
     return {
-      targetRole: role || 'Machine Learning Engineer',
-      currentSkills: current.length > 0 ? current : ['Python', 'Linear Algebra', 'Statistics'],
-      missingSkills: missing.length > 0 ? missing : ['Scikit-Learn', 'TensorFlow / PyTorch', 'Pandas & NumPy', 'SQL'],
+      targetRole: role || 'DevOps Engineer',
+      currentSkills: current.length > 0 ? current : ['Linux Shell', 'Git', 'Networking'],
+      missingSkills: missing.length > 0 ? missing : ['Docker', 'Kubernetes', 'Ansible', 'Terraform', 'GitHub Actions'],
       weeksEstimate: 8,
       phases: [
         {
           phaseNumber: 1,
-          title: 'Data Processing & Classical ML Models',
+          title: 'Linux Systems & Containerization',
           duration: 'Weeks 1-3',
-          objectives: ['Clean datasets using Pandas and NumPy', 'Train regression and classification models using Scikit-Learn', 'Evaluate model metrics using precision, recall, and F1-score'],
+          objectives: ['Master advanced Bash scripting and process management', 'Package web applications into lightweight Docker containers', 'Manage multi-container networks using Docker Compose'],
           resources: [
-            { title: 'Machine Learning Course', url: 'https://youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdD_athkGcED', type: 'video' },
-            { title: 'Scikit-Learn Documentation', url: 'https://scikit-learn.org/stable/', type: 'documentation' }
+            { title: 'Linux Command Line Tutorial', url: 'https://www.youtube.com/playlist?list=PLgp11mZgpf8DS9cO_dI26LzdfjY4_6kZ_', type: 'video' },
+            { title: 'Docker Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9hxjeJoM5F87SdfFCdiY5-y', type: 'video' },
+            { title: 'Docker Docs', url: 'https://docs.docker.com', type: 'documentation' }
           ],
           projects: [
-            { title: 'House Price Predictor', description: 'Train a regression model to estimate property values based on demographic and size factors.', difficulty: 'Beginner' }
+            { title: 'Multi-service Local Environment', description: 'Create a local system comprising a Node server, database container, and reverse-proxy in Docker Compose.', difficulty: 'Beginner' }
           ]
         },
         {
           phaseNumber: 2,
-          title: 'Deep Learning & Neural Networks',
+          title: 'CI/CD Pipelines & Container Orchestration',
           duration: 'Weeks 4-6',
-          objectives: ['Build neural networks with PyTorch/TensorFlow', 'Train convolutional networks (CNN) for image tasks', 'Optimize weights using stochastic gradient descent'],
+          objectives: ['Write automated test/deploy workflows in GitHub Actions', 'Learn Kubernetes deployment, service, ingress, and config assets', 'Manage local clusters using Minikube/K3s'],
           resources: [
-            { title: 'PyTorch Deep Learning Course', url: 'https://youtube.com/playlist?list=PLqnslRFeH2UrcDBLOyI9h4W7gUSLp_QQH', type: 'video' },
-            { title: 'PyTorch Official Tutorials', url: 'https://pytorch.org/tutorials/', type: 'documentation' }
+            { title: 'Kubernetes Tutorial by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9j07lpSjIL5fW82G1L7aK2o', type: 'video' },
+            { title: 'GitHub Actions Documentation', url: 'https://docs.github.com/en/actions', type: 'documentation' }
           ],
           projects: [
-            { title: 'Digit Recognizer App', description: 'Develop a CNN neural network that identifies handwritten digits from the MNIST database.', difficulty: 'Intermediate' }
+            { title: 'Self-Healing Deployments in Kubernetes', description: 'Setup an auto-scaling, containerized web deployment that survives simulated node crashes.', difficulty: 'Intermediate' }
           ]
         },
         {
           phaseNumber: 3,
-          title: 'Model Deployment & MLOps',
+          title: 'Infrastructure as Code (IaC) & Monitoring',
           duration: 'Weeks 7-8',
-          objectives: ['Save models to serialization files (.pkl, .pt)', 'Wrap model inference logic inside FastAPI endpoints', 'Deploy inference service as Docker containers'],
+          objectives: ['Provision cloud VMs and networks using Terraform scripts', 'Automate configurations management with Ansible playbooks', 'Configure metrics collections using Prometheus & Grafana'],
           resources: [
-            { title: 'FastAPI for Machine Learning', url: 'https://youtube.com/playlist?list=PL5gLrcv8JE6Dvn7gYZF8B1T69Y9Y45uK8', type: 'video' }
+            { title: 'Terraform Full Course', url: 'https://www.youtube.com/playlist?list=PL8wY813RNXqqM6fR5O76Y54mS_rA_xwhU', type: 'video' }
           ],
           projects: [
-            { title: 'Live NLP Analysis API', description: 'Deploy a containerized Sentiment Analysis model API that takes raw strings and returns score outputs.', difficulty: 'Advanced' }
+            { title: 'Automated Load-Balanced Cluster', description: 'Write Terraform configs to deploy load-balanced EC2 instances on AWS, automated via GitHub Actions pipelines.', difficulty: 'Advanced' }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 7. MACHINE LEARNING ENGINEER
+  if (roleName.includes('machine learning') || roleName.includes('ml')) {
+    return {
+      targetRole: role || 'Machine Learning Engineer',
+      currentSkills: current.length > 0 ? current : ['Python', 'Calculus', 'Statistics'],
+      missingSkills: missing.length > 0 ? missing : ['Scikit-Learn', 'Pandas & NumPy', 'Matplotlib', 'Model Tuning'],
+      weeksEstimate: 8,
+      phases: [
+        {
+          phaseNumber: 1,
+          title: 'Data Wrangling & Statistical Analysis',
+          duration: 'Weeks 1-3',
+          objectives: ['Clean, filter, and aggregate datasets in Pandas', 'Perform matrix math manipulations using NumPy arrays', 'Visualize distributions using Matplotlib and Seaborn'],
+          resources: [
+            { title: 'Pandas & NumPy Tutorial by Corey Schafer', url: 'https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdD_athkGcED', type: 'video' },
+            { title: 'Pandas Reference Documentation', url: 'https://pandas.pydata.org/docs/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Housing Prices Analytics Dashboard', description: 'Load raw real-estate CSV sheets, clean null entries, filter extreme outliers, and output visual price maps.', difficulty: 'Beginner' }
+          ]
+        },
+        {
+          phaseNumber: 2,
+          title: 'Classical Machine Learning Algorithms',
+          duration: 'Weeks 4-6',
+          objectives: ['Train regression and classification trees with Scikit-Learn', 'Perform hyperparameter tuning using GridSearch', 'Audit models using Confusion Matrices and F1 scores'],
+          resources: [
+            { title: 'Machine Learning Course in Python', url: 'https://www.youtube.com/playlist?list=PLQVvvaa0QuDfKTOs3Keq_kaG2P55YRn5v', type: 'video' },
+            { title: 'Scikit-Learn User Guide', url: 'https://scikit-learn.org/stable/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Credit Fraud Classifier', description: 'Train a random-forest classification model to flag suspicious bank transfers based on transaction features.', difficulty: 'Intermediate' }
+          ]
+        },
+        {
+          phaseNumber: 3,
+          title: 'Models Serialization & Basic APIs',
+          duration: 'Weeks 7-8',
+          objectives: ['Serialize models to disk using Joblib/Pickle', 'Implement model inference pipelines inside FastAPI endpoints', 'Deploy prediction microservice using Docker'],
+          resources: [
+            { title: 'FastAPI for Machine Learning', url: 'https://www.youtube.com/playlist?list=PL5gLrcv8JE6Dvn7gYZF8B1T69Y9Y45uK8', type: 'video' }
+          ],
+          projects: [
+            { title: 'Production Prediction microservice', description: 'Package a trained classifier inside FastAPI and publish the containerized service to Render.', difficulty: 'Advanced' }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 8. AI ENGINEER
+  if (roleName.includes('ai engineer') || roleName.includes('ai') || roleName.includes('generative')) {
+    return {
+      targetRole: role || 'AI Engineer',
+      currentSkills: current.length > 0 ? current : ['Python', 'API Integrations', 'Basic ML'],
+      missingSkills: missing.length > 0 ? missing : ['PyTorch', 'Hugging Face Transformers', 'LangChain', 'Vector Databases', 'OpenAI/Gemini APIs'],
+      weeksEstimate: 8,
+      phases: [
+        {
+          phaseNumber: 1,
+          title: 'Deep Learning & Neural Networks',
+          duration: 'Weeks 1-3',
+          objectives: ['Build neural networks from scratch using PyTorch layers', 'Understand backpropagation, activation functions, and optimizers', 'Train basic CNNs and RNNs on CPU/GPU hardware'],
+          resources: [
+            { title: 'PyTorch Deep Learning Course', url: 'https://www.youtube.com/playlist?list=PLqnslRFeH2UrcDBLOyI9h4W7gUSLp_QQH', type: 'video' },
+            { title: 'PyTorch Tutorials', url: 'https://pytorch.org/tutorials/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Handwritten Digit Recognizer', description: 'Implement and train a CNN classifier in PyTorch to identify numbers from MNIST datasets.', difficulty: 'Beginner' }
+          ]
+        },
+        {
+          phaseNumber: 2,
+          title: 'Large Language Models & Prompt Engineering',
+          duration: 'Weeks 4-6',
+          objectives: ['Integrate generative models using Google Gemini / OpenAI SDKs', 'Construct advanced system instructions and context injection patterns', 'Fine-tune model prompts for structured JSON schema outputs'],
+          resources: [
+            { title: 'TensorFlow & Deep Learning', url: 'https://www.youtube.com/playlist?list=PLQVvvaa0QuDdcJHDF756w1OkygVyipOMe', type: 'video' },
+            { title: 'Google AI Studio API Docs', url: 'https://ai.google.dev/docs/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'AI Resume Scorecard Assistant', description: 'Build an API that takes raw resume texts, sends structured prompt requests to Gemini, and parses the returned JSON.', difficulty: 'Intermediate' }
+          ]
+        },
+        {
+          phaseNumber: 3,
+          title: 'Retrieval Augmented Generation (RAG) & Agents',
+          duration: 'Weeks 7-8',
+          objectives: ['Learn LangChain or LlamaIndex frameworks', 'Create text embeddings and store them in Pinecone/Chroma Vector Databases', 'Implement agent loops supporting semantic search queries'],
+          resources: [
+            { title: 'LangChain & Vector DB Course', url: 'https://www.youtube.com/playlist?list=PL8wY813RNXqyL_3t8Xn4O5U-9Jxw4Ld0x', type: 'video' }
+          ],
+          projects: [
+            { title: 'Semantic Document QA System', description: 'Deploy a chatbot that allows users to upload PDF manuals, indexes them into a vector database, and answers questions using RAG structures.', difficulty: 'Advanced' }
+          ]
+        }
+      ]
+    };
+  }
+
+  // 9. UI/UX DESIGNER
+  if (roleName.includes('ux') || roleName.includes('designer') || roleName.includes('design')) {
+    return {
+      targetRole: role || 'UI/UX Designer',
+      currentSkills: current.length > 0 ? current : ['Sketching', 'Creativity', 'Basic HTML/CSS'],
+      missingSkills: missing.length > 0 ? missing : ['Figma', 'Wireframing', 'User Research', 'Prototyping', 'Visual Systems', 'Design System Architecture'],
+      weeksEstimate: 8,
+      phases: [
+        {
+          phaseNumber: 1,
+          title: 'UX Research & Information Architecture',
+          duration: 'Weeks 1-3',
+          objectives: ['Master UX user journey mappings and persona creations', 'Learn how to outline detailed site wireframes', 'Conduct standard user interviews and qualitative feedback loops'],
+          resources: [
+            { title: 'UX Design Course by CareerFoundry', url: 'https://www.youtube.com/playlist?list=PLvGgC6N_X_g8f0HkFw049H6b88J611x0_', type: 'video' },
+            { title: 'Nielsen Norman Group UX Articles', url: 'https://www.nngroup.com/articles/', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'User Persona Portfolio', description: 'Conduct research for a local service app (e.g. food delivery), detail user personas, and build a site-map hierarchy.', difficulty: 'Beginner' }
+          ]
+        },
+        {
+          phaseNumber: 2,
+          title: 'Advanced Figma Design Systems',
+          duration: 'Weeks 4-6',
+          objectives: ['Master Figma auto-layouts, components, and variables properties', 'Build reusable visual UI library assets (buttons, fields, headers)', 'Design low-fidelity and high-fidelity page assets'],
+          resources: [
+            { title: 'Figma Full Course', url: 'https://www.youtube.com/playlist?list=PLlG35B1U0_7m7-s2nZpT_XwzVfV_mPZ2R', type: 'video' },
+            { title: 'Figma Official Help Center Guides', url: 'https://help.figma.com/hc/en-us', type: 'documentation' }
+          ],
+          projects: [
+            { title: 'Career Tracker Mobile App', description: 'Design a complete high-fidelity mobile app layout in Figma, using a unified UI component system and custom animations.', difficulty: 'Intermediate' }
+          ]
+        },
+        {
+          phaseNumber: 3,
+          title: 'Interactive Prototyping & Handoffs',
+          duration: 'Weeks 7-8',
+          objectives: ['Configure smart animation transitions in Figma prototypes', 'Conduct usability testing runs on interactive screens', 'Prepare design assets handoffs for frontend developers'],
+          resources: [
+            { title: 'Figma Smart Animate Tutorial', url: 'https://www.youtube.com/playlist?list=PLvGgC6N_X_g_37m9r5xUpK6gGZfFhT2Zz', type: 'video' }
+          ],
+          projects: [
+            { title: 'Interactive Web Platform Design', description: 'Create an interactive high-fidelity web app prototype in Figma with micro-interactions and developer handoff documentations.', difficulty: 'Advanced' }
           ]
         }
       ]
@@ -565,7 +823,7 @@ function getMockRoadmap(role, current, missing) {
         duration: 'Weeks 1-3',
         objectives: ['Master Node.js asynchronous event loops', 'Setup REST APIs with Express.js', 'Connect and structure MongoDB schemas'],
         resources: [
-          { title: 'Node.js Crash Course by NetNinja', url: 'https://youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymhLOyfBUw', type: 'video' },
+          { title: 'Node.js Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9jsz4LDYc6kv3ymhLOyfBUw', type: 'video' },
           { title: 'Express.js Official Guide', url: 'https://expressjs.com', type: 'documentation' }
         ],
         projects: [
@@ -578,7 +836,7 @@ function getMockRoadmap(role, current, missing) {
         duration: 'Weeks 4-6',
         objectives: ['Interface frontend with backend tokens', 'Implement state management', 'Integrate Tailwind or CSS variables styling system'],
         resources: [
-          { title: 'TypeScript Handbook', url: 'https://www.typescriptlang.org/docs/', type: 'documentation' },
+          { title: 'React Crash Course by NetNinja', url: 'https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-TeeM-eUTFLUAzNZsz1', type: 'video' },
           { title: 'React Router v6 Masterclass', url: 'https://reactrouter.com', type: 'documentation' }
         ],
         projects: [
