@@ -38,7 +38,7 @@ const CompanyPrep = () => {
 
   const companiesList = [
     'Google', 'Microsoft', 'Amazon', 'Meta', 'Samsung', 'Accenture',
-    'Flipkart', 'Zomato', 'Lenskart', 'TCS', 'Uber', 'Ola',
+    'Flipkart', 'Zomato', 'Lenskart', 'Uber', 'Ola',
     'Meesho', 'Zepto', 'Razorpay', 'ShareChat', 'Paytm', 'Dunzo'
   ];
 

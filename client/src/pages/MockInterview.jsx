@@ -801,13 +801,6 @@ const MockInterview = () => {
                             desc: 'Explore tech developer roles at Zomato'
                           },
                           {
-                            name: 'Lenskart Jobs',
-                            logo: 'L',
-                            color: '#000045',
-                            url: 'https://www.lenskart.com/life-at-lenskart',
-                            desc: 'Search active tech vacancies at Lenskart'
-                          },
-                          {
                             name: 'TCS Careers',
                             logo: 'T',
                             color: '#1E3A8A',
@@ -839,13 +832,6 @@ const MockInterview = () => {
                             desc: 'Explore developer roles at Meesho social commerce'
                           },
                           {
-                            name: 'Zepto Careers',
-                            logo: 'Zp',
-                            color: '#3B0764',
-                            url: 'https://www.zeptonow.com/careers',
-                            desc: 'Apply for quick-commerce roles at Zepto'
-                          },
-                          {
                             name: 'Razorpay Jobs',
                             logo: 'Rp',
                             color: '#0B72E7',
@@ -865,13 +851,6 @@ const MockInterview = () => {
                             color: '#002E6E',
                             url: 'https://paytm.com/careers',
                             desc: 'Apply to dynamic fintech slots at Paytm'
-                          },
-                          {
-                            name: 'Dunzo Careers',
-                            logo: 'Dn',
-                            color: '#00BFA5',
-                            url: 'https://www.dunzo.com/',
-                            desc: 'Search localized delivery roles at Dunzo'
                           }
                         ];
                       }
