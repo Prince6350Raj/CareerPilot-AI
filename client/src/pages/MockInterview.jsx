@@ -773,8 +773,8 @@ const MockInterview = () => {
                             name: 'Samsung Careers',
                             logo: 'S',
                             color: '#034EA2',
-                            url: `https://sec.careers.samsung.com/`,
-                            desc: 'Apply for core tech roles at Samsung Global'
+                            url: 'https://www.samsung.com/in/aboutsamsung/careers/',
+                            desc: 'Apply for core tech roles at Samsung India'
                           },
                           {
                             name: 'Accenture Jobs',
@@ -804,14 +804,14 @@ const MockInterview = () => {
                             name: 'Lenskart Jobs',
                             logo: 'L',
                             color: '#000045',
-                            url: `https://lenskart.peoplestrong.com/portal/home`,
+                            url: 'https://www.lenskart.com/life-at-lenskart',
                             desc: 'Search active tech vacancies at Lenskart'
                           },
                           {
                             name: 'TCS Careers',
                             logo: 'T',
                             color: '#1E3A8A',
-                            url: `https://www.tcs.com/careers/search-results?keyword=${roleQuery}`,
+                            url: 'https://ibegin.tcs.com/iBegin/',
                             desc: 'Search enterprise roles at Tata Consultancy Services'
                           },
                           {
@@ -827,13 +827,6 @@ const MockInterview = () => {
                             color: '#4CA64C',
                             url: `https://www.olacabs.com/careers`,
                             desc: 'Explore mobility developer roles at Ola Cabs'
-                          },
-                          {
-                            name: 'boAt Lifestyle',
-                            logo: 'bA',
-                            color: '#E31E24',
-                            url: `https://www.boat-lifestyle.com/pages/careers`,
-                            desc: 'Apply for direct product & developer roles at boAt'
                           }
                         ];
                       } else {
@@ -842,14 +835,14 @@ const MockInterview = () => {
                             name: 'Meesho Careers',
                             logo: 'Me',
                             color: '#F43F5E',
-                            url: `https://www.meesho.careers/`,
+                            url: 'https://www.meesho.io/jobs',
                             desc: 'Explore developer roles at Meesho social commerce'
                           },
                           {
                             name: 'Zepto Careers',
                             logo: 'Zp',
                             color: '#3B0764',
-                            url: `https://www.zepto.careers/`,
+                            url: 'https://www.zeptonow.com/careers',
                             desc: 'Apply for quick-commerce roles at Zepto'
                           },
                           {
@@ -870,14 +863,14 @@ const MockInterview = () => {
                             name: 'Paytm Careers',
                             logo: 'Py',
                             color: '#002E6E',
-                            url: `https://careers.paytm.com/`,
+                            url: 'https://paytm.com/careers',
                             desc: 'Apply to dynamic fintech slots at Paytm'
                           },
                           {
                             name: 'Dunzo Careers',
                             logo: 'Dn',
                             color: '#00BFA5',
-                            url: `https://www.dunzo.com/careers`,
+                            url: 'https://www.dunzo.com/',
                             desc: 'Search localized delivery roles at Dunzo'
                           }
                         ];
