@@ -843,6 +843,87 @@ exports.getPortfolioSuggestions = async (portfolioUrl) => {
 };
 
 function getMockRoleComparison(jobRole) {
+  const role = (jobRole || '').toLowerCase();
+  
+  if (role.includes('frontend')) {
+    return {
+      matchScore: 82,
+      missingSkills: ['React Query', 'TailwindCSS', 'Redux Toolkit', 'TypeScript'],
+      missingKeywords: ['Single Page Application', 'SEO Optimization', 'Responsive Web Design', 'Component Lifecycle'],
+      recommendations: [
+        'Highlight TypeScript proficiency and advanced state management patterns in frontend apps.',
+        'Add details about modern bundlers like Vite/Webpack and optimizing performance score (Lighthouse).',
+        'Demonstrate API caching mechanisms using tools like React Query or RTK Query.'
+      ]
+    };
+  }
+  
+  if (role.includes('backend')) {
+    return {
+      matchScore: 75,
+      missingSkills: ['Redis', 'PostgreSQL', 'Docker', 'GraphQL'],
+      missingKeywords: ['REST API Design', 'Database Indexing', 'Microservices', 'Message Queue'],
+      recommendations: [
+        'Add description of system design achievements (e.g. database query optimization metrics).',
+        'Highlight server caching strategies using Redis and API rate-limiting implementation.',
+        'Describe container deployment methodologies using Docker.'
+      ]
+    };
+  }
+  
+  if (role.includes('fullstack')) {
+    return {
+      matchScore: 79,
+      missingSkills: ['Next.js', 'PostgreSQL', 'Docker', 'TailwindCSS'],
+      missingKeywords: ['Server Side Rendering', 'Client-Server Architecture', 'REST API', 'CI/CD Pipelines'],
+      recommendations: [
+        'Demonstrate end-to-end feature ownership from database design to frontend styling.',
+        'Showcase Next.js App Router or Server-Side Rendering (SSR) capabilities.',
+        'Add security practices like JWT auth, password hashing (bcrypt), and CSRF protection.'
+      ]
+    };
+  }
+  
+  if (role.includes('python')) {
+    return {
+      matchScore: 77,
+      missingSkills: ['Django', 'FastAPI', 'Pandas/NumPy', 'PostgreSQL'],
+      missingKeywords: ['Data Wrangling', 'Asynchronous Operations', 'ORM', 'Object-Oriented Programming'],
+      recommendations: [
+        'Include machine learning or data analysis libraries if relevant (Pandas, NumPy).',
+        'Highlight FastAPI query routing speeds and validation using Pydantic.',
+        'Describe database interactions using SQLAlchemy or Django ORM.'
+      ]
+    };
+  }
+  
+  if (role.includes('devops')) {
+    return {
+      matchScore: 72,
+      missingSkills: ['Kubernetes', 'Terraform', 'GitHub Actions', 'AWS S3/EC2'],
+      missingKeywords: ['Infrastructure as Code', 'Continuous Integration', 'Cloud Orchestration', 'Log Monitoring'],
+      recommendations: [
+        'Highlight automated build, test, and deploy pipelines using GitHub Actions or Jenkins.',
+        'Showcase Infrastructure as Code (IaC) setup using Terraform files.',
+        'List cloud monitoring metrics configured using Prometheus, Grafana, or AWS CloudWatch.'
+      ]
+    };
+  }
+  
+  if (role.includes('data structures') || role.includes('dsa')) {
+    return {
+      matchScore: 85,
+      missingSkills: ['Dynamic Programming', 'Graph Theory', 'Time Complexity Analysis'],
+      missingKeywords: ['Algorithm Design', 'Space Complexity Optimization', 'Bit Manipulation', 'Tree Traversal'],
+      recommendations: [
+        'Provide LeetCode rating or competitive programming profiles if applicable.',
+        'Highlight optimization achievements (e.g. reducing runtime from O(N^2) to O(N log N)).',
+        'Showcase deep understanding of recursive patterns and memory allocation details.'
+      ]
+    };
+  }
+
+  // Default fallback
   return {
     matchScore: 78,
     missingSkills: ['Docker', 'AWS', 'Redux Toolkit'],

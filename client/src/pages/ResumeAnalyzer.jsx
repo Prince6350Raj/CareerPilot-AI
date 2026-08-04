@@ -206,14 +206,13 @@ const ResumeAnalyzer = () => {
   return (
     <div className="resume-analyzer-view">
       <h1 className="page-title">ATS Resume Hub</h1>
-      <p className="page-subtitle">Manage resume versions, check job role suitability, and generate custom cover letters.</p>
+      <p className="page-subtitle">Manage resume versions and check job role suitability.</p>
 
       {/* Tab Select Header */}
       <div className="resume-tabs-row glass-card">
         {[
           { id: 'ats', label: 'ATS Audit Report', icon: FileText },
           { id: 'compare', label: 'AI Role Suitability', icon: Briefcase },
-          { id: 'coverletter', label: 'AI Cover Letter Gen', icon: FileSignature },
           { id: 'versions', label: 'Version Diff History', icon: Layers }
         ].map(t => {
           const Icon = t.icon;
@@ -472,51 +471,7 @@ const ResumeAnalyzer = () => {
                 </div>
               )}
 
-              {/* TAB 3: COVER LETTER */}
-              {activeTab === 'coverletter' && (
-                <div className="results-card glass-card animate-fade-in">
-                  <h2 className="results-panel-title" style={{ marginBottom: '0.5rem' }}>AI Cover Letter Generator</h2>
-                  <p className="subsection-desc">Paste a job description to write a professional cover letter matching your resume.</p>
-
-                  <div className="form-group" style={{ marginTop: '1.5rem' }}>
-                    <label className="form-label" htmlFor="jd-textarea">Job Description / Requirements</label>
-                    <textarea
-                      id="jd-textarea"
-                      placeholder="Paste the desired job posting or requirements details here..."
-                      className="form-control"
-                      rows={6}
-                      value={jobDescription}
-                      onChange={(e) => setJobDescription(e.target.value)}
-                    />
-                  </div>
-
-                  <button
-                    onClick={handleGenerateCoverLetter}
-                    className="btn btn-primary"
-                    disabled={generatingLetter || !jobDescription.trim()}
-                    style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}
-                  >
-                    {generatingLetter ? 'Generating Cover Letter...' : 'Generate Cover Letter'}
-                  </button>
-
-                  {coverLetterResult && (
-                    <div className="cover-letter-output-wrapper animate-fade-in" style={{ marginTop: '2rem' }}>
-                      <div className="output-header-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>Generated Cover Letter</h3>
-                        <button onClick={handlePrintCoverLetter} className="btn btn-secondary" style={{ gap: '0.5rem' }}>
-                          <Download size={14} />
-                          <span>Download PDF</span>
-                        </button>
-                      </div>
-
-                      {/* Display Box */}
-                      <div className="cover-letter-paper printable-cover-letter" style={{ padding: '1.5rem', background: 'var(--bg-item)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', whiteSpace: 'pre-line', fontSize: '0.9rem', color: 'var(--text-primary)', fontFamily: 'serif', lineHeight: 1.6 }}>
-                        {coverLetterResult}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* TAB 3: COVER LETTER REMOVED */}
 
               {/* TAB 4: VERSION HISTORY DIFF */}
               {activeTab === 'versions' && (
