@@ -65,54 +65,71 @@ exports.analyzeResume = async (resumeText) => {
  * 2. Generate Learning Roadmap
  */
 exports.generateRoadmap = async (targetRole, currentSkills = [], missingSkills = []) => {
+  let roadmap;
   if (!genAI) {
     console.warn('⚠️ Gemini Key not found. Loading Mock Roadmap.');
-    return getMockRoadmap(targetRole, currentSkills, missingSkills);
-  }
+    roadmap = getMockRoadmap(targetRole, currentSkills, missingSkills);
+  } else {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        generationConfig: { responseMimeType: 'application/json' }
+      });
 
-  try {
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      generationConfig: { responseMimeType: 'application/json' }
-    });
+      const prompt = `
+        Create a step-by-step weekly learning roadmap for a student aiming to become a "${targetRole}".
+        Current Skills: ${JSON.stringify(currentSkills)}
+        Missing Skills: ${JSON.stringify(missingSkills)}
 
-    const prompt = `
-      Create a step-by-step weekly learning roadmap for a student aiming to become a "${targetRole}".
-      Current Skills: ${JSON.stringify(currentSkills)}
-      Missing Skills: ${JSON.stringify(missingSkills)}
-
-      Return a JSON object matching this schema:
-      {
-        "targetRole": "${targetRole}",
-        "currentSkills": [string],
-        "missingSkills": [string],
-        "weeksEstimate": number (total duration, e.g. 12),
-        "phases": [{
-          "phaseNumber": number,
-          "title": string,
-          "duration": string (e.g. "Weeks 1-4"),
-          "objectives": [string],
-          "resources": [{
+        Return a JSON object matching this schema:
+        {
+          "targetRole": "${targetRole}",
+          "currentSkills": [string],
+          "missingSkills": [string],
+          "weeksEstimate": number (total duration, e.g. 12),
+          "phases": [{
+            "phaseNumber": number,
             "title": string,
-            "url": string (suggest high-quality free URLs or placeholder domains),
-            "type": "video" | "article" | "course" | "documentation"
-          }],
-          "projects": [{
-            "title": string,
-            "description": string,
-            "difficulty": "Beginner" | "Intermediate" | "Advanced"
+            "duration": string (e.g. "Weeks 1-4"),
+            "objectives": [string],
+            "resources": [{
+              "title": string,
+              "url": string (suggest high-quality free URLs or placeholder domains),
+              "type": "video" | "article" | "course" | "documentation"
+            }],
+            "projects": [{
+              "title": string,
+              "description": string,
+              "difficulty": "Beginner" | "Intermediate" | "Advanced"
+            }]
           }]
-        }]
-      }
-    `;
+        }
+      `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return parseAIResponse(response.text());
-  } catch (error) {
-    console.error('Gemini Roadmap Generation error:', error);
-    return getMockRoadmap(targetRole, currentSkills, missingSkills);
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      roadmap = parseAIResponse(response.text());
+    } catch (error) {
+      console.error('Gemini Roadmap Generation error:', error);
+      roadmap = getMockRoadmap(targetRole, currentSkills, missingSkills);
+    }
   }
+
+  // Sanitize and filter out all YouTube video resources
+  if (roadmap && Array.isArray(roadmap.phases)) {
+    roadmap.phases = roadmap.phases.map(phase => {
+      if (Array.isArray(phase.resources)) {
+        phase.resources = phase.resources.filter(resource => {
+          const urlStr = (resource.url || '').toLowerCase();
+          const isYoutube = urlStr.includes('youtube.com') || urlStr.includes('youtu.be');
+          return resource.type !== 'video' && !isYoutube;
+        });
+      }
+      return phase;
+    });
+  }
+
+  return roadmap;
 };
 
 /**

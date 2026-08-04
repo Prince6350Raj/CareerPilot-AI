@@ -211,23 +211,25 @@ const Roadmap = () => {
                       </div>
 
                       {/* Resources */}
-                      {phase.resources?.length > 0 && (
+                      {phase.resources?.filter(r => r.type !== 'video' && !r.url?.includes('youtube.com') && !r.url?.includes('youtu.be')).length > 0 && (
                         <div className="phase-section">
                           <h4 className="section-small-lbl">Curated Study Resources</h4>
                           <div className="resources-grid">
-                            {phase.resources.map((resource, i) => (
-                              <a
-                                key={i}
-                                href={resource.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="resource-link-card"
-                              >
-                                {getResourceIcon(resource.type)}
-                                <span className="resource-title-text">{resource.title}</span>
-                                <ExternalLink size={12} className="link-arrow" />
-                              </a>
-                            ))}
+                            {phase.resources
+                              .filter(r => r.type !== 'video' && !r.url?.includes('youtube.com') && !r.url?.includes('youtu.be'))
+                              .map((resource, i) => (
+                                <a
+                                  key={i}
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="resource-link-card"
+                                >
+                                  {getResourceIcon(resource.type)}
+                                  <span className="resource-title-text">{resource.title}</span>
+                                  <ExternalLink size={12} className="link-arrow" />
+                                </a>
+                              ))}
                           </div>
                         </div>
                       )}
