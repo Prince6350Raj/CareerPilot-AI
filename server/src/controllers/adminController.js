@@ -87,3 +87,22 @@ exports.getAnalytics = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get all feedbacks
+// @route   GET /api/admin/feedbacks
+// @access  Private/Admin
+exports.getFeedbacks = async (req, res, next) => {
+  try {
+    const feedbacks = await Feedback.find({})
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: feedbacks.length,
+      data: feedbacks
+    });
+  } catch (error) {
+    next(error);
+  }
+};

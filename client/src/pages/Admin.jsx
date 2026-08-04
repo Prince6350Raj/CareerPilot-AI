@@ -7,7 +7,9 @@ const Admin = () => {
   const { token, API_URL } = useContext(AuthContext);
   
   const [users, setUsers] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [analytics, setAnalytics] = useState(null);
+  const [activeTab, setActiveTab] = useState('users');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,6 +22,15 @@ const Admin = () => {
       const usersData = await usersRes.json();
       if (usersData.success) {
         setUsers(usersData.data);
+      }
+
+      // Fetch feedbacks
+      const feedbackRes = await fetch(`${API_URL}/admin/feedbacks`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const feedbackData = await feedbackRes.json();
+      if (feedbackData.success) {
+        setFeedbacks(feedbackData.data);
       }
 
       // Fetch analytics
@@ -118,49 +129,104 @@ const Admin = () => {
         </div>
       </div>
 
-      {/* Users table */}
-      <div className="users-table-card glass-card">
-        <h3 className="section-title">Registered Accounts</h3>
-        <div className="table-responsive-wrapper">
-          <table className="admin-users-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email Address</th>
-                <th>Role</th>
-                <th>Verification</th>
-                <th>Created Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u._id}>
-                  <td className="user-name-col">{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    <span className={`role-badge ${u.role}`}>
-                      {u.role}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`verify-badge ${u.isVerified ? 'verified' : 'pending'}`}>
-                      {u.isVerified ? 'Verified' : 'Pending'}
-                    </span>
-                  </td>
-                  <td className="date-col">
-                    {new Date(u.createdAt).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="empty-table-row">No users registered on the platform yet.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+      {/* Tabs Selectors */}
+      <div className="admin-tabs-row">
+        <button
+          className={`admin-tab-btn ${activeTab === 'users' ? 'active' : ''}`}
+          onClick={() => setActiveTab('users')}
+        >
+          Registered Accounts ({users.length})
+        </button>
+        <button
+          className={`admin-tab-btn ${activeTab === 'feedbacks' ? 'active' : ''}`}
+          onClick={() => setActiveTab('feedbacks')}
+        >
+          User Feedbacks ({feedbacks.length})
+        </button>
       </div>
+
+      {activeTab === 'users' ? (
+        <div className="users-table-card glass-card">
+          <h3 className="section-title">Registered Accounts</h3>
+          <div className="table-responsive-wrapper">
+            <table className="admin-users-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email Address</th>
+                  <th>Role</th>
+                  <th>Verification</th>
+                  <th>Created Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(u => (
+                  <tr key={u._id}>
+                    <td className="user-name-col">{u.name}</td>
+                    <td>{u.email}</td>
+                    <td>
+                      <span className={`role-badge ${u.role}`}>
+                        {u.role}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`verify-badge ${u.isVerified ? 'verified' : 'pending'}`}>
+                        {u.isVerified ? 'Verified' : 'Pending'}
+                      </span>
+                    </td>
+                    <td className="date-col">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+                {users.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="empty-table-row">No users registered on the platform yet.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        <div className="users-table-card glass-card">
+          <h3 className="section-title">User Feedbacks & Suggestions</h3>
+          <div className="table-responsive-wrapper">
+            <table className="admin-users-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Subject</th>
+                  <th>Description</th>
+                  <th>Submitted Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {feedbacks.map(f => (
+                  <tr key={f._id}>
+                    <td className="user-name-col">
+                      <div>{f.userId?.name || 'Deleted User'}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 'normal', opacity: 0.7 }}>
+                        {f.userId?.email || 'N/A'}
+                      </div>
+                    </td>
+                    <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{f.subject}</td>
+                    <td style={{ maxWidth: '300px', whiteSpace: 'pre-wrap', lineHeight: '1.4' }}>{f.content}</td>
+                    <td className="date-col">
+                      {new Date(f.createdAt).toLocaleDateString()} {new Date(f.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
+                  </tr>
+                ))}
+                {feedbacks.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="empty-table-row">No feedbacks submitted yet.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
