@@ -709,162 +709,181 @@ const MockInterview = () => {
                 <Briefcase size={22} className="accent-icon" />
                 <h3>Direct Company Job Openings</h3>
               </div>
-              <p className="extra-card-desc">
-                {scorecard.overallScore >= 7.0 
-                  ? 'Excellent score! You are prepared to apply. Here are direct vacancy search pages for top tech companies:'
-                  : 'Good effort. We recommend applying for internships or junior roles. Here are direct openings profiles:'}
-              </p>
+              
+              {scorecard.overallScore < 4.0 ? (
+                <div className="assessment-failed-message" style={{ padding: '2rem 1.5rem', textAlign: 'center', background: 'var(--bg-item)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', marginTop: '1rem' }}>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>🎯</span>
+                  <h4 style={{ color: '#ef4444', fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+                    Assessment Unsuccessful
+                  </h4>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                    Aap is assessment me clear nahi ho paaye. Kripya fir se acchi tarah se taiyari kijiye aur re-test dijiye.
+                    Ek baar qualifying score (4.0+) achieve karne ke baad, hum aapko profile settings ke matching top hiring companies suggest karenge.
+                  </p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', borderTop: '1px dashed var(--border-color)', paddingTop: '1rem' }}>
+                    "Please prepare more thoroughly and retake the test. Once you achieve a passing score, we will unlock customized company career recommendations for you."
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <p className="extra-card-desc">
+                    {scorecard.overallScore >= 7.0 
+                      ? 'Excellent score! You are prepared to apply. Here are direct vacancy search pages for top tech companies:'
+                      : 'Good effort. We recommend applying for internships or junior roles. Here are direct openings profiles:'}
+                  </p>
 
-              <div className="company-vacancies-list">
-                {(() => {
-                  const roleQuery = encodeURIComponent(scorecard.role);
-                  const isHighValuation = (scorecard.overallScore || 0) >= 5.0; // 50% or above
+                  <div className="company-vacancies-list">
+                    {(() => {
+                      const roleQuery = encodeURIComponent(scorecard.role);
+                      const isHighValuation = (scorecard.overallScore || 0) >= 5.0; // 50% or above
 
-                  const companies = isHighValuation
-                    ? [
+                      const companies = isHighValuation
+                        ? [
+                            {
+                              name: 'Google Careers',
+                              logo: 'G',
+                              color: '#4285F4',
+                              url: `https://www.google.com/about/careers/applications/jobs/results/?q=${roleQuery}`,
+                              desc: 'Search active openings on Google Careers'
+                            },
+                            {
+                              name: 'Microsoft Careers',
+                              logo: 'M',
+                              color: '#F25022',
+                              url: `https://careers.microsoft.com/us/en/search-results?keywords=${roleQuery}`,
+                              desc: 'Explore engineering roles at Microsoft'
+                            },
+                            {
+                              name: 'Amazon Jobs',
+                              logo: 'A',
+                              color: '#FF9900',
+                              url: `https://www.amazon.jobs/en/search?base_query=${roleQuery}`,
+                              desc: 'Apply directly via Amazon Jobs portal'
+                            },
+                            {
+                              name: 'Meta Careers',
+                              logo: 'Me',
+                              color: '#0668E1',
+                              url: `https://www.metacareers.com/jobs?q=${roleQuery}`,
+                              desc: 'Explore engineering roles at Meta'
+                            }
+                          ]
+                        : [
+                            {
+                              name: 'TCS Careers',
+                              logo: 'T',
+                              color: '#1E3A8A',
+                              url: `https://www.tcs.com/careers/search-results?keyword=${roleQuery}`,
+                              desc: 'Explore entry-level & graduate roles at TCS'
+                            },
+                            {
+                              name: 'Infosys Careers',
+                              logo: 'I',
+                              color: '#007cc3',
+                              url: `https://www.infosys.com/careers/apply.html?q=${roleQuery}`,
+                              desc: 'Apply to developer positions at Infosys'
+                            },
+                            {
+                              name: 'Wellfound (AngelList)',
+                              logo: 'W',
+                              color: '#000000',
+                              url: `https://wellfound.com/jobs?q=${roleQuery}`,
+                              desc: 'Apply to high-growth tech startups on Wellfound'
+                            },
+                            {
+                              name: 'Wipro Careers',
+                              logo: 'Wi',
+                              color: '#5b21b6',
+                              url: `https://careers.wipro.com/careers-home/search?q=${roleQuery}`,
+                              desc: 'Search active tech vacancies at Wipro'
+                            }
+                          ];
+
+                      return companies;
+                    })().map((company, idx) => (
+                      <a 
+                        key={idx}
+                        href={company.url}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="company-vacancy-item"
+                      >
+                        <div className="company-logo-avatar" style={{ backgroundColor: company.color }}>
+                          {company.logo}
+                        </div>
+                        <div className="company-meta-info">
+                          <span className="company-name">{company.name}</span>
+                          <span className="company-job-desc">{company.desc}</span>
+                        </div>
+                        <div className="vacancy-pulse-indicator">
+                          <span className="pulse-dot"></span>
+                          <span className="pulse-lbl">Open</span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+
+                  {/* Separated Job Search Portals Section */}
+                  <div className="job-portals-section-divider" style={{ margin: '2rem 0 1rem 0', borderTop: '1px dashed var(--border-color)', paddingTop: '1.5rem' }}>
+                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 0 0.5rem 0', fontSize: '1rem', color: 'var(--text-primary)' }}>
+                      <span style={{ fontSize: '1.2rem' }}>🌐</span> Global Job Search Engines
+                    </h4>
+                    <p className="extra-card-desc" style={{ marginBottom: '1rem' }}>
+                      Search aggregated listings across top worldwide job discovery platforms for custom roles:
+                    </p>
+                  </div>
+
+                  <div className="company-vacancies-list">
+                    {(() => {
+                      const roleQuery = encodeURIComponent(scorecard.role);
+                      return [
                         {
-                          name: 'Google Careers',
-                          logo: 'G',
-                          color: '#4285F4',
-                          url: `https://www.google.com/about/careers/applications/jobs/results/?q=${roleQuery}`,
-                          desc: 'Search active openings on Google Careers'
+                          name: 'LinkedIn Jobs',
+                          logo: 'In',
+                          color: '#0A66C2',
+                          url: `https://www.linkedin.com/jobs/search/?keywords=${roleQuery}`,
+                          desc: `Search active ${scorecard.role} roles on LinkedIn`
                         },
                         {
-                          name: 'Microsoft Careers',
-                          logo: 'M',
-                          color: '#F25022',
-                          url: `https://careers.microsoft.com/us/en/search-results?keywords=${roleQuery}`,
-                          desc: 'Explore engineering roles at Microsoft'
+                          name: 'Indeed Jobs',
+                          logo: 'Id',
+                          color: '#2164f3',
+                          url: `https://www.indeed.com/jobs?q=${roleQuery}`,
+                          desc: `Search localized jobs on Indeed portal`
                         },
                         {
-                          name: 'Amazon Jobs',
-                          logo: 'A',
-                          color: '#FF9900',
-                          url: `https://www.amazon.jobs/en/search?base_query=${roleQuery}`,
-                          desc: 'Apply directly via Amazon Jobs portal'
-                        },
-                        {
-                          name: 'Meta Careers',
-                          logo: 'Me',
-                          color: '#0668E1',
-                          url: `https://www.metacareers.com/jobs?q=${roleQuery}`,
-                          desc: 'Explore engineering roles at Meta'
-                        }
-                      ]
-                    : [
-                        {
-                          name: 'TCS Careers',
-                          logo: 'T',
-                          color: '#1E3A8A',
-                          url: `https://www.tcs.com/careers/search-results?keyword=${roleQuery}`,
-                          desc: 'Explore entry-level & graduate roles at TCS'
-                        },
-                        {
-                          name: 'Infosys Careers',
-                          logo: 'I',
-                          color: '#007cc3',
-                          url: `https://www.infosys.com/careers/apply.html?q=${roleQuery}`,
-                          desc: 'Apply to developer positions at Infosys'
-                        },
-                        {
-                          name: 'Wellfound (AngelList)',
-                          logo: 'W',
-                          color: '#000000',
-                          url: `https://wellfound.com/jobs?q=${roleQuery}`,
-                          desc: 'Apply to high-growth tech startups on Wellfound'
-                        },
-                        {
-                          name: 'Wipro Careers',
-                          logo: 'Wi',
-                          color: '#5b21b6',
-                          url: `https://careers.wipro.com/careers-home/search?q=${roleQuery}`,
-                          desc: 'Search active tech vacancies at Wipro'
+                          name: 'Naukri.com',
+                          logo: 'N',
+                          color: '#ff6f00',
+                          url: `https://www.naukri.com/${roleQuery.replace(/%20/g, '-')}-jobs`,
+                          desc: `Explore top Indian openings on Naukri`
                         }
                       ];
-
-                  return companies;
-                })().map((company, idx) => (
-                  <a 
-                    key={idx}
-                    href={company.url}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="company-vacancy-item"
-                  >
-                    <div className="company-logo-avatar" style={{ backgroundColor: company.color }}>
-                      {company.logo}
-                    </div>
-                    <div className="company-meta-info">
-                      <span className="company-name">{company.name}</span>
-                      <span className="company-job-desc">{company.desc}</span>
-                    </div>
-                    <div className="vacancy-pulse-indicator">
-                      <span className="pulse-dot"></span>
-                      <span className="pulse-lbl">Open</span>
-                    </div>
-                  </a>
-                ))}
-              </div>
-
-              {/* Separated Job Search Portals Section */}
-              <div className="job-portals-section-divider" style={{ margin: '2rem 0 1rem 0', borderTop: '1px dashed var(--border-color)', paddingTop: '1.5rem' }}>
-                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 0 0.5rem 0', fontSize: '1rem', color: 'var(--text-primary)' }}>
-                  <span style={{ fontSize: '1.2rem' }}>🌐</span> Global Job Search Engines
-                </h4>
-                <p className="extra-card-desc" style={{ marginBottom: '1rem' }}>
-                  Search aggregated listings across top worldwide job discovery platforms for custom roles:
-                </p>
-              </div>
-
-              <div className="company-vacancies-list">
-                {(() => {
-                  const roleQuery = encodeURIComponent(scorecard.role);
-                  return [
-                    {
-                      name: 'LinkedIn Jobs',
-                      logo: 'In',
-                      color: '#0A66C2',
-                      url: `https://www.linkedin.com/jobs/search/?keywords=${roleQuery}`,
-                      desc: `Search active ${scorecard.role} roles on LinkedIn`
-                    },
-                    {
-                      name: 'Indeed Jobs',
-                      logo: 'Id',
-                      color: '#2164f3',
-                      url: `https://www.indeed.com/jobs?q=${roleQuery}`,
-                      desc: `Search localized jobs on Indeed portal`
-                    },
-                    {
-                      name: 'Naukri.com',
-                      logo: 'N',
-                      color: '#ff6f00',
-                      url: `https://www.naukri.com/${roleQuery.replace(/%20/g, '-')}-jobs`,
-                      desc: `Explore top Indian openings on Naukri`
-                    }
-                  ];
-                })().map((portal, idx) => (
-                  <a 
-                    key={idx}
-                    href={portal.url}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="company-vacancy-item"
-                    style={{ border: '1px solid hsla(215, 85%, 60%, 0.15)', background: 'hsla(215, 85%, 60%, 0.03)' }}
-                  >
-                    <div className="company-logo-avatar" style={{ backgroundColor: portal.color }}>
-                      {portal.logo}
-                    </div>
-                    <div className="company-meta-info">
-                      <span className="company-name">{portal.name}</span>
-                      <span className="company-job-desc">{portal.desc}</span>
-                    </div>
-                    <div className="vacancy-pulse-indicator">
-                      <span className="pulse-dot" style={{ backgroundColor: 'var(--secondary)' }}></span>
-                      <span className="pulse-lbl" style={{ color: 'var(--secondary)' }}>Search</span>
-                    </div>
-                  </a>
-                ))}
-              </div>
+                    })().map((portal, idx) => (
+                      <a 
+                        key={idx}
+                        href={portal.url}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="company-vacancy-item"
+                        style={{ border: '1px solid hsla(215, 85%, 60%, 0.15)', background: 'hsla(215, 85%, 60%, 0.03)' }}
+                      >
+                        <div className="company-logo-avatar" style={{ backgroundColor: portal.color }}>
+                          {portal.logo}
+                        </div>
+                        <div className="company-meta-info">
+                          <span className="company-name">{portal.name}</span>
+                          <span className="company-job-desc">{portal.desc}</span>
+                        </div>
+                        <div className="vacancy-pulse-indicator">
+                          <span className="pulse-dot" style={{ backgroundColor: 'var(--secondary)' }}></span>
+                          <span className="pulse-lbl" style={{ color: 'var(--secondary)' }}>Search</span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
