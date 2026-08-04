@@ -717,11 +717,11 @@ const MockInterview = () => {
                     Assessment Unsuccessful
                   </h4>
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                    Aap is assessment me clear nahi ho paaye. Kripya fir se acchi tarah se taiyari kijiye aur re-test dijiye.
-                    Ek baar qualifying score (4.0+) achieve karne ke baad, hum aapko profile settings ke matching top hiring companies suggest karenge.
+                    You did not pass the assessment this time. Please prepare more thoroughly and retake the test.
+                    Once you achieve a passing score (4.0+), we will unlock customized company career recommendations and job vacancy portals matching your profile.
                   </p>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', borderTop: '1px dashed var(--border-color)', paddingTop: '1rem' }}>
-                    "Please prepare more thoroughly and retake the test. Once you achieve a passing score, we will unlock customized company career recommendations for you."
+                    "Success is not final, failure is not fatal: it is the courage to continue that counts."
                   </p>
                 </div>
               ) : (
