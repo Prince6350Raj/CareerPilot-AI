@@ -29,7 +29,7 @@ exports.analyzeResume = async (resumeText) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -72,7 +72,7 @@ exports.generateRoadmap = async (targetRole, currentSkills = [], missingSkills =
   } else {
     try {
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-3.6-flash',
         generationConfig: { responseMimeType: 'application/json' }
       });
 
@@ -143,7 +143,7 @@ exports.generateInterviewQuestions = async (role, type, limit = 5, format = 'the
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -208,7 +208,7 @@ exports.gradeInterviewAnswer = async (questionText, userAnswer) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -1136,7 +1136,7 @@ exports.compareResumeToRole = async (resumeText, jobRole) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -1176,7 +1176,7 @@ exports.generateCoverLetter = async (resumeText, jobDescription) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
     });
 
     const prompt = `
@@ -1208,7 +1208,7 @@ exports.getCompanyPrep = async (companyName) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -1250,7 +1250,7 @@ exports.getCareerChatbotResponse = async (userMessage, userProfileContext) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -1294,7 +1294,7 @@ exports.getPortfolioSuggestions = async (portfolioUrl) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -2470,7 +2470,7 @@ exports.generateCodingChallenge = async (difficulty, topic) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 
@@ -2521,7 +2521,7 @@ exports.evaluateCodeSubmission = async (problemTitle, problemStatement, userCode
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: { responseMimeType: 'application/json' }
     });
 

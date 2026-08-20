@@ -8,7 +8,7 @@
     "dev": "nodemon src/server.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.11.0",
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
