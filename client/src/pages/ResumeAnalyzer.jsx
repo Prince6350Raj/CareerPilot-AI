@@ -73,6 +73,12 @@ const ResumeAnalyzer = () => {
 
   const currentTheme = colorThemesList.find(t => t.id === colorTheme) || colorThemesList[0];
 
+  const canvasStyles = {
+    '--theme-primary': currentTheme.primary,
+    '--theme-secondary': currentTheme.secondary,
+    '--theme-text-light': currentTheme.text
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
