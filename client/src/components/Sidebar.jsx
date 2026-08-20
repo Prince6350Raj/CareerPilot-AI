@@ -125,7 +125,7 @@ const Sidebar = () => {
           {[
             { id: 'dark', name: 'Deep Space', color: '#4f46e5', label: 'D' },
             { id: 'light', name: 'Frosted Glass', color: '#94a3b8', label: 'L' },
-            { id: 'cyberpunk', name: 'Cyberpunk Neon', color: '#ec4899', label: 'C' },
+            { id: 'cyberpunk', name: 'Midnight Gold', color: '#eab308', label: 'M' },
             { id: 'emerald', name: 'Emerald Forest', color: '#10b981', label: 'E' },
             { id: 'sakura', name: 'Aura Obsidian', color: '#d97706', label: 'A' },
             { id: 'ocean', name: 'Geeta Portal', color: '#1e3a8a', label: 'G' }

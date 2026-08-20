@@ -69,28 +69,28 @@
   --bg-input: hsla(0, 0%, 100%, 0.85); /* Soft frosted input in light mode */
 }
 
-/* Cyberpunk Neon Theme Overrides */
+/* Midnight Gold Theme Overrides (Black and Yellow) */
 :root[data-theme="cyberpunk"] {
-  --bg-dark: hsl(280, 50%, 8%); /* Rich dark violet background */
-  --bg-card: hsla(280, 50%, 12%, 0.7); /* Frosted violet card */
-  --border-color: hsla(320, 100%, 60%, 0.25); /* Neon rose border */
-  --text-primary: hsl(180, 100%, 95%); /* Bright cyan-blue text */
-  --text-secondary: hsl(320, 100%, 80%); /* Neon pink-violet text */
-  --text-muted: hsl(280, 25%, 55%); /* Muted violet */
+  --bg-dark: hsl(0, 0%, 4%); /* Matte Obsidian Black background */
+  --bg-card: hsla(0, 0%, 9%, 0.75); /* Frosted dark charcoal card */
+  --border-color: hsla(48, 100%, 50%, 0.18); /* Muted yellow/gold border */
+  --text-primary: hsl(0, 0%, 98%); /* Pure white text */
+  --text-secondary: hsl(48, 100%, 55%); /* Bright cyber yellow text */
+  --text-muted: hsl(0, 0%, 62%); /* Warm slate gray text */
   
-  --primary: hsl(320, 100%, 55%); /* Neon Hot Pink */
-  --primary-glow: hsla(320, 100%, 55%, 0.25);
-  --primary-hover: hsl(320, 100%, 65%);
+  --primary: hsl(48, 100%, 50%); /* Premium Sports Yellow */
+  --primary-glow: hsla(48, 100%, 50%, 0.20);
+  --primary-hover: hsl(45, 100%, 45%);
   
-  --secondary: hsl(180, 100%, 50%); /* Neon Cyber Cyan */
-  --secondary-glow: hsla(180, 100%, 50%, 0.25);
+  --secondary: hsl(0, 0%, 90%); /* Light Platinum Accent */
+  --secondary-glow: hsla(0, 0%, 90%, 0.20);
   
-  --glass-border: 1px solid hsla(320, 100%, 60%, 0.25);
-  --glass-shadow: 0 8px 32px 0 rgba(244, 63, 94, 0.15);
+  --glass-border: 1px solid hsla(48, 100%, 50%, 0.22);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
   
-  --bg-item: hsla(280, 50%, 5%, 0.6);
-  --bg-item-hover: hsla(320, 100%, 60%, 0.15);
-  --bg-input: hsla(280, 50%, 4%, 0.9);
+  --bg-item: hsla(0, 0%, 2%, 0.7);
+  --bg-item-hover: hsla(48, 100%, 50%, 0.12);
+  --bg-input: hsla(0, 0%, 3%, 0.9);
 }
 
 /* Emerald Forest Theme Overrides */
@@ -195,8 +195,8 @@ body {
 
 :root[data-theme="cyberpunk"] body {
   background-image: 
-    radial-gradient(at 0% 0%, hsla(320, 100%, 55%, 0.22) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(180, 100%, 50%, 0.22) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(48, 100%, 50%, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(0, 0%, 20%, 0.25) 0px, transparent 50%);
 }
 
 :root[data-theme="emerald"] body {
