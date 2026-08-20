@@ -786,3 +786,123 @@
   color: #4b5563;
   margin: 0;
 }
+
+/* ==========================================================================
+   CANVA STYLE CUSTOMIZATION CONTROL BAR
+   ========================================================================== */
+.builder-control-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.template-selectors-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.control-btn {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.control-btn:hover {
+  background: var(--bg-item-hover);
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
+.control-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.color-swatches-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.color-swatch-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 0;
+}
+
+.color-swatch-circle:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch-circle.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--primary);
+  transform: scale(1.1);
+}
+
+.load-demo-section {
+  display: flex;
+  align-items: center;
+}
+
+.load-demo-btn {
+  background: var(--bg-dark) !important;
+  color: var(--secondary) !important;
+  border: 1.5px dashed var(--secondary) !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 700 !important;
+  transition: var(--transition-smooth);
+}
+
+.load-demo-btn:hover {
+  background: var(--secondary) !important;
+  color: var(--bg-dark) !important;
+  transform: translateY(-1px);
+}
+
+/* Photo layout spacing adjustments */
+.p-photo-classic {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Sidebar layout print/canvas styling rules */
+.template-sidebar-col, .template-sidebar-body {
+  box-sizing: border-box;
+}
+
+.template-banner-root {
+  box-sizing: border-box;
+}
