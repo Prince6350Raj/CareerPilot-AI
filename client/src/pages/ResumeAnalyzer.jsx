@@ -30,6 +30,198 @@ const ResumeAnalyzer = () => {
   const [vSelectedB, setVSelectedB] = useState('');
   const [versionDiff, setVersionDiff] = useState(null);
 
+  // Resume Builder States
+  const [personal, setPersonal] = useState({
+    fullName: '',
+    title: '',
+    email: '',
+    phone: '',
+    location: '',
+    linkedin: '',
+    github: '',
+    summary: ''
+  });
+
+  const [experience, setExperience] = useState([
+    { company: '', position: '', duration: '', description: '' }
+  ]);
+
+  const [education, setEducation] = useState([
+    { institution: '', degree: '', duration: '' }
+  ]);
+
+  const [projects, setProjects] = useState([
+    { name: '', tech: '', description: '' }
+  ]);
+
+  const [skills, setSkills] = useState('');
+  const [analyzingBuilt, setAnalyzingBuilt] = useState(false);
+
+  const handleAddExperience = () => {
+    setExperience([...experience, { company: '', position: '', duration: '', description: '' }]);
+  };
+  const handleRemoveExperience = (index) => {
+    const list = [...experience];
+    list.splice(index, 1);
+    setExperience(list);
+  };
+  const handleExperienceChange = (index, field, value) => {
+    const list = [...experience];
+    list[index][field] = value;
+    setExperience(list);
+  };
+
+  const handleAddEducation = () => {
+    setEducation([...education, { institution: '', degree: '', duration: '' }]);
+  };
+  const handleRemoveEducation = (index) => {
+    const list = [...education];
+    list.splice(index, 1);
+    setEducation(list);
+  };
+  const handleEducationChange = (index, field, value) => {
+    const list = [...education];
+    list[index][field] = value;
+    setEducation(list);
+  };
+
+  const handleAddProject = () => {
+    setProjects([...projects, { name: '', tech: '', description: '' }]);
+  };
+  const handleRemoveProject = (index) => {
+    const list = [...projects];
+    list.splice(index, 1);
+    setProjects(list);
+  };
+  const handleProjectChange = (index, field, value) => {
+    const list = [...projects];
+    list[index][field] = value;
+    setProjects(list);
+  };
+
+  const serializeResumeText = () => {
+    let text = `${personal.fullName.toUpperCase()}\n`;
+    if (personal.title) text += `${personal.title}\n`;
+    text += `${personal.email} | ${personal.phone} | ${personal.location}\n`;
+    if (personal.linkedin || personal.github) {
+      text += `${personal.linkedin ? 'LinkedIn: ' + personal.linkedin : ''} ${personal.github ? 'GitHub: ' + personal.github : ''}\n`;
+    }
+    text += `\n`;
+
+    if (personal.summary) {
+      text += `SUMMARY\n${personal.summary}\n\n`;
+    }
+
+    if (experience.length > 0 && experience[0].company) {
+      text += `WORK EXPERIENCE\n`;
+      experience.forEach(exp => {
+        text += `${exp.company} - ${exp.position} (${exp.duration})\n${exp.description}\n\n`;
+      });
+    }
+
+    if (education.length > 0 && education[0].institution) {
+      text += `EDUCATION\n`;
+      education.forEach(edu => {
+        text += `${edu.institution} - ${edu.degree} (${edu.duration})\n\n`;
+      });
+    }
+
+    if (projects.length > 0 && projects[0].name) {
+      text += `PROJECTS\n`;
+      projects.forEach(p => {
+        text += `${p.name} (${p.tech})\n${p.description}\n\n`;
+      });
+    }
+
+    if (skills) {
+      text += `SKILLS\n${skills}\n`;
+    }
+
+    return text;
+  };
+
+  const handleAnalyzeBuiltResume = async () => {
+    if (!personal.fullName) {
+      setError('Please provide at least your full name before analyzing.');
+      return;
+    }
+
+    setAnalyzingBuilt(true);
+    setError('');
+    const serializedText = serializeResumeText();
+
+    try {
+      const res = await fetch(`${API_URL}/resume/analyze-built`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ resumeText: serializedText })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setHistory([data.data, ...history]);
+        setActiveResume(data.data);
+        setActiveTab('ats');
+      } else {
+        setError(data.message || 'Failed to analyze built resume.');
+      }
+    } catch (err) {
+      setError('Network communication timeout.');
+    } finally {
+      setAnalyzingBuilt(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('resume-preview-container');
+    if (!element) return;
+
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import('jspdf');
+
+      const originalStyle = element.style.cssText;
+      element.style.width = '794px';
+      element.style.background = '#ffffff';
+      element.style.color = '#000000';
+      element.style.padding = '30px';
+      element.style.boxShadow = 'none';
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      element.style.cssText = originalStyle;
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+    } catch (err) {
+      console.error('Failed to generate PDF:', err);
+    }
+  };
+
   const fetchHistory = async () => {
     try {
       const res = await fetch(`${API_URL}/resume/history`, {
@@ -213,7 +405,8 @@ const ResumeAnalyzer = () => {
         {[
           { id: 'ats', label: 'ATS Audit Report', icon: FileText },
           { id: 'compare', label: 'AI Role Suitability', icon: Briefcase },
-          { id: 'versions', label: 'Version Diff History', icon: Layers }
+          { id: 'versions', label: 'Version Diff History', icon: Layers },
+          { id: 'builder', label: 'Resume Builder', icon: FileSignature }
         ].map(t => {
           const Icon = t.icon;
           return (
@@ -304,7 +497,392 @@ const ResumeAnalyzer = () => {
 
         {/* Right Side: Tab Contents Panel */}
         <div className="analyzer-results-panel">
-          {activeResume ? (
+          {activeTab === 'builder' ? (
+            <div className="resume-builder-workspace animate-fade-in">
+              <div className="builder-split-editor">
+                {/* Left: Input Form */}
+                <div className="builder-form-panel glass-card">
+                  <h3 className="section-title">Resume Information Editor</h3>
+                  
+                  <div className="builder-form-section">
+                    <h4>1. Contact Details</h4>
+                    <div className="form-grid-2">
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-fullname">Full Name</label>
+                        <input
+                          type="text"
+                          id="b-fullname"
+                          className="form-control"
+                          placeholder="e.g. Ashutosh"
+                          value={personal.fullName}
+                          onChange={(e) => setPersonal({ ...personal, fullName: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-title">Professional Title</label>
+                        <input
+                          type="text"
+                          id="b-title"
+                          className="form-control"
+                          placeholder="e.g. Fullstack Developer"
+                          value={personal.title}
+                          onChange={(e) => setPersonal({ ...personal, title: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-email">Email Address</label>
+                        <input
+                          type="email"
+                          id="b-email"
+                          className="form-control"
+                          placeholder="email@example.com"
+                          value={personal.email}
+                          onChange={(e) => setPersonal({ ...personal, email: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-phone">Phone Number</label>
+                        <input
+                          type="text"
+                          id="b-phone"
+                          className="form-control"
+                          placeholder="+91 XXXXX XXXXX"
+                          value={personal.phone}
+                          onChange={(e) => setPersonal({ ...personal, phone: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-location">Location</label>
+                        <input
+                          type="text"
+                          id="b-location"
+                          className="form-control"
+                          placeholder="e.g. Delhi, India"
+                          value={personal.location}
+                          onChange={(e) => setPersonal({ ...personal, location: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="b-linkedin">LinkedIn URL</label>
+                        <input
+                          type="text"
+                          id="b-linkedin"
+                          className="form-control"
+                          placeholder="linkedin.com/in/username"
+                          value={personal.linkedin}
+                          onChange={(e) => setPersonal({ ...personal, linkedin: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="form-label" htmlFor="b-github">GitHub Profile</label>
+                        <input
+                          type="text"
+                          id="b-github"
+                          className="form-control"
+                          placeholder="github.com/username"
+                          value={personal.github}
+                          onChange={(e) => setPersonal({ ...personal, github: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="builder-form-section">
+                    <h4>2. Summary Statement</h4>
+                    <div className="form-group">
+                      <textarea
+                        id="b-summary"
+                        className="form-control textarea-field"
+                        placeholder="Write a short summary about your professional background and goals..."
+                        rows={3}
+                        value={personal.summary}
+                        onChange={(e) => setPersonal({ ...personal, summary: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="builder-form-section">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                      <h4 style={{ margin: 0 }}>3. Work Experience</h4>
+                      <button onClick={handleAddExperience} className="btn btn-secondary btn-sm" style={{ padding: '0.4rem 0.8rem' }}>+ Add Job</button>
+                    </div>
+                    {experience.map((exp, idx) => (
+                      <div key={idx} className="builder-repeater-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="repeater-index-lbl">Experience #{idx + 1}</span>
+                          {experience.length > 1 && (
+                            <button onClick={() => handleRemoveExperience(idx)} className="delete-repeater-btn" title="Remove Job">
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
+                        <div className="form-grid-2" style={{ marginTop: '0.5rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">Company Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. Google"
+                              value={exp.company}
+                              onChange={(e) => handleExperienceChange(idx, 'company', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Position/Role</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. Frontend Engineer"
+                              value={exp.position}
+                              onChange={(e) => handleExperienceChange(idx, 'position', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="form-label">Duration (e.g. June 2021 - Present)</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="June 2021 - Present"
+                              value={exp.duration}
+                              onChange={(e) => handleExperienceChange(idx, 'duration', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="form-label">Key Achievements & Duties</label>
+                            <textarea
+                              className="form-control textarea-field"
+                              placeholder="Describe your responsibilities, technologies used, and metrics (e.g. Optimized queries reducing load by 20%)..."
+                              rows={2}
+                              value={exp.description}
+                              onChange={(e) => handleExperienceChange(idx, 'description', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="builder-form-section">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                      <h4 style={{ margin: 0 }}>4. Education</h4>
+                      <button onClick={handleAddEducation} className="btn btn-secondary btn-sm" style={{ padding: '0.4rem 0.8rem' }}>+ Add School</button>
+                    </div>
+                    {education.map((edu, idx) => (
+                      <div key={idx} className="builder-repeater-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="repeater-index-lbl">Education #{idx + 1}</span>
+                          {education.length > 1 && (
+                            <button onClick={() => handleRemoveEducation(idx)} className="delete-repeater-btn" title="Remove Education">
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
+                        <div className="form-grid-2" style={{ marginTop: '0.5rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">Institution Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. Delhi University"
+                              value={edu.institution}
+                              onChange={(e) => handleEducationChange(idx, 'institution', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Degree / Field of Study</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. B.Tech Computer Science"
+                              value={edu.degree}
+                              onChange={(e) => handleEducationChange(idx, 'degree', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="form-label">Duration (e.g. 2018 - 2022)</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="2018 - 2022"
+                              value={edu.duration}
+                              onChange={(e) => handleEducationChange(idx, 'duration', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="builder-form-section">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                      <h4 style={{ margin: 0 }}>5. Projects</h4>
+                      <button onClick={handleAddProject} className="btn btn-secondary btn-sm" style={{ padding: '0.4rem 0.8rem' }}>+ Add Project</button>
+                    </div>
+                    {projects.map((p, idx) => (
+                      <div key={idx} className="builder-repeater-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="repeater-index-lbl">Project #{idx + 1}</span>
+                          {projects.length > 1 && (
+                            <button onClick={() => handleRemoveProject(idx)} className="delete-repeater-btn" title="Remove Project">
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
+                        <div className="form-grid-2" style={{ marginTop: '0.5rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">Project Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. E-Commerce Portal"
+                              value={p.name}
+                              onChange={(e) => handleProjectChange(idx, 'name', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Technologies Used</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. React, Node.js, MongoDB"
+                              value={p.tech}
+                              onChange={(e) => handleProjectChange(idx, 'tech', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="form-label">Project Description</label>
+                            <textarea
+                              className="form-control textarea-field"
+                              placeholder="Describe the project features, architecture, and deployment status..."
+                              rows={2}
+                              value={p.description}
+                              onChange={(e) => handleProjectChange(idx, 'description', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="builder-form-section">
+                    <h4>6. Technical Skills</h4>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="b-skills">Skills (Comma-separated)</label>
+                      <input
+                        type="text"
+                        id="b-skills"
+                        className="form-control"
+                        placeholder="e.g. React, Node.js, Python, Java, SQL, AWS, Docker"
+                        value={skills}
+                        onChange={(e) => setSkills(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="builder-actions-row" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                    <button
+                      onClick={handleAnalyzeBuiltResume}
+                      className="btn btn-primary"
+                      style={{ flex: 1, justifyContent: 'center' }}
+                      disabled={analyzingBuilt || !personal.fullName}
+                    >
+                      {analyzingBuilt ? 'Analyzing Built Resume...' : 'Analyze Built Resume'}
+                    </button>
+                    <button
+                      onClick={handleDownloadPDF}
+                      className="btn btn-secondary"
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+                      disabled={!personal.fullName}
+                    >
+                      <Download size={16} />
+                      <span>Download PDF</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right: Live Preview Panel */}
+                <div className="builder-preview-panel">
+                  <div className="preview-header-bar">
+                    <span>A4 LIVE RESUME PREVIEW</span>
+                  </div>
+                  
+                  <div className="preview-canvas-card" id="resume-preview-container">
+                    <div className="preview-header-center">
+                      <h1 className="p-fullname">{personal.fullName || 'YOUR NAME'}</h1>
+                      {personal.title && <p className="p-title">{personal.title}</p>}
+                      <div className="p-contact-row">
+                        {personal.email && <span>{personal.email}</span>}
+                        {personal.phone && <span> • {personal.phone}</span>}
+                        {personal.location && <span> • {personal.location}</span>}
+                      </div>
+                      <div className="p-contact-row" style={{ marginTop: '2px' }}>
+                        {personal.linkedin && <span>LinkedIn: {personal.linkedin}</span>}
+                        {personal.github && <span>{personal.linkedin ? ' • ' : ''}GitHub: {personal.github}</span>}
+                      </div>
+                    </div>
+
+                    {personal.summary && (
+                      <div className="preview-section">
+                        <h3 className="p-section-title">PROFESSIONAL SUMMARY</h3>
+                        <p className="p-text">{personal.summary}</p>
+                      </div>
+                    )}
+
+                    {experience.some(e => e.company) && (
+                      <div className="preview-section">
+                        <h3 className="p-section-title">WORK EXPERIENCE</h3>
+                        {experience.filter(e => e.company).map((exp, i) => (
+                          <div key={i} className="p-item-node">
+                            <div className="p-item-header">
+                              <strong>{exp.company}</strong> — <em>{exp.position}</em>
+                              <span>{exp.duration}</span>
+                            </div>
+                            <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{exp.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {education.some(e => e.institution) && (
+                      <div className="preview-section">
+                        <h3 className="p-section-title">EDUCATION</h3>
+                        {education.filter(e => e.institution).map((edu, i) => (
+                          <div key={i} className="p-item-node">
+                            <div className="p-item-header">
+                              <strong>{edu.institution}</strong>
+                              <span>{edu.duration}</span>
+                            </div>
+                            <p className="p-item-desc">{edu.degree}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {projects.some(p => p.name) && (
+                      <div className="preview-section">
+                        <h3 className="p-section-title">PERSONAL PROJECTS</h3>
+                        {projects.filter(p => p.name).map((proj, i) => (
+                          <div key={i} className="p-item-node">
+                            <div className="p-item-header">
+                              <strong>{proj.name}</strong> — <em>{proj.tech}</em>
+                            </div>
+                            <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {skills && (
+                      <div className="preview-section" style={{ borderBottom: 'none' }}>
+                        <h3 className="p-section-title">TECHNICAL SKILLS</h3>
+                        <p className="p-text">{skills}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : activeResume ? (
             <>
               {/* TAB 1: ATS AUDIT */}
               {activeTab === 'ats' && (

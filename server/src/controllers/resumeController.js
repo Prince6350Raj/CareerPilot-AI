@@ -289,3 +289,64 @@ exports.generateCoverLetter = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Analyze a built resume (text submission)
+// @route   POST /api/resume/analyze-built
+// @access  Private
+exports.analyzeBuiltResume = async (req, res, next) => {
+  try {
+    const { resumeText } = req.body;
+
+    if (!resumeText) {
+      return res.status(400).json({ success: false, message: 'Please provide resume text content' });
+    }
+
+    // 1. Send text to Gemini API for ATS score and analysis
+    const analysis = await geminiService.analyzeResume(resumeText);
+
+    // 2. Save to MongoDB using a default dummy PDF path as it is generated/built
+    const resume = await Resume.create({
+      userId: req.user.id,
+      fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      parsedText: resumeText,
+      atsScore: analysis.atsScore,
+      breakdown: analysis.breakdown,
+      detectedSkills: analysis.detectedSkills,
+      suggestedSkills: analysis.suggestedSkills,
+      feedback: analysis.feedback
+    });
+
+    // Update User profile skills to build AI memory context
+    if (analysis.detectedSkills && analysis.detectedSkills.length > 0) {
+      await User.findByIdAndUpdate(req.user.id, {
+        $addToSet: { 'profile.skills': { $each: analysis.detectedSkills } }
+      });
+    }
+
+    // 3. Update user progress & unlock badge
+    let progress = await Progress.findOne({ userId: req.user.id });
+    if (!progress) {
+      progress = await Progress.create({ userId: req.user.id });
+    }
+
+    const hasResumeBadge = progress.badges.some(b => b.badgeId === 'resume_pro');
+    if (!hasResumeBadge) {
+      progress.badges.push({
+        badgeId: 'resume_pro',
+        title: 'Resume Pro',
+        description: 'Successfully scanned your resume for ATS optimization.',
+        icon: 'file-text'
+      });
+      await progress.save();
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'Resume analyzed successfully',
+      data: resume,
+      badgeUnlocked: !hasResumeBadge
+    });
+  } catch (error) {
+    next(error);
+  }
+};
