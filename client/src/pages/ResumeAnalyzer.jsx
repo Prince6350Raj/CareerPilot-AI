@@ -39,6 +39,7 @@ const ResumeAnalyzer = () => {
     location: '',
     linkedin: '',
     github: '',
+    leetcode: '',
     summary: ''
   });
 
@@ -47,7 +48,7 @@ const ResumeAnalyzer = () => {
   ]);
 
   const [education, setEducation] = useState([
-    { institution: '', degree: '', duration: '' }
+    { institution: '', degree: '', duration: '', grade: '' }
   ]);
 
   const [projects, setProjects] = useState([
@@ -55,7 +56,25 @@ const ResumeAnalyzer = () => {
   ]);
 
   const [skills, setSkills] = useState('');
+  const [languages, setLanguages] = useState('');
+  const [certificates, setCertificates] = useState([
+    { title: '', organization: '', date: '' }
+  ]);
   const [analyzingBuilt, setAnalyzingBuilt] = useState(false);
+
+  const handleAddCertificate = () => {
+    setCertificates([...certificates, { title: '', organization: '', date: '' }]);
+  };
+  const handleRemoveCertificate = (index) => {
+    const list = [...certificates];
+    list.splice(index, 1);
+    setCertificates(list);
+  };
+  const handleCertificateChange = (index, field, value) => {
+    const list = [...certificates];
+    list[index][field] = value;
+    setCertificates(list);
+  };
 
   // Layout & Color Customization States
   const [selectedTemplate, setSelectedTemplate] = useState('classic');
@@ -100,53 +119,77 @@ const ResumeAnalyzer = () => {
 
   const handleLoadDemoData = () => {
     setPersonal({
-      fullName: 'Ashutosh Kumar',
-      title: 'Fullstack Developer',
-      email: 'ashutosh.kumar@example.com',
-      phone: '+91 98765 43210',
-      location: 'Delhi, India',
-      linkedin: 'linkedin.com/in/ashutosh-kumar',
-      github: 'github.com/ashutosh-kumar',
-      summary: 'Passionate and result-oriented software engineer with 3+ years of experience designing and developing robust web applications. Expert in React.js, Node.js, Express, and MongoDB. Proven track record of improving application efficiency, performance, and cross-functional team collaboration.'
+      fullName: 'PRINCE RAJ',
+      title: 'FULLSTACK DEVELOPER',
+      email: 'princerajceo@gmail.com',
+      phone: '+91-6367279950, +91-9693205299',
+      location: 'Panipat- 132145',
+      linkedin: 'linkedin.com/in/princeraj123',
+      github: 'github.com/prince6350raj',
+      leetcode: 'leetcode.com/prince_rajx',
+      summary: 'B.Tech Computer Science undergraduate proficient in C, C++, Python, and Java and hands-on experience in web development. Skilled in building responsive applications using HTML, CSS, Bootstrap, JavaScript, and React.js with backend knowledge in PHP and Next.js. Focused on applying problem-solving skills to develop efficient software solutions while expanding knowledge in cyber security and cloud technologies.'
     });
 
     setExperience([
       {
-        company: 'Innovate Tech Labs',
-        position: 'Software Developer',
-        duration: 'June 2023 - Present',
-        description: '• Developed and maintained 15+ React component libraries, boosting UI consistency across projects.\n• Designed RESTful APIs using Node.js/Express, reducing database retrieval latency by 25%.\n• Integrated WebSockets to support real-time data streaming and instant chat notifications.'
+        company: 'Softsynth',
+        position: 'Web Development Intern',
+        duration: 'June,2026 -- July,2026',
+        description: '• Developed and deployed responsive web pages using HTML, CSS, and JavaScript to enhance user experience.\n• Worked on an E-commerce & Job alert website project, integrating product listings, shopping cart, and checkout functionality.'
       },
       {
-        company: 'WebSphere Systems',
-        position: 'Associate Engineer',
-        duration: 'Jan 2022 - May 2023',
-        description: '• Optimized single-page app loading speeds by 30% via lazy-loading and image compression techniques.\n• Authored unit test suites using Jest and React Testing Library, achieving 90% code coverage.\n• Collaborated closely with UI/UX designers to implement pixel-perfect mobile-first designs.'
+        company: 'Geeta University',
+        position: 'Python Development Intern',
+        duration: 'June,2025 - Aug,2025',
+        description: '• Developed interactive data visualizations using Plotly to analyze global development and EV adoption trends.\n• Built a secure password manager application using Python and Tkinter for enhanced security and user-friendly access.'
       }
     ]);
 
     setEducation([
       {
-        institution: 'Delhi Technological University (DTU)',
-        degree: 'Bachelor of Technology (B.Tech) in Computer Science',
-        duration: '2018 - 2022'
+        institution: 'Geeta University, Panipat',
+        degree: 'B.Tech in Computer Science & Eng.',
+        duration: '2023 - Present',
+        grade: '8.84/10 CGPA'
+      },
+      {
+        institution: 'Bihar School Examination Board',
+        degree: 'Intermediate',
+        duration: '2021',
+        grade: '72.6 %'
+      },
+      {
+        institution: 'Jesus & Mary Academy, Darbhanga',
+        degree: 'Matriculation',
+        duration: '2018',
+        grade: '7 CGPA'
       }
     ]);
 
     setProjects([
       {
-        name: 'AI Mock Interview Portal',
-        tech: 'React, Tailwind, Node.js, Gemini API',
-        description: 'An AI-powered preparation dashboard simulating live interview environments. Features speech-to-text response tracking, scoring algorithms, and instant resume analysis.'
+        name: 'Visualization of Electric Vehicle Adoption Trends (Individual)',
+        tech: 'Python, Plotly, Pandas & Matplotlib',
+        description: '• About: Developed interactive data visualizations to analyze global trends in electric vehicle adoption.\n• Role: Designed and implemented data visualizations using Python and Plotly.'
       },
       {
-        name: 'Distributed Task Manager',
-        tech: 'Next.js, Redis, MongoDB, Docker',
-        description: 'A task queuing application designed to handle scheduled background jobs, email queues, and reporting services with horizontal auto-scaling support.'
+        name: 'Job Alert Website (Group 2 people)',
+        tech: 'Next.js, NestJS, TypeScript, REST API',
+        description: '• About: Built a online job portal platform delivering real-time updates on government jobs, results, admit cards, and recruitment notifications.\n• Role: Developed a scalable frontend with Next.js and backend services with NestJS, including API development.'
       }
     ]);
 
-    setSkills('React, Next.js, Redux, Node.js, Express, MongoDB, PostgreSQL, REST APIs, GraphQL, Redis, Docker, Git, Jest, Tailwind CSS, HTML5, CSS3, JavaScript (ES6+), TypeScript');
+    setSkills('Technical Language: DSA (C++).\nFullstack Development : HTML, CSS, Bootstrap, JavaScript, React.js, Next.js, Firebase.\nOther: Cloud Computing & Cybersecurity.');
+    
+    setLanguages('Hindi, English');
+
+    setCertificates([
+      { title: 'Simplilearn Certification', organization: 'Google Cloud Platform', date: 'March 2026' },
+      { title: 'Microsoft Certification', organization: 'Fullstack Development', date: 'June 2025' },
+      { title: 'Cisco Certification', organization: 'Networking Basics', date: 'February 2024' },
+      { title: 'Great Learning Certificate', organization: 'PYTHON Language', date: 'Jan 2024' },
+      { title: 'Great Learning Certificate', organization: 'C Language', date: 'December 2023' }
+    ]);
   };
 
   const handleAddExperience = () => {
@@ -195,8 +238,8 @@ const ResumeAnalyzer = () => {
     let text = `${personal.fullName.toUpperCase()}\n`;
     if (personal.title) text += `${personal.title}\n`;
     text += `${personal.email} | ${personal.phone} | ${personal.location}\n`;
-    if (personal.linkedin || personal.github) {
-      text += `${personal.linkedin ? 'LinkedIn: ' + personal.linkedin : ''} ${personal.github ? 'GitHub: ' + personal.github : ''}\n`;
+    if (personal.linkedin || personal.github || personal.leetcode) {
+      text += `${personal.linkedin ? 'LinkedIn: ' + personal.linkedin : ''} ${personal.github ? 'GitHub: ' + personal.github : ''} ${personal.leetcode ? 'LeetCode: ' + personal.leetcode : ''}\n`;
     }
     text += `\n`;
 
@@ -214,7 +257,7 @@ const ResumeAnalyzer = () => {
     if (education.length > 0 && education[0].institution) {
       text += `EDUCATION\n`;
       education.forEach(edu => {
-        text += `${edu.institution} - ${edu.degree} (${edu.duration})\n\n`;
+        text += `${edu.institution} - ${edu.degree} (${edu.duration})${edu.grade ? ' | Grade: ' + edu.grade : ''}\n\n`;
       });
     }
 
@@ -225,8 +268,20 @@ const ResumeAnalyzer = () => {
       });
     }
 
+    if (certificates.length > 0 && certificates[0].title) {
+      text += `CERTIFICATES\n`;
+      certificates.forEach(c => {
+        text += `${c.title} - ${c.organization} (${c.date})\n`;
+      });
+      text += `\n`;
+    }
+
     if (skills) {
-      text += `SKILLS\n${skills}\n`;
+      text += `SKILLS\n${skills}\n\n`;
+    }
+
+    if (languages) {
+      text += `LANGUAGES\n${languages}\n`;
     }
 
     return text;
@@ -734,6 +789,18 @@ const ResumeAnalyzer = () => {
                       </div>
                       
                       <div className="form-group">
+                        <label className="form-label" htmlFor="b-leetcode">LeetCode Profile (Optional)</label>
+                        <input
+                          type="text"
+                          id="b-leetcode"
+                          className="form-control"
+                          placeholder="leetcode.com/username"
+                          value={personal.leetcode}
+                          onChange={(e) => setPersonal({ ...personal, leetcode: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
                         <label className="form-label">Profile Photo (Optional)</label>
                         <div className="profile-photo-uploader-row">
                           {profileImage ? (
@@ -859,7 +926,7 @@ const ResumeAnalyzer = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="e.g. Delhi University"
+                              placeholder="e.g. Geeta University"
                               value={edu.institution}
                               onChange={(e) => handleEducationChange(idx, 'institution', e.target.value)}
                             />
@@ -874,14 +941,24 @@ const ResumeAnalyzer = () => {
                               onChange={(e) => handleEducationChange(idx, 'degree', e.target.value)}
                             />
                           </div>
-                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                            <label className="form-label">Duration (e.g. 2018 - 2022)</label>
+                          <div className="form-group">
+                            <label className="form-label">Duration (e.g. 2023 - Present)</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="2018 - 2022"
+                              placeholder="2023 - Present"
                               value={edu.duration}
                               onChange={(e) => handleEducationChange(idx, 'duration', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Grade / CGPA (e.g. 8.84/10 CGPA)</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. 8.84/10 CGPA or 72.6 %"
+                              value={edu.grade}
+                              onChange={(e) => handleEducationChange(idx, 'grade', e.target.value)}
                             />
                           </div>
                         </div>
@@ -943,16 +1020,82 @@ const ResumeAnalyzer = () => {
                   <div className="builder-form-section">
                     <h4>6. Technical Skills</h4>
                     <div className="form-group">
-                      <label className="form-label" htmlFor="b-skills">Skills (Comma-separated)</label>
-                      <input
-                        type="text"
+                      <label className="form-label" htmlFor="b-skills">Skills & Categories (Multi-line or Comma-separated)</label>
+                      <textarea
                         id="b-skills"
-                        className="form-control"
-                        placeholder="e.g. React, Node.js, Python, Java, SQL, AWS, Docker"
+                        className="form-control textarea-field"
+                        placeholder="e.g. Technical Language: DSA (C++).&#10;Fullstack Development: React, Node.js, etc."
+                        rows={3}
                         value={skills}
                         onChange={(e) => setSkills(e.target.value)}
                       />
                     </div>
+                  </div>
+
+                  <div className="builder-form-section">
+                    <h4>7. Languages</h4>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="b-languages">Languages (Comma-separated)</label>
+                      <input
+                        type="text"
+                        id="b-languages"
+                        className="form-control"
+                        placeholder="e.g. Hindi, English"
+                        value={languages}
+                        onChange={(e) => setLanguages(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="builder-form-section">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                      <h4 style={{ margin: 0 }}>8. Certificates</h4>
+                      <button type="button" onClick={handleAddCertificate} className="btn btn-secondary btn-sm" style={{ padding: '0.4rem 0.8rem' }}>+ Add Certificate</button>
+                    </div>
+                    {certificates.map((cert, idx) => (
+                      <div key={idx} className="builder-repeater-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span className="repeater-index-lbl">Certificate #{idx + 1}</span>
+                          {certificates.length > 1 && (
+                            <button type="button" onClick={() => handleRemoveCertificate(idx)} className="delete-repeater-btn" title="Remove Certificate">
+                              <Trash2 size={12} />
+                            </button>
+                          )}
+                        </div>
+                        <div className="form-grid-2" style={{ marginTop: '0.5rem' }}>
+                          <div className="form-group">
+                            <label className="form-label">Certificate Title</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. Simplilearn Certification"
+                              value={cert.title}
+                              onChange={(e) => handleCertificateChange(idx, 'title', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label className="form-label">Organization / Authority</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="e.g. Google Cloud Platform"
+                              value={cert.organization}
+                              onChange={(e) => handleCertificateChange(idx, 'organization', e.target.value)}
+                            />
+                          </div>
+                          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="form-label">Issued Date (e.g. March 2026)</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="March 2026"
+                              value={cert.date}
+                              onChange={(e) => handleCertificateChange(idx, 'date', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   <div className="builder-actions-row" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
@@ -981,148 +1124,242 @@ const ResumeAnalyzer = () => {
                   <div className="preview-header-bar">
                     <span>A4 LIVE RESUME PREVIEW</span>
                   </div>
-                  
-                  <div className="preview-canvas-card" id="resume-preview-container" style={canvasStyles}>
+                     <div className="preview-canvas-card" id="resume-preview-container" style={canvasStyles}>
                     {selectedTemplate === 'classic' && (
-                      <div className="template-classic-root">
-                        <div className="preview-header-center">
+                      <div className="template-classic-root" style={{ textAlign: 'left', color: '#1a1a1a' }}>
+                        <div className="preview-header-center" style={{ borderBottom: '2px solid var(--theme-primary)', paddingBottom: '0.75rem', textAlign: 'center', marginBottom: '1.25rem' }}>
                           {profileImage && (
-                            <div className="p-photo-wrapper" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
-                              <img src={profileImage} alt="Profile" className="p-photo-classic" style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-primary)' }} />
+                            <div className="p-photo-wrapper" style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'center' }}>
+                              <img src={profileImage} alt="Profile" className="p-photo-classic" style={{ width: '85px', height: '85px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-primary)' }} />
                             </div>
                           )}
-                          <h1 className="p-fullname" style={{ color: 'var(--theme-primary)' }}>{personal.fullName || 'YOUR NAME'}</h1>
-                          {personal.title && <p className="p-title" style={{ color: 'var(--theme-secondary)' }}>{personal.title}</p>}
-                          <div className="p-contact-row">
+                          <h1 className="p-fullname" style={{ color: 'var(--theme-primary)', fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{personal.fullName || 'YOUR NAME'}</h1>
+                          {personal.title && <p className="p-title" style={{ color: 'var(--theme-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '4px 0 0 0' }}>{personal.title}</p>}
+                          <div className="p-contact-row" style={{ display: 'flex', justifyContent: 'center', gap: '0.3rem', fontSize: '0.75rem', flexWrap: 'wrap', marginTop: '6px', color: '#4b5563' }}>
                             {personal.email && <span>{personal.email}</span>}
                             {personal.phone && <span> • {personal.phone}</span>}
                             {personal.location && <span> • {personal.location}</span>}
                           </div>
-                          <div className="p-contact-row" style={{ marginTop: '2px' }}>
+                          <div className="p-contact-row" style={{ display: 'flex', justifyContent: 'center', gap: '0.3rem', fontSize: '0.75rem', flexWrap: 'wrap', marginTop: '2px', color: '#4b5563' }}>
                             {personal.linkedin && <span>LinkedIn: {personal.linkedin}</span>}
-                            {personal.github && <span>{personal.linkedin ? ' • ' : ''}GitHub: {personal.github}</span>}
+                            {personal.github && <span> • GitHub: {personal.github}</span>}
+                            {personal.leetcode && <span> • LeetCode: {personal.leetcode}</span>}
                           </div>
                         </div>
 
                         {personal.summary && (
-                          <div className="preview-section">
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '2px' }}>PROFESSIONAL SUMMARY</h3>
-                            <p className="p-text">{personal.summary}</p>
+                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PROFESSIONAL SUMMARY</h3>
+                            <p className="p-text" style={{ fontSize: '0.8rem', lineHeight: 1.45, color: '#374151', margin: 0 }}>{personal.summary}</p>
                           </div>
                         )}
 
                         {experience.some(e => e.company) && (
-                          <div className="preview-section">
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '2px' }}>WORK EXPERIENCE</h3>
+                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>WORK EXPERIENCE</h3>
                             {experience.filter(e => e.company).map((exp, i) => (
-                              <div key={i} className="p-item-node">
-                                <div className="p-item-header">
-                                  <strong>{exp.company}</strong> — <em>{exp.position}</em>
-                                  <span style={{ color: 'var(--theme-secondary)' }}>{exp.duration}</span>
+                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
+                                <div className="p-item-header" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
+                                  <span>{exp.company} — <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{exp.position}</span></span>
+                                  <span style={{ color: 'var(--theme-secondary)', fontWeight: 'normal' }}>{exp.duration}</span>
                                 </div>
-                                <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{exp.description}</p>
+                                <p className="p-item-desc" style={{ fontSize: '0.75rem', lineHeight: 1.4, color: '#4b5563', margin: '2px 0 0 0', whiteSpace: 'pre-wrap' }}>{exp.description}</p>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {education.some(e => e.institution) && (
-                          <div className="preview-section">
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '2px' }}>EDUCATION</h3>
+                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>EDUCATION</h3>
                             {education.filter(e => e.institution).map((edu, i) => (
-                              <div key={i} className="p-item-node">
-                                <div className="p-item-header">
-                                  <strong>{edu.institution}</strong>
-                                  <span style={{ color: 'var(--theme-secondary)' }}>{edu.duration}</span>
+                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
+                                <div className="p-item-header" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
+                                  <span>{edu.degree}</span>
+                                  <span style={{ color: 'var(--theme-secondary)', fontWeight: 'normal' }}>{edu.duration}</span>
                                 </div>
-                                <p className="p-item-desc">{edu.degree}</p>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#4b5563', marginTop: '2px' }}>
+                                  <span>{edu.institution}</span>
+                                  {edu.grade && <span style={{ fontWeight: 600 }}>{edu.grade}</span>}
+                                </div>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {projects.some(p => p.name) && (
-                          <div className="preview-section">
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '2px' }}>PERSONAL PROJECTS</h3>
+                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PERSONAL PROJECTS</h3>
                             {projects.filter(p => p.name).map((proj, i) => (
-                              <div key={i} className="p-item-node">
-                                <div className="p-item-header">
-                                  <strong>{proj.name}</strong> — <em>{proj.tech}</em>
+                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
+                                <div className="p-item-header" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
+                                  <span>{proj.name} — <span style={{ fontWeight: 'normal', fontSize: '0.75rem', color: 'var(--theme-secondary)' }}>{proj.tech}</span></span>
                                 </div>
-                                <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                                <p className="p-item-desc" style={{ fontSize: '0.75rem', lineHeight: 1.4, color: '#4b5563', margin: '2px 0 0 0', whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {certificates.some(c => c.title) && (
+                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>CERTIFICATES</h3>
+                            {certificates.filter(c => c.title).map((cert, i) => (
+                              <div key={i} style={{ fontSize: '0.75rem', color: '#374151', marginBottom: '3px', display: 'flex', justifyContent: 'space-between' }}>
+                                <span>• <strong>{cert.title}</strong>: | {cert.organization}</span>
+                                <span style={{ color: 'var(--theme-secondary)' }}>| {cert.date}</span>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {skills && (
-                          <div className="preview-section" style={{ borderBottom: 'none' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '2px' }}>TECHNICAL SKILLS</h3>
-                            <p className="p-text">{skills}</p>
+                          <div className="preview-section" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>TECHNICAL SKILLS</h3>
+                            <p className="p-text" style={{ fontSize: '0.8rem', lineHeight: 1.45, color: '#374151', margin: 0, whiteSpace: 'pre-wrap' }}>{skills}</p>
+                          </div>
+                        )}
+
+                        {languages && (
+                          <div className="preview-section" style={{ borderBottom: 'none', paddingBottom: 0, marginTop: '0.75rem' }}>
+                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>LANGUAGES</h3>
+                            <ul style={{ margin: '4px 0 0 0', paddingLeft: '1.2rem', fontSize: '0.8rem', color: '#374151' }}>
+                              {languages.split(',').map((lang, idx) => (
+                                <li key={idx} style={{ marginBottom: '2px' }}>{lang.trim()}</li>
+                              ))}
+                            </ul>
                           </div>
                         )}
                       </div>
                     )}
 
                     {selectedTemplate === 'sidebar' && (
-                      <div className="template-sidebar-root" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', minHeight: '297mm', margin: '-2.5rem -2rem', overflow: 'hidden' }}>
-                        {/* Sidebar */}
-                        <div className="template-sidebar-col" style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-light)', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                      <div className="template-sidebar-root" style={{ display: 'grid', gridTemplateColumns: '3fr 7fr', minHeight: '297mm', margin: '-2.5rem -2rem', overflow: 'hidden' }}>
+                        {/* Left Column (Gray/Light Blue Sidebar background) */}
+                        <div className="template-sidebar-col" style={{ backgroundColor: '#f1f5f9', color: '#1e293b', padding: '2.5rem 1.25rem', borderRight: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', gap: '1.75rem', textAlign: 'left' }}>
                           <div style={{ textAlign: 'center' }}>
                             {profileImage ? (
-                              <img src={profileImage} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-text-light)', marginBottom: '1rem', display: 'inline-block' }} />
+                              <img src={profileImage} alt="Profile" style={{ width: '110px', height: '110px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-primary)', display: 'inline-block', marginBottom: '0.5rem' }} />
                             ) : (
-                              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.1)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '3px dashed rgba(255,255,255,0.2)', marginBottom: '1rem', fontSize: '0.8rem' }}>Photo</div>
+                              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#cbd5e1', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '3px dashed #94a3b8', marginBottom: '0.5rem', fontSize: '0.8rem', color: '#64748b' }}>Photo</div>
                             )}
-                            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0', color: 'var(--theme-text-light)' }}>{personal.fullName || 'YOUR NAME'}</h2>
-                            {personal.title && <p style={{ fontSize: '0.8rem', opacity: 0.8, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '4px 0 0 0' }}>{personal.title}</p>}
                           </div>
 
                           <div>
-                            <h3 style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid rgba(255,255,255,0.3)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-text-light)' }}>CONTACT</h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.75rem', wordBreak: 'break-all', textAlign: 'left' }}>
-                              {personal.email && <div>✉ {personal.email}</div>}
-                              {personal.phone && <div>📞 {personal.phone}</div>}
-                              {personal.location && <div>📍 {personal.location}</div>}
-                              {personal.linkedin && <div>in: {personal.linkedin}</div>}
-                              {personal.github && <div>gh: {personal.github}</div>}
+                            <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>C O N T A C T</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.72rem', color: '#334155' }}>
+                              {personal.phone && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>📞</span>
+                                  <span>{personal.phone}</span>
+                                </div>
+                              )}
+                              {personal.email && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>✉</span>
+                                  <span style={{ wordBreak: 'break-all' }}>{personal.email}</span>
+                                </div>
+                              )}
+                              {personal.location && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>📍</span>
+                                  <span>{personal.location}</span>
+                                </div>
+                              )}
+                              {personal.linkedin && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>in</span>
+                                  <span style={{ wordBreak: 'break-all' }}>{personal.linkedin}</span>
+                                </div>
+                              )}
+                              {personal.github && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>gh</span>
+                                  <span style={{ wordBreak: 'break-all' }}>{personal.github}</span>
+                                </div>
+                              )}
+                              {personal.leetcode && (
+                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                  <span>lc</span>
+                                  <span style={{ wordBreak: 'break-all' }}>{personal.leetcode}</span>
+                                </div>
+                              )}
                             </div>
                           </div>
 
-                          {skills && (
+                          {education.some(e => e.institution) && (
                             <div>
-                              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid rgba(255,255,255,0.3)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-text-light)' }}>SKILLS</h3>
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', justifyContent: 'flex-start' }}>
-                                {skills.split(',').map((s, i) => (
-                                  <span key={i} style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem', background: 'rgba(255,255,255,0.15)', borderRadius: '3px', color: 'var(--theme-text-light)' }}>
-                                    {s.trim()}
-                                  </span>
+                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>E D U C A T I O N</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.72rem', color: '#334155' }}>
+                                {education.filter(e => e.institution).map((edu, i) => (
+                                  <div key={i} style={{ borderBottom: i < education.length - 1 ? '1px dashed #cbd5e1' : 'none', paddingBottom: '0.5rem' }}>
+                                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '2px' }}>{edu.degree}</div>
+                                    <div style={{ fontSize: '0.68rem', color: '#64748b', marginBottom: '4px' }}>{edu.institution}</div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', fontWeight: 600 }}>
+                                      <span>{edu.duration}</span>
+                                      {edu.grade && <span style={{ color: 'var(--theme-secondary)' }}>{edu.grade}</span>}
+                                    </div>
+                                  </div>
                                 ))}
                               </div>
                             </div>
                           )}
+
+                          {skills && (
+                            <div>
+                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>S K I L L S</h3>
+                              <div style={{ fontSize: '0.72rem', color: '#334155', whiteSpace: 'pre-wrap', lineHeight: '1.4' }}>
+                                {skills}
+                              </div>
+                            </div>
+                          )}
+
+                          {languages && (
+                            <div>
+                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>L A N G U A G E S</h3>
+                              <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.75rem', color: '#334155' }}>
+                                {languages.split(',').map((lang, idx) => (
+                                  <li key={idx} style={{ marginBottom: '2px' }}>{lang.trim()}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
 
-                        {/* Main Body */}
-                        <div className="template-sidebar-body" style={{ padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', backgroundColor: '#ffffff', color: '#1a1a1a', textAlign: 'left' }}>
+                        {/* Right Column (Timeline Thread) */}
+                        <div className="template-sidebar-body" style={{ padding: '2.5rem 2rem', display: 'flex', flexDirection: 'column', gap: '1.75rem', backgroundColor: '#ffffff', color: '#1a1a1a', textAlign: 'left', position: 'relative' }}>
+                          
+                          {/* Vertical timeline line */}
+                          <div className="vertical-timeline-line" style={{ position: 'absolute', left: '1.95rem', top: '10.5rem', bottom: '2.5rem', width: '2px', backgroundColor: '#cbd5e1', zIndex: 1 }}></div>
+
+                          {/* Top Name Box Banner */}
+                          <div style={{ backgroundColor: 'var(--theme-primary)', padding: '1.5rem', border: '3px double #ffffff', outline: '8px solid var(--theme-primary)', textAlign: 'center', marginBottom: '1rem', color: '#ffffff' }}>
+                            <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '0.15rem', margin: 0, color: '#ffffff' }}>{personal.fullName || 'YOUR NAME'}</h1>
+                            {personal.title && <p style={{ fontSize: '0.85rem', letterSpacing: '0.1rem', textTransform: 'uppercase', opacity: 0.9, marginTop: '6px', margin: '6px 0 0 0', color: '#ffffff' }}>{personal.title}</p>}
+                          </div>
+
                           {personal.summary && (
-                            <div>
-                              <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>About Me</h3>
-                              <p style={{ fontSize: '0.8rem', lineHeight: 1.5, color: '#374151', margin: 0 }}>{personal.summary}</p>
+                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
+                              {/* Bullet node on timeline */}
+                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
+                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>S U M M A R Y</h3>
+                              <p style={{ fontSize: '0.78rem', lineHeight: 1.5, color: '#374151', margin: 0 }}>{personal.summary}</p>
                             </div>
                           )}
 
                           {experience.some(e => e.company) && (
-                            <div>
-                              <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Work Experience</h3>
+                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
+                              {/* Bullet node on timeline */}
+                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
+                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>I N T E R N S H I P   E X P E R I E N C E</h3>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 {experience.filter(e => e.company).map((exp, i) => (
                                   <div key={i} style={{ fontSize: '0.75rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, color: '#111111' }}>
-                                      <span>{exp.company} — {exp.position}</span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, color: '#0f172a' }}>
+                                      <span>• {exp.company} — <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{exp.position}</span></span>
                                       <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary)' }}>{exp.duration}</span>
                                     </div>
-                                    <p style={{ margin: '4px 0 0 0', lineHeight: 1.4, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{exp.description}</p>
+                                    <p style={{ margin: '4px 0 0 0', lineHeight: 1.45, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.8rem' }}>{exp.description}</p>
                                   </div>
                                 ))}
                               </div>
@@ -1130,30 +1367,33 @@ const ResumeAnalyzer = () => {
                           )}
 
                           {projects.some(p => p.name) && (
-                            <div>
-                              <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Personal Projects</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
+                              {/* Bullet node on timeline */}
+                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
+                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>P R O J E C T S</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                                 {projects.filter(p => p.name).map((proj, i) => (
                                   <div key={i} style={{ fontSize: '0.75rem' }}>
-                                    <div style={{ fontWeight: 700, color: '#111111' }}>{proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.7rem', color: 'var(--theme-secondary)' }}>({proj.tech})</span></div>
-                                    <p style={{ margin: '2px 0 0 0', lineHeight: 1.4, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '2px' }}>
+                                      • {proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.7rem', color: 'var(--theme-secondary)' }}>({proj.tech})</span>
+                                    </div>
+                                    <p style={{ margin: '4px 0 0 0', lineHeight: 1.45, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.8rem' }}>{proj.description}</p>
                                   </div>
                                 ))}
                               </div>
                             </div>
                           )}
 
-                          {education.some(e => e.institution) && (
-                            <div>
-                              <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '4px', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Education</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                {education.filter(e => e.institution).map((edu, i) => (
-                                  <div key={i} style={{ fontSize: '0.75rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, color: '#111111' }}>
-                                      <span>{edu.institution}</span>
-                                      <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary)' }}>{edu.duration}</span>
-                                    </div>
-                                    <p style={{ margin: '2px 0 0 0', color: '#4b5563' }}>{edu.degree}</p>
+                          {certificates.some(c => c.title) && (
+                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
+                              {/* Bullet node on timeline */}
+                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
+                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>C E R T I F I C A T E S</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', paddingLeft: '0.5rem' }}>
+                                {certificates.filter(c => c.title).map((cert, i) => (
+                                  <div key={i} style={{ fontSize: '0.75rem', color: '#374151', display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>• <strong>{cert.title}</strong>: | {cert.organization}</span>
+                                    <span style={{ color: 'var(--theme-secondary)' }}>| {cert.date}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1164,9 +1404,9 @@ const ResumeAnalyzer = () => {
                     )}
 
                     {selectedTemplate === 'banner' && (
-                      <div className="template-banner-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '297mm', margin: '-2.5rem -2rem', backgroundColor: '#ffffff', color: '#1a1a1a' }}>
+                      <div className="template-banner-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '297mm', margin: '-2.5rem -2rem', backgroundColor: '#ffffff', color: '#1a1a1a', textAlign: 'left' }}>
                         {/* Top banner */}
-                        <div style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-light)', padding: '2.5rem 2rem 2rem 2rem', position: 'relative', textAlign: 'left' }}>
+                        <div style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-light)', padding: '2.5rem 2rem 2rem 2rem', position: 'relative' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                               <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '0', color: 'var(--theme-text-light)' }}>{personal.fullName || 'YOUR NAME'}</h1>
@@ -1179,7 +1419,7 @@ const ResumeAnalyzer = () => {
                         </div>
 
                         {/* Split columns layout below */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', padding: '2rem', flex: 1, textAlign: 'left' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', padding: '2rem', flex: 1 }}>
                           {/* Left Column: Summary, Exp, Projects */}
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                             {personal.summary && (
@@ -1231,6 +1471,7 @@ const ResumeAnalyzer = () => {
                                 {personal.location && <div>📍 {personal.location}</div>}
                                 {personal.linkedin && <div>in: {personal.linkedin}</div>}
                                 {personal.github && <div>gh: {personal.github}</div>}
+                                {personal.leetcode && <div>lc: {personal.leetcode}</div>}
                               </div>
                             </div>
 
@@ -1242,7 +1483,20 @@ const ResumeAnalyzer = () => {
                                     <div key={i} style={{ fontSize: '0.72rem' }}>
                                       <div style={{ fontWeight: 700, color: '#111111' }}>{edu.institution}</div>
                                       <div style={{ color: 'var(--theme-secondary)', margin: '1px 0' }}>{edu.duration}</div>
-                                      <div style={{ color: '#4b5563' }}>{edu.degree}</div>
+                                      <div style={{ color: '#4b5563' }}>{edu.degree} {edu.grade && <span style={{ fontWeight: 600 }}>({edu.grade})</span>}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {certificates.some(c => c.title) && (
+                              <div>
+                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Certificates</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.72rem' }}>
+                                  {certificates.filter(c => c.title).map((cert, i) => (
+                                    <div key={i} style={{ color: '#374151' }}>
+                                      • <strong>{cert.title}</strong>: {cert.organization} ({cert.date})
                                     </div>
                                   ))}
                                 </div>
@@ -1252,8 +1506,17 @@ const ResumeAnalyzer = () => {
                             {skills && (
                               <div>
                                 <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Skills</h3>
+                                <div style={{ fontSize: '0.72rem', whiteSpace: 'pre-wrap', lineHeight: '1.4' }}>
+                                  {skills}
+                                </div>
+                              </div>
+                            )}
+
+                            {languages && (
+                              <div>
+                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Languages</h3>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                                  {skills.split(',').map((s, i) => (
+                                  {languages.split(',').map((s, i) => (
                                     <span key={i} style={{ fontSize: '0.68rem', padding: '0.15rem 0.4rem', background: '#f3f4f6', color: '#374151', borderRadius: '3px', border: '1px solid #e5e7eb' }}>
                                       {s.trim()}
                                     </span>
