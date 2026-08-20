@@ -230,3 +230,66 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* ==========================================================================
+   SPEECH-TO-TEXT AND AUDIO CONTROLS
+   ========================================================================== */
+.chat-mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-item);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.chat-mic-btn:hover:not(:disabled) {
+  background: var(--bg-item-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chat-mic-btn.listening {
+  background: var(--accent-error) !important;
+  border-color: var(--accent-error) !important;
+  color: #ffffff !important;
+  animation: mic-pulse 1.2s infinite;
+}
+
+@keyframes mic-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.bubble-speak-btn:hover {
+  color: var(--primary) !important;
+  transform: scale(1.15);
+}
+
+.bubble-speak-btn.speaking {
+  color: var(--accent-error) !important;
+  animation: speak-wiggle 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes speak-wiggle {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1) rotate(5deg); }
+}
+
+.auto-speak-toggle-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
