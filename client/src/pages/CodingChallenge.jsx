@@ -30,7 +30,7 @@ const TOPICS = [
     desc: 'Vectors, sets, maps, hash tables',
     webName: 'GeeksforGeeks Array Guide',
     webUrl: 'https://www.geeksforgeeks.org/array-data-structure/',
-    ytUrl: 'https://www.youtube.com/watch?v=mF3EqQZDPmU'
+    ytUrl: 'https://youtu.be/mF3EqQZDPmU'
   },
   { 
     id: 'Strings', 
@@ -39,7 +39,7 @@ const TOPICS = [
     desc: 'Substrings, regex, anagrams',
     webName: 'LeetCode Strings Study Card',
     webUrl: 'https://leetcode.com/explore/interview/card/top-interview-questions-easy/127/strings/',
-    ytUrl: 'https://www.youtube.com/watch?v=Wdjr6uoZ0e0'
+    ytUrl: 'https://youtu.be/Wdjr6uoZ0e0'
   },
   { 
     id: 'Linked List', 
@@ -48,7 +48,7 @@ const TOPICS = [
     desc: 'Singly, doubly, cycle detection',
     webName: 'GeeksforGeeks Linked List DS',
     webUrl: 'https://www.geeksforgeeks.org/data-structures/linked-list/',
-    ytUrl: 'https://www.youtube.com/watch?v=R9PTBwOzraw'
+    ytUrl: 'https://youtu.be/R9PTBwOzraw'
   },
   { 
     id: 'Stack', 
@@ -57,7 +57,7 @@ const TOPICS = [
     desc: 'LIFO structures, matching parentheses',
     webName: 'GeeksforGeeks Stack DS',
     webUrl: 'https://www.geeksforgeeks.org/stack-data-structure/',
-    ytUrl: 'https://www.youtube.com/watch?v=mJWAPDKK4ho'
+    ytUrl: 'https://youtu.be/mJWAPDKK4ho'
   },
   { 
     id: 'Queue', 
@@ -66,7 +66,7 @@ const TOPICS = [
     desc: 'FIFO structures, sliding windows',
     webName: 'GeeksforGeeks Queue DS',
     webUrl: 'https://www.geeksforgeeks.org/queue-data-structure/',
-    ytUrl: 'https://www.youtube.com/watch?v=mJWAPDKK4ho'
+    ytUrl: 'https://youtu.be/mJWAPDKK4ho'
   },
   { 
     id: 'Searching', 
@@ -75,7 +75,7 @@ const TOPICS = [
     desc: 'Binary search, divide & conquer',
     webName: 'LeetCode Binary Search Discussion',
     webUrl: 'https://leetcode.com/discuss/general-discussion/786126/binary-search-for-beginners-problems-patterns-sample-solutions',
-    ytUrl: 'https://www.youtube.com/watch?v=f6UU7c3szVw'
+    ytUrl: 'https://youtu.be/f6UU7c3szVw'
   },
   { 
     id: 'Sorting', 
@@ -84,7 +84,7 @@ const TOPICS = [
     desc: 'Quick, merge, bubble, heap sorting',
     webName: 'VisuAlgo Sorting Animation',
     webUrl: 'https://visualgo.net/en/sorting',
-    ytUrl: 'https://www.youtube.com/watch?v=mG7vS-n95hA'
+    ytUrl: 'https://youtu.be/mG7vS-n95hA'
   },
   { 
     id: 'depth-first-search', 
@@ -93,7 +93,7 @@ const TOPICS = [
     desc: 'Recursive tree and graph traversal',
     webName: 'GeeksforGeeks Graph DFS',
     webUrl: 'https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/',
-    ytUrl: 'https://www.youtube.com/watch?v=uOlMGRec_yk'
+    ytUrl: 'https://youtu.be/uOlMGRec_yk'
   },
   { 
     id: 'breadth-first-search', 
@@ -102,7 +102,7 @@ const TOPICS = [
     desc: 'Shortest path, level-order queues',
     webName: 'GeeksforGeeks Graph BFS',
     webUrl: 'https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/',
-    ytUrl: 'https://www.youtube.com/watch?v=oDbK1z5HB0Y'
+    ytUrl: 'https://youtu.be/oDbK1z5HB0Y'
   },
   { 
     id: 'two-pointer', 
@@ -111,7 +111,7 @@ const TOPICS = [
     desc: 'Slow-fast runners, bounded limits',
     webName: 'LeetCode Two-Pointer Guide',
     webUrl: 'https://leetcode.com/discuss/study-guide/1688903/Solved-all-two-pointers-problems-in-LeetCode',
-    ytUrl: 'https://www.youtube.com/watch?v=95jK5GkS0lM'
+    ytUrl: 'https://youtu.be/95jK5GkS0lM'
   },
   { 
     id: 'counting', 
@@ -120,7 +120,7 @@ const TOPICS = [
     desc: 'Frequency counts, hash calculations',
     webName: 'GeeksforGeeks Hash Frequencies',
     webUrl: 'https://www.geeksforgeeks.org/counting-frequencies-of-array-elements/',
-    ytUrl: 'https://www.youtube.com/watch?v=keuY8JNeQnk'
+    ytUrl: 'https://youtu.be/keuY8JNeQnk'
   },
   { 
     id: 'math', 
@@ -129,7 +129,7 @@ const TOPICS = [
     desc: 'GCD, primes, combinations, logic',
     webName: 'GeeksforGeeks Math Algorithms',
     webUrl: 'https://www.geeksforgeeks.org/mathematical-algorithms/',
-    ytUrl: 'https://www.youtube.com/watch?v=094y1Z2wp5A'
+    ytUrl: 'https://youtu.be/094y1Z2wp5A'
   },
   { 
     id: 'greedy', 
@@ -138,7 +138,7 @@ const TOPICS = [
     desc: 'Local optimal choice, scheduling',
     webName: 'LeetCode Greedy Tutorial',
     webUrl: 'https://leetcode.com/discuss/study-guide/1063635/greedy-for-beginners-problems-sample-solutions',
-    ytUrl: 'https://www.youtube.com/watch?v=l_a1G41gWqM'
+    ytUrl: 'https://youtu.be/l_a1G41gWqM'
   },
   { 
     id: 'Recursion', 
@@ -147,7 +147,7 @@ const TOPICS = [
     desc: 'Dynamic programming, memoization',
     webName: 'GeeksforGeeks Recursion Basics',
     webUrl: 'https://www.geeksforgeeks.org/recursion/',
-    ytUrl: 'https://www.youtube.com/watch?v=yVdKa8dnKiE'
+    ytUrl: 'https://youtu.be/yVdKa8dnKiE'
   }
 ];
 
