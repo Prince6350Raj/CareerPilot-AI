@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Save, User, Award, Tag, Mail, Camera, Link, Briefcase } from 'lucide-react';
+import { Save, User, Award, Tag, Mail, Camera, Link, Briefcase, RefreshCw, Upload, Sparkles, CheckCircle2 } from 'lucide-react';
 import './Profile.css';
 
 const AVATAR_PRESETS = [
@@ -41,6 +41,40 @@ const LinkedinIcon = ({ size = 18, className = '' }) => (
   </svg>
 );
 
+const LeetcodeIcon = ({ size = 18, className = '' }) => (
+  <svg 
+    stroke="currentColor" 
+    fill="currentColor" 
+    strokeWidth="0" 
+    viewBox="0 0 24 24" 
+    height={size} 
+    width={size} 
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M13.483 0a1.374 1.374 0 0 0-.961.414l-9.75 9.75a1.375 1.375 0 0 0 0 1.945l1.9 1.9a1.375 1.375 0 0 0 1.95 0l9.75-9.75a1.375 1.375 0 0 0 0-1.945l-1.9-1.9A1.374 1.374 0 0 0 13.483 0zm-8.835 12.09c-.279-.279-.64-.424-1.002-.435a1.373 1.373 0 0 0-.961.414l-1.9 1.9a1.375 1.375 0 0 0 0 1.945l9.75 9.75a1.375 1.375 0 0 0 1.945 0l1.9-1.9a1.375 1.375 0 0 0 0-1.945l-9.732-9.732zm13.125-6.52c-.68 0-1.23.55-1.23 1.23v10.3c0 .68.55 1.23 1.23 1.23h1.8a1.23 1.23 0 0 0 1.23-1.23v-10.3a1.23 1.23 0 0 0-1.23-1.23h-1.8z"></path>
+  </svg>
+);
+
+const GlobeIcon = ({ size = 18, className = '' }) => (
+  <svg 
+    stroke="currentColor" 
+    fill="none" 
+    strokeWidth="2" 
+    viewBox="0 0 24 24" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    height={size} 
+    width={size} 
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="2" y1="12" x2="22" y2="12"></line>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+  </svg>
+);
+
 const Profile = () => {
   const { user, updateProfile } = useContext(AuthContext);
   
@@ -53,10 +87,20 @@ const Profile = () => {
   const [avatar, setAvatar] = useState('');
   const [github, setGithub] = useState('');
   const [linkedin, setLinkedin] = useState('');
+  const [leetcode, setLeetcode] = useState('');
+  const [portfolio, setPortfolio] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Device Upload & Camera capture hooks
+  const fileInputRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const [cameraLoading, setCameraLoading] = useState(false);
 
   // Load user profile details on boot
   useEffect(() => {
@@ -70,8 +114,99 @@ const Profile = () => {
       setAvatar(user.profile?.avatar || '');
       setGithub(user.profile?.github || '');
       setLinkedin(user.profile?.linkedin || '');
+      setLeetcode(user.profile?.leetcode || '');
+      setPortfolio(user.profile?.portfolio || '');
     }
   }, [user]);
+
+  // Cleanup camera stream on unmount
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  // Calculate Profile Strength score
+  const getProfileStrength = () => {
+    let score = 0;
+    if (name.trim()) score += 15;
+    if (email.trim()) score += 15;
+    if (title.trim()) score += 15;
+    if (skills.trim()) score += 15;
+    if (targetRoles.trim()) score += 15;
+    if (experienceLevel) score += 10;
+    
+    // Social links points
+    let socialPoints = 0;
+    if (github.trim()) socialPoints += 3.75;
+    if (linkedin.trim()) socialPoints += 3.75;
+    if (leetcode.trim()) socialPoints += 3.75;
+    if (portfolio.trim()) socialPoints += 3.75;
+    score += Math.ceil(socialPoints);
+
+    return Math.min(100, score);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setError('Image size should be less than 2MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const startCamera = async () => {
+    setCameraLoading(true);
+    setError('');
+    setShowCamera(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 300, height: 300, facingMode: 'user' }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+      }
+    } catch (err) {
+      setError('Could not access device camera. Please check permissions.');
+      setShowCamera(false);
+    } finally {
+      setCameraLoading(false);
+    }
+  };
+
+  const captureSelfie = () => {
+    if (videoRef.current && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      ctx.drawImage(videoRef.current, 0, 0, 300, 300);
+      const base64Selfie = canvasRef.current.toDataURL('image/jpeg');
+      setAvatar(base64Selfie);
+      stopCamera();
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setShowCamera(false);
+  };
+
+  const triggerFileSelect = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +214,6 @@ const Profile = () => {
     setMessage('');
     setError('');
 
-    // Parse comma strings
     const skillsArray = skills.split(',').map(s => s.trim()).filter(Boolean);
     const rolesArray = targetRoles.split(',').map(r => r.trim()).filter(Boolean);
 
@@ -93,7 +227,9 @@ const Profile = () => {
         targetRoles: rolesArray,
         avatar,
         github,
-        linkedin
+        linkedin,
+        leetcode,
+        portfolio
       });
       setMessage('Profile settings saved successfully!');
     } catch (err) {
@@ -104,6 +240,7 @@ const Profile = () => {
   };
 
   const currentAvatarUrl = avatar || 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(name || 'Explorer');
+  const strengthScore = getProfileStrength();
 
   return (
     <div className="profile-view-container">
@@ -112,34 +249,61 @@ const Profile = () => {
 
       <div className="profile-layout-grid animate-fade-in">
         
-        {/* Left Column: Visual Profile Card */}
-        <div className="profile-sidebar-card glass-card">
+        {/* Left Column: Visual Dev Passport Badge Card */}
+        <div className="profile-sidebar-card dev-id-badge glass-card">
+          <div className="dev-badge-header">
+            <span className="badge-logo">CP // PILOT</span>
+            <span className="badge-status-dot active">VERIFIED</span>
+          </div>
+
           <div className="avatar-preview-section">
-            <div className="avatar-container-circle">
+            <div className="avatar-container-circle clickable" onClick={triggerFileSelect}>
               <img src={currentAvatarUrl} alt="User Avatar" className="profile-display-avatar" />
               <div className="avatar-edit-icon-overlay">
                 <Camera size={18} />
+                <span style={{ fontSize: '0.62rem', fontWeight: 700, marginTop: '0.15rem' }}>CHANGE</span>
               </div>
             </div>
             <h3 className="user-sidebar-name">{name || 'Explorer'}</h3>
-            <span className="user-sidebar-title">{title || 'Career Pilot User'}</span>
+            <span className="user-sidebar-title">{title || 'Full Stack Developer'}</span>
           </div>
 
           {/* Social icons display */}
           <div className="profile-sidebar-socials-row">
             {github && (
-              <a href={github} target="_blank" rel="noopener noreferrer" className="sidebar-social-link github">
-                <GithubIcon size={18} />
+              <a href={github} target="_blank" rel="noopener noreferrer" className="sidebar-social-link github" title="GitHub Profile">
+                <GithubIcon size={16} />
               </a>
             )}
             {linkedin && (
-              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="sidebar-social-link linkedin">
-                <LinkedinIcon size={18} />
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className="sidebar-social-link linkedin" title="LinkedIn Profile">
+                <LinkedinIcon size={16} />
               </a>
             )}
-            {!github && !linkedin && (
-              <span className="no-socials-text">Add socials in configuration</span>
+            {leetcode && (
+              <a href={leetcode} target="_blank" rel="noopener noreferrer" className="sidebar-social-link leetcode" title="LeetCode Profile">
+                <LeetcodeIcon size={16} />
+              </a>
             )}
+            {portfolio && (
+              <a href={portfolio} target="_blank" rel="noopener noreferrer" className="sidebar-social-link portfolio" title="Personal Portfolio">
+                <GlobeIcon size={16} />
+              </a>
+            )}
+            {!github && !linkedin && !leetcode && !portfolio && (
+              <span className="no-socials-text">Social links are empty</span>
+            )}
+          </div>
+
+          {/* Profile Strength Meter */}
+          <div className="profile-strength-meter-section" style={{ width: '100%', marginTop: '1.75rem', textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', fontWeight: 800, marginBottom: '0.35rem', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
+              <span>Profile Strength</span>
+              <span style={{ color: strengthScore === 100 ? 'var(--accent-success)' : strengthScore > 60 ? 'var(--accent-warning)' : 'var(--accent-error)' }}>{strengthScore}%</span>
+            </div>
+            <div className="strength-bar-bg" style={{ height: '6px', background: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div className="strength-bar-fill" style={{ height: '100%', width: `${strengthScore}%`, background: strengthScore === 100 ? 'hsl(142, 70%, 45%)' : strengthScore > 60 ? 'hsl(38, 92%, 50%)' : 'hsl(0, 84%, 60%)', transition: 'width 0.4s ease' }}></div>
+            </div>
           </div>
 
           <div className="sidebar-stats-divider"></div>
@@ -147,13 +311,24 @@ const Profile = () => {
           {/* Quick Info summary */}
           <div className="sidebar-info-summary">
             <div className="summary-item">
-              <span className="lbl">Email Address</span>
-              <span className="val">{email || 'Not provided'}</span>
+              <span className="lbl">System ID</span>
+              <span className="val" style={{ fontFamily: 'monospace', letterSpacing: '0.05em' }}>UID-{user?.id?.slice(-8).toUpperCase() || 'EXPLORER'}</span>
             </div>
             <div className="summary-item">
-              <span className="lbl">Experience Tier</span>
-              <span className="val">{experienceLevel} Tier</span>
+              <span className="lbl">Email Coordinate</span>
+              <span className="val">{email || 'Not provided'}</span>
             </div>
+          </div>
+
+          {/* Barcode Mock styling decoration */}
+          <div className="dev-badge-barcode-decoration">
+            <div className="barcode-line thin"></div>
+            <div className="barcode-line thick"></div>
+            <div className="barcode-line medium"></div>
+            <div className="barcode-line thin"></div>
+            <div className="barcode-line thick"></div>
+            <div className="barcode-line thin"></div>
+            <span className="barcode-text">CAREERPILOT.AI // DEV-PASS</span>
           </div>
         </div>
 
@@ -162,13 +337,24 @@ const Profile = () => {
           {message && <div className="alert-message success-alert" style={{ padding: '0.85rem 1rem', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid var(--accent-success)', color: 'var(--accent-success)', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', fontSize: '0.85rem' }}>{message}</div>}
           {error && <div className="alert-message error-alert" style={{ padding: '0.85rem 1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--accent-error)', color: 'var(--accent-error)', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', fontSize: '0.85rem' }}>{error}</div>}
 
+          {/* Hidden File Input */}
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileUpload} 
+            style={{ display: 'none' }} 
+            accept="image/*" 
+          />
+
           <form onSubmit={handleSubmit} className="profile-edit-form">
+            
+            {/* 1. General Profile details */}
             <h3 className="section-title-minor" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: 0, fontSize: '0.95rem', fontWeight: 800 }}>
               <User size={16} style={{ color: 'var(--primary)' }} />
               <span>Personal Information</span>
             </h3>
             
-            <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+            <div className="settings-section-row">
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-name">Full Name</label>
                 <input
@@ -199,7 +385,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+            <div className="settings-section-row" style={{ marginBottom: '2rem' }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-title">Professional Title</label>
                 <div className="input-with-icon">
@@ -231,46 +417,90 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Avatar customization */}
+            {/* 2. Image Selection & Upload Area */}
             <h3 className="section-title-minor" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem', marginTop: '1.5rem', fontSize: '0.95rem', fontWeight: 800 }}>
               <Camera size={16} style={{ color: 'var(--primary)' }} />
-              <span>Choose Profile Avatar</span>
+              <span>Choose Profile Avatar / Photo</span>
             </h3>
             
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '0 0 1.25rem 0' }}>Select one of our premium character presets, or paste your custom image URL below.</p>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '0 0 1.25rem 0' }}>Upload a file, take a live webcam selfie, or choose one of our programmer character presets.</p>
             
-            <div className="avatar-presets-grid" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-              {AVATAR_PRESETS.map(preset => (
-                <div 
-                  key={preset.name} 
-                  className={`avatar-preset-item ${avatar === preset.url ? 'active' : ''}`}
-                  onClick={() => setAvatar(preset.url)}
-                  style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', border: avatar === preset.url ? '3px solid var(--primary)' : '2px solid var(--border-color)', cursor: 'pointer', transition: 'all 0.2s ease', background: 'var(--bg-item)' }}
-                >
-                  <img src={preset.url} alt={preset.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div className="image-sourcing-panel-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+              
+              {/* Device File Upload card */}
+              <div className="image-source-box drag-upload-card" onClick={triggerFileSelect}>
+                <Upload size={22} className="upload-box-icon" />
+                <span className="lbl">Upload Image</span>
+                <span className="desc">PNG, JPG up to 2MB</span>
+              </div>
+
+              {/* Webcam Selfie Capture Card */}
+              <div className="image-source-box selfie-cam-card" onClick={startCamera}>
+                <Camera size={22} className="upload-box-icon" />
+                <span className="lbl">Take live Selfie</span>
+                <span className="desc">Capture using webcam</span>
+              </div>
+
+            </div>
+
+            {/* Webcam Live Feed Modal/Box */}
+            {showCamera && (
+              <div className="webcam-capture-modal animate-fade-in">
+                <div className="webcam-header-row">
+                  <span>Live Camera Capture</span>
+                  <button type="button" onClick={stopCamera} className="btn-close-cam">Cancel</button>
                 </div>
-              ))}
+                {cameraLoading ? (
+                  <div className="webcam-loading-spinner">Connecting camera...</div>
+                ) : (
+                  <div className="webcam-feed-container">
+                    <video ref={videoRef} autoPlay playsInline width="280" height="280" className="camera-video-stream"></video>
+                    <canvas ref={canvasRef} width="300" height="300" style={{ display: 'none' }}></canvas>
+                    <button type="button" onClick={captureSelfie} className="btn btn-primary capture-selfie-action-btn">
+                      <Camera size={14} />
+                      <span>Capture Photo</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Avatar presets selection */}
+            <div className="presets-select-sub-panel" style={{ background: 'var(--bg-item)', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', display: 'block', marginBottom: '0.5rem' }}>Character Presets</span>
+              <div className="avatar-presets-grid" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                {AVATAR_PRESETS.map(preset => (
+                  <div 
+                    key={preset.name} 
+                    className={`avatar-preset-item ${avatar === preset.url ? 'active' : ''}`}
+                    onClick={() => setAvatar(preset.url)}
+                    style={{ width: '54px', height: '54px', borderRadius: '50%', overflow: 'hidden', border: avatar === preset.url ? '3px solid var(--primary)' : '2px solid var(--border-color)', cursor: 'pointer', transition: 'all 0.2s ease', background: 'var(--bg-item)' }}
+                  >
+                    <img src={preset.url} alt={preset.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="form-group" style={{ marginBottom: '2rem' }}>
-              <label className="form-label" htmlFor="prof-avatar-url">Custom Image URL</label>
+              <label className="form-label" htmlFor="prof-avatar-url">Custom Photo URL</label>
               <input
                 type="text"
                 id="prof-avatar-url"
                 className="form-control"
-                placeholder="e.g. https://domain.com/picture.png"
+                placeholder="https://domain.com/picture.png"
                 value={avatar}
                 onChange={(e) => setAvatar(e.target.value)}
               />
             </div>
 
-            {/* Social links */}
+            {/* 3. Social Coordinates links */}
             <h3 className="section-title-minor" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem', marginTop: '1.5rem', fontSize: '0.95rem', fontWeight: 800 }}>
               <Link size={16} style={{ color: 'var(--primary)' }} />
               <span>Social Coordinates</span>
             </h3>
             
-            <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+            <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-github">GitHub Profile Link</label>
                 <div className="input-with-icon">
@@ -304,7 +534,41 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Professional metadata */}
+            <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+              <div className="form-group">
+                <label className="form-label" htmlFor="prof-leetcode">LeetCode Profile Link</label>
+                <div className="input-with-icon">
+                  <LeetcodeIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <input
+                    type="text"
+                    id="prof-leetcode"
+                    className="form-control"
+                    placeholder="https://leetcode.com/username"
+                    value={leetcode}
+                    onChange={(e) => setLeetcode(e.target.value)}
+                    style={{ paddingLeft: '38px' }}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="prof-portfolio">Portfolio / Personal Website</label>
+                <div className="input-with-icon">
+                  <GlobeIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <input
+                    type="text"
+                    id="prof-portfolio"
+                    className="form-control"
+                    placeholder="https://myportfolio.com"
+                    value={portfolio}
+                    onChange={(e) => setPortfolio(e.target.value)}
+                    style={{ paddingLeft: '38px' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Professional skills details */}
             <h3 className="section-title-minor" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem', marginTop: '1.5rem', fontSize: '0.95rem', fontWeight: 800 }}>
               <Tag size={16} style={{ color: 'var(--primary)' }} />
               <span>Technical Skills & Alignment</span>

@@ -58,6 +58,14 @@ const UserSchema = new mongoose.Schema({
     linkedin: {
       type: String,
       default: ''
+    },
+    leetcode: {
+      type: String,
+      default: ''
+    },
+    portfolio: {
+      type: String,
+      default: ''
     }
   },
   streak: {
