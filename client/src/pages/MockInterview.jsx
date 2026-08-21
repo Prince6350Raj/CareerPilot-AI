@@ -69,12 +69,30 @@ const MockInterview = () => {
     };
   }, []);
 
+  const speakTextDirectly = (text) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   const speakQuestion = (text) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
       utterance.pitch = 1.0;
+      
+      utterance.onend = () => {
+        const followUp = new SpeechSynthesisUtterance("What is your answer?");
+        followUp.rate = 1.0;
+        followUp.pitch = 1.0;
+        window.speechSynthesis.speak(followUp);
+      };
+      
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -129,8 +147,30 @@ const MockInterview = () => {
     };
 
     recognition.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      setUserAnswer(prev => prev + (prev.trim() ? ' ' : '') + transcript);
+      const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      
+      // 1. Voice command to go to next question
+      if (questionFeedback && (transcript.includes('next') || transcript.includes('continue') || transcript.includes('proceed') || transcript.includes('go ahead'))) {
+        handleNext();
+        return;
+      }
+
+      // 2. Voice command to select option in MCQ mode
+      if (activeSession && activeSession.format === 'mcq' && questionFeedback === null) {
+        let matchedOption = null;
+        if (/^(option|select|choose|answer)?\s*a\b/i.test(transcript) || transcript === 'a') matchedOption = 'A';
+        else if (/^(option|select|choose|answer)?\s*b\b/i.test(transcript) || transcript === 'b') matchedOption = 'B';
+        else if (/^(option|select|choose|answer)?\s*c\b/i.test(transcript) || transcript === 'c') matchedOption = 'C';
+        else if (/^(option|select|choose|answer)?\s*d\b/i.test(transcript) || transcript === 'd') matchedOption = 'D';
+
+        if (matchedOption) {
+          setUserAnswer(matchedOption);
+          speakTextDirectly(`Selected option ${matchedOption}.`);
+          return;
+        }
+      }
+
+      setUserAnswer(prev => prev + (prev.trim() ? ' ' : '') + event.results[event.results.length - 1][0].transcript);
     };
 
     recognition.onerror = (event) => {
@@ -239,6 +279,21 @@ const MockInterview = () => {
       const data = await res.json();
       if (data.success) {
         setQuestionFeedback(data.data);
+        
+        // Real-time evaluation readout
+        if (aiVoiceEnabled) {
+          const rating = data.data.rating || 0;
+          // Classify rating >= 5 as correct (out of 10 for subjective, or out of 5 for MCQs)
+          const isCorrect = rating >= 5;
+          let evalSpeech = "";
+          if (isCorrect) {
+            evalSpeech = "Yes! That is the correct answer. ";
+          } else {
+            evalSpeech = `That is incorrect. The correct answer is: ${data.data.modelAnswer || ""}. `;
+          }
+          evalSpeech += `Feedback comments: ${data.data.feedback || ""}`;
+          speakTextDirectly(evalSpeech);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -276,6 +331,18 @@ const MockInterview = () => {
         setScorecard(data.data);
         setActiveSession(null);
         fetchHistory();
+
+        // Final summary voice announcement
+        if (aiVoiceEnabled) {
+          const badgeInfo = getBadgeDetails(data.data.overallScore);
+          let finishSpeech = "";
+          if (badgeInfo.label === 'FAIL') {
+            finishSpeech = "Better luck next time. Please try again after preparation.";
+          } else {
+            finishSpeech = `Congratulations! You got a ${badgeInfo.label.toLowerCase()} medal. According to your performance, I will provide some job referrals. Please check.`;
+          }
+          speakTextDirectly(finishSpeech);
+        }
       }
     } catch (err) {
       console.error(err);
