@@ -351,12 +351,8 @@
 }
 
 /* History Table & Study Resource Link Hover Effects */
-.solved-history-table tr {
-  transition: background-color 0.2s ease;
-}
-
-.solved-history-table tr:hover {
-  background: rgba(255, 255, 255, 0.02) !important;
+.solved-history-row:hover {
+  background: var(--bg-item-hover) !important;
 }
 
 .resource-study-link {

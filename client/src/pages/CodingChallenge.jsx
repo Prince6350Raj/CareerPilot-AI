@@ -18,7 +18,8 @@ import {
   Sigma, 
   Zap,
   Share2,
-  GitBranch
+  GitBranch,
+  RefreshCw
 } from 'lucide-react';
 import './CodingChallenge.css';
 
@@ -264,7 +265,10 @@ const CodingChallenge = () => {
             title: challenge.title,
             topic: activeTopicObj ? activeTopicObj.name : topic,
             difficulty: challenge.difficulty || difficulty,
-            date: new Date().toISOString().split('T')[0]
+            date: new Date().toISOString().split('T')[0],
+            challengeData: challenge,
+            submittedCode: userCode.trim(),
+            language
           };
 
           const newHistory = [solvedItem, ...solvedHistory];
@@ -282,6 +286,29 @@ const CodingChallenge = () => {
       setError('Submission error. Check backend connection.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleLoadHistoryChallenge = (item) => {
+    if (item.challengeData) {
+      setChallenge(item.challengeData);
+      setUserCode(item.submittedCode || '');
+      setLanguage(item.language || 'javascript');
+      setEvaluation(null);
+      setBadgeUnlocked(false);
+      setError('');
+    } else {
+      // Find the topic ID by matching name
+      const matchedTopic = TOPICS.find(t => t.name === item.topic || t.id === item.topic);
+      const matchedDifficulty = item.difficulty || 'Easy';
+      
+      setTopic(matchedTopic ? matchedTopic.id : 'arrays');
+      setDifficulty(matchedDifficulty);
+      
+      setError(`Pre-populated item: Generating a fresh '${matchedDifficulty}' challenge for '${item.topic}'...`);
+      setTimeout(() => {
+        fetchChallenge();
+      }, 500);
     }
   };
 
@@ -321,7 +348,13 @@ const CodingChallenge = () => {
                   </thead>
                   <tbody>
                     {solvedHistory.map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)' }}>
+                      <tr 
+                        key={idx} 
+                        onClick={() => handleLoadHistoryChallenge(item)}
+                        title="Click to view solution or retake this challenge"
+                        className="solved-history-row"
+                        style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.03)', cursor: 'pointer' }}
+                      >
                         <td style={{ padding: '0.6rem 0.75rem', color: 'var(--text-primary)', fontWeight: 600 }}>✅ {item.title}</td>
                         <td style={{ padding: '0.6rem 0.75rem', color: 'var(--text-secondary)' }}>{item.topic}</td>
                         <td style={{ padding: '0.6rem 0.75rem' }}>
@@ -556,9 +589,28 @@ const CodingChallenge = () => {
               </ul>
             </div>
 
-            <button onClick={() => setChallenge(null)} className="btn btn-secondary" style={{ marginTop: '2rem' }}>
-              Back to configurations
-            </button>
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+              <button onClick={() => setChallenge(null)} className="btn btn-secondary">
+                Back to configurations
+              </button>
+              <button 
+                onClick={() => {
+                  if (challenge && challenge.starterCode) {
+                    setUserCode(challenge.starterCode[language] || '');
+                  } else {
+                    setUserCode('');
+                  }
+                  setEvaluation(null);
+                  setBadgeUnlocked(false);
+                }} 
+                className="btn btn-secondary" 
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', borderColor: 'var(--accent-warning)', color: 'var(--accent-warning)' }}
+                title="Reset code editor to starter code and solve again"
+              >
+                <RefreshCw size={14} />
+                <span>Try Again (Reset)</span>
+              </button>
+            </div>
           </div>
 
           {/* Right panel: Editor sandbox */}
