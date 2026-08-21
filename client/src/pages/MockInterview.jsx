@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { MessageSquare, ArrowRight, Play, Timer, Check, Info, Award, Download, Briefcase, Search, ChevronDown } from 'lucide-react';
 import './MockInterview.css';
