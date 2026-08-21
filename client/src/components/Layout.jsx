@@ -5,7 +5,6 @@ import { Menu } from 'lucide-react';
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -13,10 +12,7 @@ const Layout = () => {
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
-    setIsHovered(false);
   };
-
-  const showSidebar = isSidebarOpen || isHovered;
 
   return (
     <div className="app-container">
@@ -34,35 +30,8 @@ const Layout = () => {
       {/* Translucent overlay backdrop on mobile */}
       {isSidebarOpen && <div className="sidebar-backdrop" onClick={closeSidebar}></div>}
 
-      {/* Invisible corner/edge hover trigger at the left of the screen for desktop */}
-      <div 
-        className="sidebar-hover-trigger" 
-        onMouseEnter={() => setIsHovered(true)}
-      />
-
-      {/* Floating Toggle Menu Button for Desktop */}
-      {!showSidebar && (
-        <button 
-          className="desktop-menu-toggle-btn glass-card" 
-          onClick={toggleSidebar}
-          title="Open Navigation Menu"
-        >
-          <Menu size={20} />
-        </button>
-      )}
-
       {/* Responsive Sidebar Drawer Wrapper */}
-      <div 
-        className={`sidebar-wrapper ${showSidebar ? 'open' : ''}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={(e) => {
-          // Close sidebar when clicking links or buttons inside it
-          if (e.target.closest('a') || e.target.closest('button')) {
-            closeSidebar();
-          }
-        }}
-      >
+      <div className={`sidebar-wrapper ${isSidebarOpen ? 'open' : ''}`} onClick={closeSidebar}>
         <Sidebar />
       </div>
 
