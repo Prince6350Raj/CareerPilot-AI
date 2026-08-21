@@ -475,15 +475,6 @@ const CodingChallenge = () => {
                     >
                       📖 Article: {selectedTopicObj.webName}
                     </a>
-                    <a 
-                      href={selectedTopicObj.ytUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="resource-study-link"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', color: '#ef4444', textDecoration: 'none', fontWeight: 700 }}
-                    >
-                      🎥 YouTube: Video Tutorial Playlist
-                    </a>
                   </div>
                 </div>
               )}
