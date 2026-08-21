@@ -63,7 +63,7 @@ exports.getProfile = async (req, res, next) => {
 // @access  Private
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { name, email, title, skills, targetRoles, experienceLevel, avatar, github, linkedin, leetcode, portfolio } = req.body;
+    const { name, email, title, skills, targetRoles, experienceLevel, avatar, github, linkedin, leetcode, portfolio, avatarScale, avatarX, avatarY } = req.body;
 
     const profileUpdates = {};
     if (title !== undefined) profileUpdates.title = title;
@@ -75,6 +75,9 @@ exports.updateProfile = async (req, res, next) => {
     if (linkedin !== undefined) profileUpdates.linkedin = linkedin;
     if (leetcode !== undefined) profileUpdates.leetcode = leetcode;
     if (portfolio !== undefined) profileUpdates.portfolio = portfolio;
+    if (avatarScale !== undefined) profileUpdates.avatarScale = avatarScale;
+    if (avatarX !== undefined) profileUpdates.avatarX = avatarX;
+    if (avatarY !== undefined) profileUpdates.avatarY = avatarY;
 
     const user = await User.findById(req.user.id);
     if (!user) {

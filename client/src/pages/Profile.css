@@ -32,22 +32,11 @@
   position: relative;
   overflow: hidden;
   
-  /* Futuristic Dark Glass ID badge aesthetic */
-  background: linear-gradient(135deg, #090f1e 0%, #111a30 50%, #060912 100%) !important;
-  border: 1px solid rgba(168, 85, 247, 0.25) !important;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
-}
-
-.dev-id-badge::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  right: -20%;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 80%);
-  z-index: 1;
-  pointer-events: none;
+  /* Frosted Light-Glass aesthetic matching client theme */
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--glass-shadow) !important;
+  color: var(--text-primary) !important;
 }
 
 .dev-badge-header {
@@ -69,7 +58,7 @@
 }
 
 .dev-badge-header .badge-status-dot {
-  color: #34d399;
+  color: #10b981;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -98,12 +87,12 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.06);
+  border: 4px solid var(--border-color);
   position: relative;
   overflow: hidden;
   margin-bottom: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: var(--bg-item);
+  box-shadow: var(--glass-shadow);
   transition: var(--transition-smooth);
 }
 
@@ -147,14 +136,14 @@
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 800;
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
   margin: 0 0 0.35rem 0;
   letter-spacing: -0.01em;
 }
 
 .dev-id-badge .user-sidebar-title {
   font-size: 0.82rem;
-  color: #94a3b8 !important;
+  color: var(--text-secondary) !important;
   font-weight: 600;
 }
 
@@ -175,9 +164,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: #94a3b8;
+  border: 1px solid var(--border-color);
+  background: var(--bg-item);
+  color: var(--text-secondary);
   transition: var(--transition-smooth);
   text-decoration: none;
 }
@@ -188,35 +177,39 @@
 }
 
 .sidebar-social-link.github:hover {
-  border-color: #ffffff;
+  border-color: #24292e;
   background: #24292e;
+  color: #ffffff;
 }
 
 .sidebar-social-link.linkedin:hover {
   border-color: #0077b5;
   background: #0077b5;
+  color: #ffffff;
 }
 
 .sidebar-social-link.leetcode:hover {
   border-color: #f7901e;
   background: #f7901e;
+  color: #ffffff;
 }
 
 .sidebar-social-link.portfolio:hover {
   border-color: var(--primary);
   background: var(--primary);
+  color: #ffffff;
 }
 
 .no-socials-text {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--text-muted);
   font-style: italic;
 }
 
 .sidebar-stats-divider {
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--border-color);
   margin: 1.5rem 0;
   position: relative;
   z-index: 2;
@@ -234,7 +227,7 @@
 
 .dev-id-badge .summary-item .lbl {
   font-size: 0.68rem;
-  color: #64748b !important;
+  color: var(--text-muted) !important;
   text-transform: uppercase;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -242,7 +235,7 @@
 
 .dev-id-badge .summary-item .val {
   font-size: 0.85rem;
-  color: #cbd5e1 !important;
+  color: var(--text-primary) !important;
   font-weight: 600;
 }
 
@@ -254,7 +247,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2.5px;
-  opacity: 0.4;
+  opacity: 0.45;
   position: relative;
   z-index: 2;
 }
@@ -262,7 +255,7 @@
 .dev-badge-barcode-decoration .barcode-line {
   width: 75%;
   height: 2px;
-  background: #cbd5e1;
+  background: var(--text-muted);
 }
 
 .dev-badge-barcode-decoration .barcode-line.thick {
@@ -281,7 +274,7 @@
   font-size: 0.55rem;
   font-family: monospace;
   letter-spacing: 0.12em;
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 0.35rem;
   text-transform: uppercase;
 }

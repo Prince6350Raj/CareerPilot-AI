@@ -89,6 +89,11 @@ const Profile = () => {
   const [linkedin, setLinkedin] = useState('');
   const [leetcode, setLeetcode] = useState('');
   const [portfolio, setPortfolio] = useState('');
+
+  // Image zoom and position alignment states
+  const [avatarScale, setAvatarScale] = useState(1);
+  const [avatarX, setAvatarX] = useState(50);
+  const [avatarY, setAvatarY] = useState(50);
   
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -116,6 +121,9 @@ const Profile = () => {
       setLinkedin(user.profile?.linkedin || '');
       setLeetcode(user.profile?.leetcode || '');
       setPortfolio(user.profile?.portfolio || '');
+      setAvatarScale(user.profile?.avatarScale ?? 1);
+      setAvatarX(user.profile?.avatarX ?? 50);
+      setAvatarY(user.profile?.avatarY ?? 50);
     }
   }, [user]);
 
@@ -152,13 +160,17 @@ const Profile = () => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        setError('Image size should be less than 2MB');
+      if (file.size > 8 * 1024 * 1024) {
+        setError('Image size should be less than 8MB');
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
         setAvatar(reader.result);
+        // Reset scale and positions on upload
+        setAvatarScale(1);
+        setAvatarX(50);
+        setAvatarY(50);
       };
       reader.readAsDataURL(file);
     }
@@ -190,6 +202,10 @@ const Profile = () => {
       ctx.drawImage(videoRef.current, 0, 0, 300, 300);
       const base64Selfie = canvasRef.current.toDataURL('image/jpeg');
       setAvatar(base64Selfie);
+      // Reset scale and positions on capture
+      setAvatarScale(1);
+      setAvatarX(50);
+      setAvatarY(50);
       stopCamera();
     }
   };
@@ -229,11 +245,14 @@ const Profile = () => {
         github,
         linkedin,
         leetcode,
-        portfolio
+        portfolio,
+        avatarScale,
+        avatarX,
+        avatarY
       });
       setMessage('Profile settings saved successfully!');
     } catch (err) {
-      setError(err.message || 'Failed to update profile details.');
+      setError(err.message || 'Failed to update profile details. (Try using a smaller image if limit exceeded)');
     } finally {
       setLoading(false);
     }
@@ -258,7 +277,16 @@ const Profile = () => {
 
           <div className="avatar-preview-section">
             <div className="avatar-container-circle clickable" onClick={triggerFileSelect}>
-              <img src={currentAvatarUrl} alt="User Avatar" className="profile-display-avatar" />
+              <img 
+                src={currentAvatarUrl} 
+                alt="User Avatar" 
+                className="profile-display-avatar" 
+                style={{ 
+                  transform: `scale(${avatarScale})`, 
+                  objectPosition: `${avatarX}% ${avatarY}%`,
+                  transition: 'transform 0.1s ease, object-position 0.1s ease'
+                }} 
+              />
               <div className="avatar-edit-icon-overlay">
                 <Camera size={18} />
                 <span style={{ fontSize: '0.62rem', fontWeight: 700, marginTop: '0.15rem' }}>CHANGE</span>
@@ -431,7 +459,7 @@ const Profile = () => {
               <div className="image-source-box drag-upload-card" onClick={triggerFileSelect}>
                 <Upload size={22} className="upload-box-icon" />
                 <span className="lbl">Upload Image</span>
-                <span className="desc">PNG, JPG up to 2MB</span>
+                <span className="desc">PNG, JPG up to 8MB</span>
               </div>
 
               {/* Webcam Selfie Capture Card */}
@@ -465,6 +493,65 @@ const Profile = () => {
               </div>
             )}
 
+            {/* Live adjustments sliders */}
+            {avatar && (
+              <div className="avatar-alignment-adjust-panel" style={{ background: 'var(--bg-item)', padding: '1.25rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)', display: 'block', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                  📏 Adjust Photo Position & Zoom
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+                  {/* Scale Zoom Slider */}
+                  <div className="adjust-slider-group">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                      <label>Zoom Scale</label>
+                      <span>{avatarScale.toFixed(2)}x</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="3" 
+                      step="0.05" 
+                      value={avatarScale} 
+                      onChange={(e) => setAvatarScale(parseFloat(e.target.value))}
+                      style={{ width: '100%', cursor: 'pointer', accentColor: 'var(--primary)' }}
+                    />
+                  </div>
+                  {/* Horizontal Offset Slider */}
+                  <div className="adjust-slider-group">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                      <label>Horizontal Align</label>
+                      <span>{avatarX}%</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value={avatarX} 
+                      onChange={(e) => setAvatarX(parseInt(e.target.value))}
+                      style={{ width: '100%', cursor: 'pointer', accentColor: 'var(--primary)' }}
+                    />
+                  </div>
+                  {/* Vertical Offset Slider */}
+                  <div className="adjust-slider-group">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                      <label>Vertical Align</label>
+                      <span>{avatarY}%</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value={avatarY} 
+                      onChange={(e) => setAvatarY(parseInt(e.target.value))}
+                      style={{ width: '100%', cursor: 'pointer', accentColor: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Avatar presets selection */}
             <div className="presets-select-sub-panel" style={{ background: 'var(--bg-item)', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem' }}>
               <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-secondary)', display: 'block', marginBottom: '0.5rem' }}>Character Presets</span>
@@ -473,7 +560,12 @@ const Profile = () => {
                   <div 
                     key={preset.name} 
                     className={`avatar-preset-item ${avatar === preset.url ? 'active' : ''}`}
-                    onClick={() => setAvatar(preset.url)}
+                    onClick={() => {
+                      setAvatar(preset.url);
+                      setAvatarScale(1);
+                      setAvatarX(50);
+                      setAvatarY(50);
+                    }}
                     style={{ width: '54px', height: '54px', borderRadius: '50%', overflow: 'hidden', border: avatar === preset.url ? '3px solid var(--primary)' : '2px solid var(--border-color)', cursor: 'pointer', transition: 'all 0.2s ease', background: 'var(--bg-item)' }}
                   >
                     <img src={preset.url} alt={preset.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -490,7 +582,12 @@ const Profile = () => {
                 className="form-control"
                 placeholder="https://domain.com/picture.png"
                 value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
+                onChange={(e) => {
+                  setAvatar(e.target.value);
+                  setAvatarScale(1);
+                  setAvatarX(50);
+                  setAvatarY(50);
+                }}
               />
             </div>
 

@@ -40,6 +40,18 @@ const UserSchema = new mongoose.Schema({
       type: String,
       default: ''
     },
+    avatarScale: {
+      type: Number,
+      default: 1
+    },
+    avatarX: {
+      type: Number,
+      default: 50
+    },
+    avatarY: {
+      type: Number,
+      default: 50
+    },
     title: {
       type: String,
       default: ''
