@@ -63,7 +63,7 @@ exports.getProfile = async (req, res, next) => {
 // @access  Private
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { name, title, skills, targetRoles, experienceLevel, avatar } = req.body;
+    const { name, email, title, skills, targetRoles, experienceLevel, avatar, github, linkedin } = req.body;
 
     const profileUpdates = {};
     if (title !== undefined) profileUpdates.title = title;
@@ -71,6 +71,8 @@ exports.updateProfile = async (req, res, next) => {
     if (targetRoles !== undefined) profileUpdates.targetRoles = targetRoles;
     if (experienceLevel !== undefined) profileUpdates.experienceLevel = experienceLevel;
     if (avatar !== undefined) profileUpdates.avatar = avatar;
+    if (github !== undefined) profileUpdates.github = github;
+    if (linkedin !== undefined) profileUpdates.linkedin = linkedin;
 
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -78,6 +80,7 @@ exports.updateProfile = async (req, res, next) => {
     }
 
     if (name) user.name = name;
+    if (email) user.email = email;
     
     // Merge updates
     user.profile = {

@@ -50,6 +50,14 @@ const UserSchema = new mongoose.Schema({
       type: String,
       enum: ['Entry', 'Mid', 'Senior'],
       default: 'Entry'
+    },
+    github: {
+      type: String,
+      default: ''
+    },
+    linkedin: {
+      type: String,
+      default: ''
     }
   },
   streak: {
