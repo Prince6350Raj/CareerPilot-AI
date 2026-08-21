@@ -27,6 +27,132 @@ const MockInterview = () => {
   const [history, setHistory] = useState([]);
   const [showFormats, setShowFormats] = useState(false);
 
+  // Live Audio/Video Interview simulator states
+  const [showVideoFeed, setShowVideoFeed] = useState(false);
+  const [aiVoiceEnabled, setAiVoiceEnabled] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const interviewVideoRef = useRef(null);
+  const interviewStreamRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  // Custom inline SVG icons
+  const VolumeIcon = ({ size = 16, className = '' }) => (
+    <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height={size} width={size} className={className} xmlns="http://www.w3.org/2000/svg">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+  );
+
+  const MicIcon = ({ size = 16, className = '' }) => (
+    <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height={size} width={size} className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"></path>
+    </svg>
+  );
+
+  const CameraIcon = ({ size = 16, className = '' }) => (
+    <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height={size} width={size} className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+      <circle cx="12" cy="13" r="4"></circle>
+    </svg>
+  );
+
+  useEffect(() => {
+    return () => {
+      if (interviewStreamRef.current) {
+        interviewStreamRef.current.getTracks().forEach(track => track.stop());
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const speakQuestion = (text) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  useEffect(() => {
+    if (activeSession && aiVoiceEnabled) {
+      const q = activeSession.questions[currentIndex];
+      if (q) {
+        speakQuestion(q.questionText);
+      }
+    }
+  }, [currentIndex, activeSession, aiVoiceEnabled]);
+
+  const toggleVideoFeed = async () => {
+    if (showVideoFeed) {
+      if (interviewStreamRef.current) {
+        interviewStreamRef.current.getTracks().forEach(track => track.stop());
+        interviewStreamRef.current = null;
+      }
+      setShowVideoFeed(false);
+    } else {
+      setShowVideoFeed(true);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 180, facingMode: 'user' } });
+        interviewStreamRef.current = stream;
+        setTimeout(() => {
+          if (interviewVideoRef.current) {
+            interviewVideoRef.current.srcObject = stream;
+          }
+        }, 200);
+      } catch (err) {
+        alert('Webcam access was denied or is busy.');
+        setShowVideoFeed(false);
+      }
+    }
+  };
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Please use Chrome/Edge.");
+      return;
+    }
+    
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      setUserAnswer(prev => prev + (prev.trim() ? ' ' : '') + transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+    setIsListening(false);
+  };
+
   const fetchHistory = async () => {
     try {
       const res = await fetch(`${API_URL}/interview/history`, {
@@ -497,26 +623,95 @@ const MockInterview = () => {
         </div>
       )}
 
-      {/* 2. ACTIVE TERMINAL */}
       {activeSession && (
         <div className="active-terminal-card glass-card animate-fade-in">
           {/* Header */}
-          <div className="terminal-header-bar">
+          <div className="terminal-header-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="q-indicator">
               <span>QUESTION {currentIndex + 1} OF {activeSession.questions.length}</span>
               <span className="q-category">{activeSession.questions[currentIndex].category}</span>
             </div>
+            
+            {/* Interactive Audio/Video Toggles */}
+            <div className="interview-media-controls" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <button 
+                type="button"
+                onClick={toggleVideoFeed}
+                className={`btn-media-toggle ${showVideoFeed ? 'active' : ''}`}
+                style={{ 
+                  background: showVideoFeed ? 'rgba(168, 85, 247, 0.15)' : 'var(--bg-item)', 
+                  border: `1px solid ${showVideoFeed ? 'var(--primary)' : 'var(--border-color)'}`,
+                  color: showVideoFeed ? 'var(--primary)' : 'var(--text-secondary)',
+                  padding: '0.4rem 0.6rem',
+                  borderRadius: 'var(--radius-sm)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.72rem',
+                  fontWeight: 700
+                }}
+                title="Toggle Video Interview Camera Preview"
+              >
+                <CameraIcon size={13} />
+                <span>{showVideoFeed ? 'Cam ON' : 'Cam OFF'}</span>
+              </button>
+
+              <button 
+                type="button"
+                onClick={() => setAiVoiceEnabled(!aiVoiceEnabled)}
+                className={`btn-media-toggle ${aiVoiceEnabled ? 'active' : ''}`}
+                style={{ 
+                  background: aiVoiceEnabled ? 'rgba(6, 182, 212, 0.15)' : 'var(--bg-item)', 
+                  border: `1px solid ${aiVoiceEnabled ? 'var(--secondary)' : 'var(--border-color)'}`,
+                  color: aiVoiceEnabled ? 'var(--secondary)' : 'var(--text-secondary)',
+                  padding: '0.4rem 0.6rem',
+                  borderRadius: 'var(--radius-sm)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.72rem',
+                  fontWeight: 700
+                }}
+                title="Read questions using AI Text-to-Speech voice"
+              >
+                <VolumeIcon size={13} />
+                <span>{aiVoiceEnabled ? 'Voice ON' : 'Voice OFF'}</span>
+              </button>
+            </div>
+
             <div className="terminal-timer">
               <Timer size={16} />
               <span>{formatTime(seconds)}</span>
             </div>
           </div>
 
-          {/* Question Text */}
-          <div className="terminal-prompt-box">
-            <p className="terminal-prompt-text">
-              {activeSession.questions[currentIndex].questionText}
-            </p>
+          {/* Question Text & Webcam Feed */}
+          <div className="terminal-prompt-box" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {showVideoFeed && (
+              <div className="interview-webcam-preview-box" style={{ width: '100%', height: '180px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative', background: '#000000' }}>
+                <video ref={interviewVideoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }}></video>
+                <div style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(0,0,0,0.6)', padding: '0.25rem 0.6rem', borderRadius: '10px', fontSize: '0.65rem', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 800 }}>
+                  <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }}></span>
+                  <span>LIVE INTERVIEW CAMERA</span>
+                </div>
+              </div>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+              <p className="terminal-prompt-text" style={{ flex: 1, margin: 0 }}>
+                {activeSession.questions[currentIndex].questionText}
+              </p>
+              <button 
+                type="button" 
+                onClick={() => speakQuestion(activeSession.questions[currentIndex].questionText)}
+                className="btn-voice-speaker"
+                title="Read Question Out Loud"
+                style={{ background: 'var(--bg-item)', border: '1px solid var(--border-color)', color: 'var(--primary)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0 }}
+              >
+                <VolumeIcon size={14} />
+              </button>
+            </div>
           </div>
 
           {/* Answer Input (MCQ Choices or Subjective Textarea) */}
@@ -544,17 +739,44 @@ const MockInterview = () => {
               })}
             </div>
           ) : (
-            <div className="terminal-textarea-container">
+            <div className="terminal-textarea-container" style={{ position: 'relative' }}>
               <textarea
                 className="terminal-textarea"
-                placeholder="Type your structured answer here. Be detailed, explain systems, algorithms, and practical usages..."
+                placeholder="Type your structured answer here, or click the microphone to dictate your response..."
                 value={userAnswer}
                 onChange={(e) => setUserAnswer(e.target.value)}
                 disabled={questionFeedback !== null || submittingAnswer}
                 rows={8}
+                style={{ paddingRight: '46px' }}
               />
+              <button
+                type="button"
+                onClick={isListening ? stopListening : startListening}
+                disabled={questionFeedback !== null || submittingAnswer}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  bottom: '12px',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: isListening ? 'var(--accent-error)' : 'var(--bg-item)',
+                  border: `1px solid ${isListening ? 'var(--accent-error)' : 'var(--border-color)'}`,
+                  color: isListening ? '#ffffff' : 'var(--text-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  zIndex: 2
+                }}
+                title={isListening ? 'Stop Listening (Recording...)' : 'Start Voice Dictation'}
+              >
+                <MicIcon size={14} className={isListening ? 'animate-pulse' : ''} />
+              </button>
             </div>
           )}
+
 
           {/* Controls */}
           <div className="terminal-actions-bar">
