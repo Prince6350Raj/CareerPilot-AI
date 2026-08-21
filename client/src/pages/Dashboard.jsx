@@ -35,6 +35,22 @@ const Dashboard = () => {
   const [interviews, setInterviews] = useState([]);
   const [roadmaps, setRoadmaps] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -225,6 +241,11 @@ const Dashboard = () => {
             {getGreeting()}, <span className="dynamic-pop-name">{user?.name || 'Explorer'}</span>!
           </h1>
           <p className="page-subtitle">Track your career guidance progress and optimization scores.</p>
+          <div className="dashboard-date-time-bar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.5rem', fontWeight: 600 }}>
+            <span>🕒 {formatDate(currentTime)}</span>
+            <span style={{ color: 'var(--border-color)', opacity: 0.5 }}>|</span>
+            <span style={{ color: 'var(--primary)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>{formatTime(currentTime)}</span>
+          </div>
         </div>
         <div className="header-widgets-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <div className="streak-badge glass-card">

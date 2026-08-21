@@ -44,8 +44,22 @@ const Sidebar = () => {
       </div>
 
       <Link to="/profile" className="sidebar-user">
-        <div className="user-avatar">
-          {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+        <div className="user-avatar" style={{ overflow: 'hidden', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {user?.profile?.avatar ? (
+            <img 
+              src={user.profile.avatar} 
+              alt="User Avatar" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                transform: `scale(${user.profile.avatarScale || 1})`,
+                objectPosition: `${user.profile.avatarX || 50}% ${user.profile.avatarY || 50}%`
+              }} 
+            />
+          ) : (
+            user?.name ? user.name.charAt(0).toUpperCase() : 'U'
+          )}
         </div>
         <div className="user-info">
           <h4 className="user-name">{user?.name}</h4>
