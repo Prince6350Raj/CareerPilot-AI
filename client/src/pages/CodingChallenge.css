@@ -349,3 +349,21 @@
     overflow-y: auto;
   }
 }
+
+/* History Table & Study Resource Link Hover Effects */
+.solved-history-table tr {
+  transition: background-color 0.2s ease;
+}
+
+.solved-history-table tr:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.resource-study-link {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.resource-study-link:hover {
+  transform: translateY(-1px);
+  opacity: 0.85;
+}
