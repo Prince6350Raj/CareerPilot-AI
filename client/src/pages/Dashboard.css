@@ -9,74 +9,21 @@
   align-items: center;
   margin-bottom: 2.5rem;
   gap: 1.5rem;
-  padding: 2.5rem 3rem;
+  padding: 2.25rem 2.5rem;
   
-  /* Deep Dark Space luxury glass banner style */
-  background: linear-gradient(135deg, #090e1a 0%, #111827 50%, #05070f 100%);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  /* Dynamic frosted glass banner background matching each theme */
+  background: var(--bg-header-banner);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   transition: var(--transition-smooth);
 }
 
-.dashboard-heading-row::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(6, 182, 212, 0.06) 50%, transparent 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.dashboard-heading-row::after {
-  content: '';
-  position: absolute;
-  bottom: -40%;
-  left: -5%;
-  width: 250px;
-  height: 250px;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 80%);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.dashboard-heading-row > * {
-  position: relative;
-  z-index: 2; /* Put content above decorative gradients */
-}
-
 .dashboard-heading-row:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 20px rgba(168, 85, 247, 0.15);
-  border-color: rgba(168, 85, 247, 0.35);
-}
-
-/* Force light colors inside this specific dark container for excellent contrast */
-.dashboard-heading-row .page-title {
-  color: #ffffff !important;
-}
-
-.dashboard-heading-row .page-subtitle {
-  color: #94a3b8 !important;
-}
-
-.dashboard-heading-row .streak-badge {
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.07) !important;
-  backdrop-filter: blur(8px);
-}
-
-.dashboard-heading-row .streak-num {
-  color: #ffffff !important;
-}
-
-.dashboard-heading-row .streak-label {
-  color: #94a3b8 !important;
+  transform: translateY(-3px);
+  box-shadow: var(--glass-shadow), 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes internal-glow-shift {

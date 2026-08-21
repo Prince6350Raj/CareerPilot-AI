@@ -37,6 +37,7 @@
   --bg-item-hover: hsla(222, 28%, 15%, 0.45);
   
   --bg-input: hsla(222, 28%, 5%, 0.8);
+  --bg-header-banner: linear-gradient(135deg, hsla(225, 40%, 14%, 0.85) 0%, hsla(225, 40%, 8%, 0.95) 100%);
   
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -67,6 +68,7 @@
   --bg-item-hover: hsla(0, 0%, 100%, 0.85);
   
   --bg-input: hsla(0, 0%, 100%, 0.85); /* Soft frosted input in light mode */
+  --bg-header-banner: linear-gradient(135deg, hsla(215, 30%, 90%, 0.8) 0%, hsla(215, 30%, 84%, 0.85) 100%);
 }
 
 /* Midnight Gold Theme Overrides (Black and Yellow) */
@@ -91,6 +93,7 @@
   --bg-item: hsla(0, 0%, 2%, 0.7);
   --bg-item-hover: hsla(48, 100%, 50%, 0.12);
   --bg-input: hsla(0, 0%, 3%, 0.9);
+  --bg-header-banner: linear-gradient(135deg, hsla(0, 0%, 9%, 0.85) 0%, hsla(0, 0%, 2%, 0.95) 100%);
 }
 
 /* Emerald Forest Theme Overrides */
@@ -115,6 +118,7 @@
   --bg-item: hsla(155, 45%, 5%, 0.6);
   --bg-item-hover: hsla(150, 80%, 40%, 0.12);
   --bg-input: hsla(155, 45%, 4%, 0.9);
+  --bg-header-banner: linear-gradient(135deg, hsla(155, 45%, 12%, 0.85) 0%, hsla(155, 45%, 6%, 0.95) 100%);
 }
 
 /* Aura Obsidian Theme Overrides (Frosted Slate Variant) */
@@ -139,6 +143,7 @@
   --bg-item: hsla(220, 15%, 91%, 0.8);
   --bg-item-hover: hsla(220, 15%, 83%, 0.9);
   --bg-input: hsla(220, 15%, 96%, 0.9);
+  --bg-header-banner: linear-gradient(135deg, hsla(220, 15%, 85%, 0.8) 0%, hsla(220, 15%, 78%, 0.85) 100%);
 }
 
 /* Ocean Classic Theme Overrides (White Cards, Blue Accents) */
@@ -163,6 +168,7 @@
   --bg-item: hsl(215, 25%, 82%); /* Soft light blue-gray for checklist items/history */
   --bg-item-hover: hsl(215, 25%, 78%);
   --bg-input: hsl(0, 0%, 100%); /* Pure white inputs */
+  --bg-header-banner: linear-gradient(135deg, hsla(217, 30%, 90%, 0.8) 0%, hsla(217, 30%, 82%, 0.85) 100%);
 }
 
 /* Global Reset & Base Styling */
