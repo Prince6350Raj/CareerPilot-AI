@@ -328,3 +328,20 @@
     min-height: auto;
   }
 }
+
+/* Popular Company Shortcut Cards styles */
+.popular-company-card {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.popular-company-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary) !important;
+  background: var(--bg-item-hover) !important;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="light"] .popular-company-card:hover,
+:root[data-theme="goldlight"] .popular-company-card:hover {
+  box-shadow: 0 4px 15px rgba(148, 163, 184, 0.1);
+}

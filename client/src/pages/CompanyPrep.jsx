@@ -7,13 +7,29 @@ const CompanyPrep = () => {
   const { token, API_URL } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('Consulting CareerPilot database...');
   const [prepData, setPrepData] = useState(null);
   const [error, setError] = useState('');
 
   const fetchPrepData = async (company) => {
     if (!company) return;
     setLoading(true);
+    setLoadingText(`Consulting CareerPilot AI database for ${company}...`);
     setError('');
+    
+    const steps = [
+      `Fetching interview pattern parameters for ${company}...`,
+      `Retrieving most asked DSA topics...`,
+      `Gathering typical system design focuses...`,
+      `Structuring standard HR behavior queries...`,
+      `Checking salary & compensation estimates...`
+    ];
+    let idx = 0;
+    const timer = setInterval(() => {
+      setLoadingText(steps[idx]);
+      idx = (idx + 1) % steps.length;
+    }, 1200);
+
     try {
       const res = await fetch(`${API_URL}/career/prep`, {
         method: 'POST',
@@ -32,6 +48,7 @@ const CompanyPrep = () => {
     } catch (err) {
       setError('Connection timeout. Please try again.');
     } finally {
+      clearInterval(timer);
       setLoading(false);
     }
   };
@@ -42,16 +59,77 @@ const CompanyPrep = () => {
     'Meesho', 'Zepto', 'Razorpay', 'ShareChat', 'Paytm', 'Dunzo'
   ];
 
+  const popularCompanies = [
+    { name: 'Google', color: 'rgba(219, 68, 85, 0.12)', border: '#db4437', char: 'G' },
+    { name: 'Microsoft', color: 'rgba(0, 164, 239, 0.12)', border: '#00a4ef', char: 'M' },
+    { name: 'Amazon', color: 'rgba(255, 153, 0, 0.12)', border: '#ff9900', char: 'A' },
+    { name: 'Meta', color: 'rgba(6, 104, 226, 0.12)', border: '#0668e2', char: 'Meta' },
+    { name: 'Uber', color: 'rgba(15, 15, 15, 0.4)', border: 'var(--text-primary)', char: 'U' },
+    { name: 'Flipkart', color: 'rgba(40, 116, 240, 0.12)', border: '#2874f0', char: 'F' },
+    { name: 'Zomato', color: 'rgba(226, 55, 68, 0.12)', border: '#e23744', char: 'Z' },
+    { name: 'Meesho', color: 'rgba(244, 51, 151, 0.12)', border: '#f43397', char: 'M' }
+  ];
+
   return (
     <div className="company-prep-view-details">
       <h1 className="page-title">Company Preparation Guides</h1>
       <p className="page-subtitle">Get detailed interview structures, top DSA concepts, system design topics, and salary stats for top tech companies.</p>
 
+      {/* Popular Companies Grid */}
+      <div className="popular-companies-cards-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.85rem', marginBottom: '1.5rem' }}>
+        {popularCompanies.map(item => {
+          const isActive = searchQuery === item.name;
+          return (
+            <div 
+              key={item.name}
+              className={`popular-company-card ${isActive ? 'active' : ''}`}
+              onClick={() => {
+                setSearchQuery(item.name);
+                fetchPrepData(item.name);
+              }}
+              style={{
+                background: isActive ? 'var(--bg-item-hover)' : 'var(--bg-card)',
+                border: `1px solid ${isActive ? item.border : 'var(--border-color)'}`,
+                borderRadius: 'var(--radius-sm)',
+                padding: '1rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'var(--transition-smooth)',
+                boxShadow: isActive ? `0 0 10px ${item.border}33` : 'none'
+              }}
+            >
+              <div 
+                style={{ 
+                  width: '40px', 
+                  height: '40px', 
+                  borderRadius: '50%', 
+                  background: item.color, 
+                  border: `1px solid ${item.border}`, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '0.9rem', 
+                  fontWeight: 800, 
+                  color: item.border,
+                  marginBottom: '0.5rem'
+                }}
+              >
+                {item.char}
+              </div>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{item.name}</span>
+            </div>
+          );
+        })}
+      </div>
+
       {/* Dropdown Selection Grid */}
       <div className="search-header-container glass-card" style={{ padding: '1.25rem 1.5rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
           <label htmlFor="company-dropdown-select" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Select Target Company:
+            Or Select Other Company:
           </label>
           <div style={{ display: 'flex', gap: '1rem', width: '100%', flexWrap: 'wrap', alignItems: 'center' }}>
             <select
@@ -90,21 +168,21 @@ const CompanyPrep = () => {
       </div>
 
       {error && (
-        <div className="alert alert-error animate-fade-in" style={{ marginTop: '1rem' }}>
+        <div className="alert alert-error animate-fade-in" style={{ marginTop: '1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--accent-error)', color: 'var(--accent-error)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem' }}>
           {error}
         </div>
       )}
 
       {loading && (
-        <div className="prep-loader-wrapper glass-card">
+        <div className="prep-loader-wrapper glass-card animate-fade-in" style={{ marginTop: '1rem' }}>
           <div className="spinner-loader"></div>
-          <p>Consulting CareerPilot AI database for {searchQuery} interview questions...</p>
+          <p>{loadingText}</p>
         </div>
       )}
 
       {/* Main Analysis Display */}
       {prepData && !loading && (
-        <div className="prep-report-grid animate-fade-in">
+        <div className="prep-report-grid animate-fade-in" style={{ marginTop: '1rem' }}>
           {/* Header Card */}
           <div className="prep-company-hero glass-card">
             <div className="hero-avatar-logo">
@@ -114,7 +192,7 @@ const CompanyPrep = () => {
               <h2>{prepData.companyName} Interview Guide</h2>
               <div className="salary-tag-row">
                 <DollarSign size={16} className="tag-icon" />
-                <span>Average Compensation: <strong>{prepData.salary}</strong></span>
+                <span>Average Compensation: <strong>{prepData.salary || 'Market Standard'}</strong></span>
               </div>
             </div>
           </div>
@@ -146,18 +224,18 @@ const CompanyPrep = () => {
               
               <div className="skills-group-section">
                 <h4>Most Asked DSA Topics</h4>
-                <div className="tags-container">
+                <div className="tags-container" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {prepData.dsaTopics?.map((topic, i) => (
-                    <span key={i} className="skill-tag detected-tag">{topic}</span>
+                    <span key={i} className="skill-tag detected-tag" style={{ fontSize: '0.78rem', padding: '0.25rem 0.6rem', background: 'rgba(79, 70, 229, 0.1)', border: '1px solid rgba(79, 70, 229, 0.2)', borderRadius: '4px', color: 'var(--primary)', fontWeight: 700 }}>{topic}</span>
                   ))}
                 </div>
               </div>
 
               <div className="skills-group-section" style={{ marginTop: '1.5rem' }}>
                 <h4>Typical System Design Focus</h4>
-                <div className="tags-container">
+                <div className="tags-container" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {prepData.systemDesign?.map((topic, i) => (
-                    <span key={i} className="skill-tag suggested-tag">{topic}</span>
+                    <span key={i} className="skill-tag suggested-tag" style={{ fontSize: '0.78rem', padding: '0.25rem 0.6rem', background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)', borderRadius: '4px', color: 'var(--secondary)', fontWeight: 700 }}>{topic}</span>
                   ))}
                 </div>
               </div>
@@ -179,9 +257,9 @@ const CompanyPrep = () => {
               </ul>
 
               <div className="skills-group-section" style={{ marginTop: '1.5rem' }}>
-                <div className="card-header-icon-lbl" style={{ marginBottom: '0.5rem' }}>
+                <div className="card-header-icon-lbl" style={{ marginBottom: '0.5rem', borderBottom: 'none', paddingBottom: 0 }}>
                   <BookOpen size={16} className="header-icon" />
-                  <h4>Preparation Resources</h4>
+                  <h4 style={{ margin: 0 }}>Preparation Resources</h4>
                 </div>
                 <div className="prep-links-stack">
                   {prepData.resources?.map((res, i) => (
@@ -206,9 +284,9 @@ const CompanyPrep = () => {
       {/* Empty State */}
       {!prepData && !loading && (
         <div className="empty-results-prep glass-card">
-          <Briefcase size={48} className="empty-prep-icon" />
+          <Briefcase size={48} className="empty-prep-icon" style={{ opacity: 0.3, marginBottom: '1.5rem' }} />
           <h3>No Company Selected</h3>
-          <p>Search for a specific tech firm or click one of the popular buttons above to retrieve dynamic recruitment guides.</p>
+          <p>Choose one of the popular tech companies above or use the dropdown to retrieve dynamic recruitment guides.</p>
         </div>
       )}
     </div>
