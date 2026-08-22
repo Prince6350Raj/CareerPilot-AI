@@ -142,7 +142,8 @@ const Sidebar = () => {
             { id: 'cyberpunk', name: 'Midnight Gold', color: '#eab308', label: 'M' },
             { id: 'emerald', name: 'Emerald Forest', color: '#10b981', label: 'E' },
             { id: 'sakura', name: 'Aura Obsidian', color: '#d97706', label: 'A' },
-            { id: 'ocean', name: 'Geeta Portal', color: '#1e3a8a', label: 'G' }
+            { id: 'ocean', name: 'Geeta Portal', color: '#1e3a8a', label: 'G' },
+            { id: 'goldlight', name: 'White & Yellow', color: '#f59e0b', label: 'W' }
           ].map(t => (
             <button
               key={t.id}
@@ -162,7 +163,7 @@ const Sidebar = () => {
                 justifyContent: 'center',
                 fontSize: '0.6rem',
                 fontWeight: 800,
-                color: t.id === 'light' ? '#0f172a' : '#ffffff',
+                color: (t.id === 'light' || t.id === 'goldlight') ? '#0f172a' : '#ffffff',
                 boxShadow: theme === t.id ? `0 0 10px ${t.color}` : 'none'
               }}
             >

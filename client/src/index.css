@@ -171,6 +171,37 @@
   --bg-header-banner: linear-gradient(135deg, hsla(217, 30%, 90%, 0.8) 0%, hsla(217, 30%, 82%, 0.85) 100%);
 }
 
+/* Gold Light Theme Overrides (White and Yellow) */
+:root[data-theme="goldlight"] {
+  --bg-dark: hsl(48, 40%, 94%); 
+  --bg-card: hsla(48, 30%, 98%, 0.75); 
+  --border-color: hsla(48, 50%, 80%, 0.4);
+  --text-primary: hsl(48, 80%, 10%);
+  --text-secondary: hsl(48, 85%, 22%);
+  --text-muted: hsl(48, 15%, 48%);
+  
+  --primary: hsl(45, 95%, 45%);
+  --primary-glow: hsla(45, 95%, 45%, 0.08);
+  --primary-hover: hsl(45, 95%, 50%);
+  
+  --secondary: hsl(38, 90%, 35%); 
+  --secondary-glow: hsla(38, 90%, 35%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6); 
+  --glass-shadow: 0 8px 32px 0 rgba(234, 179, 8, 0.06);
+  
+  --bg-item: hsla(0, 0%, 100%, 0.6);
+  --bg-item-hover: hsla(45, 95%, 45%, 0.12);
+  --bg-input: hsla(0, 0%, 100%, 0.85); 
+  --bg-header-banner: linear-gradient(135deg, hsla(48, 40%, 92%, 0.8) 0%, hsla(48, 40%, 86%, 0.85) 100%);
+}
+
+/* Global Select Options Styling to fix readability across all themes */
+select option {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
 /* Global Reset & Base Styling */
 * {
   box-sizing: border-box;
@@ -221,6 +252,12 @@ body {
   background-image: 
     radial-gradient(at 0% 0%, hsla(217, 75%, 20%, 0.08) 0px, transparent 50%),
     radial-gradient(at 100% 100%, hsla(24, 95%, 50%, 0.08) 0px, transparent 50%);
+}
+
+:root[data-theme="goldlight"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(45, 95%, 50%, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(38, 90%, 50%, 0.06) 0px, transparent 50%);
 }
 
 h1, h2, h3, h4, h5, h6 {
