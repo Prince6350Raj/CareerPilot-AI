@@ -157,6 +157,7 @@ const CodingChallenge = () => {
   const [topic, setTopic] = useState('Arrays');
   const [difficulty, setDifficulty] = useState('Medium');
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('Initializing challenge...');
   const [challenge, setChallenge] = useState(null);
   const [language, setLanguage] = useState('javascript');
   const [userCode, setUserCode] = useState('');
@@ -181,9 +182,23 @@ const CodingChallenge = () => {
 
   const fetchChallenge = async () => {
     setLoading(true);
+    setLoadingText('Connecting to CareerPilot AI compiler...');
     setError('');
     setEvaluation(null);
     setBadgeUnlocked(false);
+
+    const steps = [
+      'Generating problem specifications...',
+      'Synthesizing edge-case test rules...',
+      'Formatting boilerplate code templates...',
+      'Compiling algorithm sandbox files...'
+    ];
+    let idx = 0;
+    const timer = setInterval(() => {
+      setLoadingText(steps[idx]);
+      idx = (idx + 1) % steps.length;
+    }, 1500);
+
     try {
       const res = await fetch(`${API_URL}/challenge/generate`, {
         method: 'POST',
@@ -203,6 +218,7 @@ const CodingChallenge = () => {
     } catch (err) {
       setError('Connection failed. Please retry.');
     } finally {
+      clearInterval(timer);
       setLoading(false);
     }
   };
@@ -325,8 +341,17 @@ const CodingChallenge = () => {
         </div>
       )}
 
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="glass-card animate-fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', textAlign: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
+          <div className="spinner-loader"></div>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>AI Sandbox Compiling...</h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{loadingText}</p>
+        </div>
+      )}
+
       {/* Select panel */}
-      {!challenge && (
+      {!challenge && !loading && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           
           {/* Solved Challenges History List (LeetCode-style list at top) */}

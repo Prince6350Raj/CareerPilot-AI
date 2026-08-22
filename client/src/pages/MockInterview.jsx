@@ -10,6 +10,7 @@ const MockInterview = () => {
   const [format, setFormat] = useState('theory');
   const [limit, setLimit] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('Initializing interview session...');
   const [activeSession, setActiveSession] = useState(null);
   
   // Terminal states
@@ -170,6 +171,15 @@ const MockInterview = () => {
         }
       }
 
+      // 3. Voice command to submit response
+      if (questionFeedback === null && (transcript.includes('submit') || transcript.includes('send response') || transcript.includes('submit answer') || transcript.includes('submit response') || transcript.includes('confirm option'))) {
+        stopListening();
+        setTimeout(() => {
+          handleAnswerSubmit();
+        }, 300);
+        return;
+      }
+
       setUserAnswer(prev => prev + (prev.trim() ? ' ' : '') + event.results[event.results.length - 1][0].transcript);
     };
 
@@ -229,7 +239,22 @@ const MockInterview = () => {
     if (!role) return;
 
     setLoading(true);
+    setLoadingText('Connecting to CareerPilot AI Engine...');
     setScorecard(null);
+
+    const steps = [
+      'Connecting to CareerPilot AI Engine...',
+      'Analyzing custom role specifications...',
+      'Synthesizing scenario interview questions...',
+      'Structuring test-case validations...',
+      'Finalizing simulation environment...'
+    ];
+    let idx = 0;
+    const timer = setInterval(() => {
+      setLoadingText(steps[idx]);
+      idx = (idx + 1) % steps.length;
+    }, 1500);
+
     try {
       const res = await fetch(`${API_URL}/interview/start`, {
         method: 'POST',
@@ -251,6 +276,7 @@ const MockInterview = () => {
     } catch (err) {
       console.error(err);
     } finally {
+      clearInterval(timer);
       setLoading(false);
     }
   };
@@ -598,8 +624,17 @@ const MockInterview = () => {
       <h1 className="page-title">AI Mock Interview</h1>
       <p className="page-subtitle">Simulate real technical, HR, and behavioral interview environments and get graded feedback.</p>
 
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="glass-card animate-fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', textAlign: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
+          <div className="spinner-loader"></div>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>AI Interview Session Initializing...</h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{loadingText}</p>
+        </div>
+      )}
+
       {/* 1. SETUP MODULE */}
-      {!activeSession && !scorecard && (
+      {!activeSession && !scorecard && !loading && (
         <div className="setup-split-layout">
           <div className="setup-card-box glass-card animate-fade-in">
             <h3 className="card-mini-title">Setup Simulated Session</h3>
