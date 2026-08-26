@@ -11,6 +11,7 @@ const CompanyPrep = () => {
   const [loadingText, setLoadingText] = useState('Consulting CareerPilot database...');
   const [prepData, setPrepData] = useState(null);
   const [error, setError] = useState('');
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   const fetchPrepData = async (company) => {
     if (!company) return;
@@ -52,6 +53,17 @@ const CompanyPrep = () => {
       clearInterval(timer);
       setLoading(false);
     }
+  };
+
+  const downloadMoreDetails = () => {
+    if (!prepData || !prepData.moreDetailsText) return;
+    const element = document.createElement("a");
+    const file = new Blob([prepData.moreDetailsText], { type: 'text/plain;charset=utf-8' });
+    element.href = URL.createObjectURL(file);
+    element.download = `${prepData.companyName}_Detailed_Profile.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const downloadPDF = () => {
@@ -341,6 +353,15 @@ const CompanyPrep = () => {
               <div>
                 <h2 style={{ fontSize: '1.6rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>{prepData.companyName}</h2>
                 <p style={{ margin: '0.25rem 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>Verified Recruitment Syllabus Guide</p>
+                {prepData.moreDetailsText && (
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={() => setShowDetailsModal(true)}
+                    style={{ marginTop: '0.5rem', fontSize: '0.75rem', padding: '0.25rem 0.6rem', minHeight: 'auto', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                  >
+                    <BookOpen size={12} /> More Details
+                  </button>
+                )}
               </div>
             </div>
 
@@ -482,6 +503,100 @@ const CompanyPrep = () => {
           <Briefcase size={48} className="empty-prep-icon" style={{ opacity: 0.3, marginBottom: '1.5rem' }} />
           <h3>No Company Selected</h3>
           <p>Choose one of the popular tech companies above or use the dropdown to retrieve dynamic recruitment guides.</p>
+        </div>
+      )}
+
+      {/* Details Modal */}
+      {showDetailsModal && prepData && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(0, 0, 0, 0.65)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '1rem'
+        }}>
+          <div className="glass-card" style={{
+            width: '100%',
+            maxWidth: '650px',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: 'var(--shadow-lg)',
+            display: 'flex',
+            flexDirection: 'column',
+            maxHeight: '85vh',
+            animation: 'scaleUp 0.25s ease'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '1.25rem 1.5rem',
+              borderBottom: '1px solid var(--border-color)'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                {prepData.companyName} Corporate Profile
+              </h3>
+              <button 
+                onClick={() => setShowDetailsModal(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem',
+                  padding: '0.2rem'
+                }}
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{
+              padding: '1.5rem',
+              overflowY: 'auto',
+              flex: 1,
+              fontSize: '0.88rem',
+              color: 'var(--text-secondary)',
+              lineHeight: '1.6',
+              whiteSpace: 'pre-wrap'
+            }}>
+              {prepData.moreDetailsText}
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '1rem',
+              padding: '1rem 1.5rem',
+              borderTop: '1px solid var(--border-color)'
+            }}>
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => setShowDetailsModal(false)}
+                style={{ fontSize: '0.85rem' }}
+              >
+                Close
+              </button>
+              <button 
+                className="btn btn-primary" 
+                onClick={downloadMoreDetails}
+                style={{ fontSize: '0.85rem' }}
+              >
+                Download Profile
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

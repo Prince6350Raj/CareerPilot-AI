@@ -1462,6 +1462,28 @@ function getMockCompanyPrep(companyName) {
   const mockGuides = {
     tcs: {
       companyName: 'TCS',
+      moreDetailsText: `Tata Consultancy Services (TCS) is a multinational information technology services and consulting company. It was founded in 1968 as a division of Tata Sons Limited. TCS is known for providing IT services, consulting, and business solutions. Its global headquarters is located in Mumbai, India.
+
+Industry:
+Information Technology and Services
+
+Company Size:
+With a workforce exceeding 500,000 employees, TCS boasts one of the largest talent pools in the IT services industry.
+
+Product, Services and Operations:
+TCS provides a wide range of services, including IT services, business solutions, and consulting. IT services include application development, maintenance, and infrastructure management. Business solutions span across various domains such as banking, finance, healthcare, retail, and telecom. Consulting services help organizations improve their business processes, enhance customer experiences, and drive digital transformation.
+
+Funding Details:
+As a publicly traded company, TCS does not disclose specific funding details, but it is a part of Tata Group, which provides substantial financial stability and support.
+
+Acquisitions:
+Notable acquisitions include the purchase of BridgePoint Group, LLC, a U.S. management consulting firm, in 2018, and the acquisition of W12 Studios, a London-based digital design studio, in 2018.
+
+Awards and Achievements:
+TCS has received numerous awards and recognitions, including being named a Leader in the Gartner Magic Quadrant for IT Services for the Banking and Financial Services sector. It has also been recognized as a Top Employer globally by the Top Employers Institute.
+
+Revenue:
+TCS generated approximately U.S. $25.7 billion in revenue for the fiscal year ending March 2023.`,
       salaryStats: {
         fresher: '₹3,36,000 - ₹7,00,000 base',
         experienced: '₹8,00,000 - ₹15,00,000 base (3+ Yrs)'
@@ -1575,6 +1597,32 @@ function getMockCompanyPrep(companyName) {
     },
     wipro: {
       companyName: 'Wipro',
+      moreDetailsText: `Wipro Limited (NYSE: WIT, BSE: 507685, NSE: WIPRO) stands at the forefront of technology services and consulting, dedicated to crafting innovative solutions that cater to clients' intricate digital transformation requirements. With a comprehensive portfolio encompassing consulting, design, engineering, and operations, Wipro empowers clients to realize ambitious goals and cultivate future-ready, sustainable businesses. Boasting nearly 245,000 employees and business partners spanning 65 countries, Wipro fulfills its commitment to helping clients, colleagues, and communities thrive in an ever-evolving world.
+
+Industry:
+IT Services and IT Consulting
+
+Company Size:
+With a workforce exceeding 250,000 employees, Wipro taps into a vast talent pool committed to driving digital innovation.
+
+Product, Services, & Operations:
+Wipro specializes in Consulting, Business Process Outsourcing, Business Application Services, Infrastructure Management, Cloud Services, Analytics and Information Management, Product and Engineering Services, Mobility, Data centre Managed Services, and Software application management.
+
+Awards & Achievements:
+Wipro's dedication to excellence is evident in its industry accolades and achievements, establishing it as a trailblazer in the digital services landscape.
+
+Global Presence:
+Operating across more than 65 countries, Wipro stands as a key player in the international technology services arena.
+
+Revenue:
+As a publicly traded company (NYSE: WIT), Wipro consistently delivers value, aiding enterprises in navigating their next stages of growth and innovation.
+
+Roles:
+• Software Developer
+• Business Analyst
+• Data Analyst
+• Test Engineer
+• Process`,
       salaryStats: {
         fresher: '₹3,50,000 - ₹6,50,000 base',
         experienced: '₹8,00,000 - ₹14,00,000 base (3+ Yrs)'
@@ -1677,6 +1725,28 @@ function getMockCompanyPrep(companyName) {
     },
     kpmg: {
       companyName: 'KPMG',
+      moreDetailsText: `KPMG is a multinational professional services network and one of the Big Four accounting organizations. It was formed in 1987 by the merger of Peat Marwick International and Klynveld Main Goerdeler. KPMG is known for providing audit, tax, and advisory services. Its global headquarters is located in Amstelveen, the Netherlands.
+
+Industry:
+Professional Services
+
+Company Size:
+With a workforce exceeding 273,424 employees, the company boasts a vast talent pool.
+
+Product, Services and Operations:
+KPMG provides three main lines of services - audit, tax, and advisory. Audit services are aimed at enhancing the reliability of information provided by clients for use by investors. Tax services help clients increase their net asset value, undertake the transfer pricing and international tax activities of multinational companies, minimize their tax liabilities, implement tax computer systems and provides advisory of tax implications of various business decisions. Advisory services provide assistance to organizations to improve their performance, manage risks, and improve value.
+
+Funding Details:
+As a private company, KPMG does not disclose its funding details.
+
+Acquisitions:
+Notable acquisitions include the purchase of the cybersecurity firm Cyberinc in 2018 and the acquisition of the identity and access management service provider, Qubera Solutions in 2014.
+
+Awards and Achievements:
+KPMG has received numerous awards and recognitions, including being named one of the "World's Best Outsourcing Advisors" by the International Association of Outsourcing Professionals. It has also been recognized as a leader in global and regional SAP implementation services by ALM Intelligence.
+
+Revenue:
+KPMG generated approximately U.S. $15.7 billion in revenue.`,
       salaryStats: {
         fresher: '₹6,00,000 - ₹9,50,000 base',
         experienced: '₹12,00,000 - ₹22,00,000 base (3+ Yrs)'
@@ -1790,6 +1860,24 @@ function getMockCompanyPrep(companyName) {
     },
     deloitte: {
       companyName: 'Deloitte',
+      moreDetailsText: `Deloitte stands as a global leader, driving progress and enabling clients to emerge as leaders in their competitive landscapes. With a commitment to investing in exceptional individuals from diverse backgrounds, Deloitte empowers its people to achieve beyond expectations. The company's approach combines insightful advice with impactful actions and unwavering integrity. Deloitte believes in the symbiotic relationship between the strength of its clients, society, and its own success.
+
+Industry:
+Deloitte operates in the dynamic field of Business Consulting and Services, providing a comprehensive suite of services.
+
+Company Size:
+Boasting a workforce exceeding 457,000 employees, Deloitte draws strength from its vast talent pool.
+
+Product, Services, & Operations:
+Deloitte's specialized offerings span Audit, Consulting, Financial Advisory, Risk Management, and Tax Services.
+
+Global Presence:
+Deloitte's impact resonates globally, with member firms strategically positioned around the world to drive positive change.
+
+Recruitment Process Criteria:
+- Deloitte conducts 3-4 rounds to select freshers in their organization.
+- 60 percent or above in B.Tech, Class X and XII.
+- No backlogs at the time of the interview.`,
       salaryStats: {
         fresher: '₹6,50,000 - ₹10,00,000 base',
         experienced: '₹13,00,000 - ₹24,00,000 base (3+ Yrs)'
