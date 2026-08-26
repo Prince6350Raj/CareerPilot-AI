@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, Brain, Cpu, Activity, Briefcase } from 'lucide-react';
+import { Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, Brain, Cpu, Activity, Briefcase, GraduationCap, Target, TrendingUp, Award } from 'lucide-react';
 import './Login.css';
 
 const Login = () => {
@@ -47,14 +47,31 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {/* Floating Animated Particles in Background */}
+      {/* Floating Animated Particles & Career Icons in Background */}
       <div className="background-decorations">
         <div className="glow-circle glow-1"></div>
         <div className="glow-circle glow-2"></div>
         <div className="glow-circle glow-3"></div>
-        <div className="floating-particle p-1"></div>
-        <div className="floating-particle p-2"></div>
-        <div className="floating-particle p-3"></div>
+        
+        {/* Floating Career Path Indicators */}
+        <div className="career-icon-float cif-1">
+          <Briefcase size={48} strokeWidth={1} />
+        </div>
+        <div className="career-icon-float cif-2">
+          <GraduationCap size={58} strokeWidth={1} />
+        </div>
+        <div className="career-icon-float cif-3">
+          <Target size={52} strokeWidth={1} />
+        </div>
+        <div className="career-icon-float cif-4">
+          <TrendingUp size={44} strokeWidth={1} />
+        </div>
+        <div className="career-icon-float cif-5">
+          <Award size={48} strokeWidth={1} />
+        </div>
+        <div className="career-icon-float cif-6">
+          <Brain size={50} strokeWidth={1} />
+        </div>
       </div>
 
       <div className="login-split-wrapper">
