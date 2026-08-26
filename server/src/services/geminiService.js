@@ -1457,152 +1457,142 @@ CareerPilot Candidate`
 }
 
 function getMockCompanyPrep(companyName) {
-        '4. Culture & Managerial Round (45 mins)'
-      ],
-      dsaTopics: ['Heaps & Priority queues', 'Greedy algorithms', 'Two pointers', 'Matrix searches'],
-      systemDesign: ['Design Meesho Reseller Catalog cache database', 'Design Cart & checkout microservice', 'Design Feed personalization service'],
-      hrQuestions: [
-        'Tell me about a time you optimized a slow query.',
-        'What interests you in social e-commerce?',
-        'How do you prioritize features?'
-      ],
-      salary: '₹14,00,000 - ₹24,00,000 base + stocks',
-      resources: [
-        { name: 'Meesho Careers & Jobs portal', url: 'https://www.meesho.io/jobs' },
-        { name: 'Low Level Design Patterns Tutorial', url: 'https://refactoring.guru/design-patterns' }
-      ]
-    },
-    'zepto': {
-      companyName: 'Zepto',
-      interviewPattern: [
-        '1. Online Hackerrank test (2 questions, 90 mins)',
-        '2. Round 1: Javascript/Go programming & DSA (60 mins)',
-        '3. Round 2: LLD & High Level System Design (60 mins)',
-        '4. Founder / HM Fitment Round (30 mins)'
-      ],
-      dsaTopics: ['Queue scheduling algorithms', 'Binary Search arrays', 'HashMaps & HashTables', 'Sliding Window bounds'],
-      systemDesign: ['Design Zepto 10-Min Delivery routing engine', 'Design Dark Store inventory management', 'Design Realtime driver availability map'],
-      hrQuestions: [
-        'Are you comfortable working in a fast-paced hyper-growth environment?',
-        'Why Zepto quick commerce?',
-        'Tell me about a project you delivered in 1 week.'
-      ],
-      salary: '₹15,00,000 - ₹26,00,000 base + equity',
-      resources: [
-        { name: 'Zepto Official Careers Site', url: 'https://www.zeptonow.com/careers' },
-        { name: 'Go Language Concurrency Patterns', url: 'https://go.dev/tour/concurrency' }
-      ]
-    },
-    'razorpay': {
-      companyName: 'Razorpay',
-      interviewPattern: [
-        '1. Hackerrank Coding Round (3 questions, 90 mins)',
-        '2. Technical Round 1: Algorithmic Problem Solving (60 mins)',
-        '3. Technical Round 2: System Design & API Security (60 mins)',
-        '4. HR Round (30 mins)'
-      ],
-      dsaTopics: ['Dynamic Programming', 'Tries & Autocomplete systems', 'Graph traversals', 'Hash Tables hashing'],
-      systemDesign: ['Design Razorpay Payment Gateway integration API', 'Design Idempotency layer for transactions', 'Design Financial ledger transactions database'],
-      hrQuestions: [
-        'Tell me about a time you handled secure user data.',
-        'Why fintech?',
-        'How do you handle disagreement with product managers?'
-      ],
-      salary: '₹14,00,000 - ₹25,00,000 base + stock options',
-      resources: [
-        { name: 'Razorpay Jobs & Careers Portal', url: 'https://razorpay.com/jobs/' },
-        { name: 'API Security Guidelines OWASP', url: 'https://owasp.org/www-project-api-security/' }
-      ]
-    },
-    'sharechat': {
-      companyName: 'ShareChat',
-      interviewPattern: [
-        '1. Online Coding Round (3 questions, 90 mins)',
-        '2. Round 1: DSA Problems (60 mins)',
-        '3. Round 2: System Design & Caching (60 mins)',
-        '4. HM Alignment Round (45 mins)'
-      ],
-      dsaTopics: ['Graphs & Network connection links', 'Dynamic Programming', 'Heaps & Priority arrays', 'Tries'],
-      systemDesign: ['Design ShareChat Video Recommendation feed', 'Design Scalable post creation and upload backend', 'Design Chat Room service for millions of users'],
-      hrQuestions: [
-        'How do you manage platform moderation challenges technically?',
-        'Why social media tech?',
-        'Describe a time you resolved a tech stack issue.'
-      ],
-      salary: '₹16,00,000 - ₹30,00,000 base + ESOPs',
-      resources: [
-        { name: 'ShareChat Official Careers Portal', url: 'https://sharechat.com/careers' },
-        { name: 'NoSQL Databases Introduction', url: 'https://www.geeksforgeeks.org/introduction-to-nosql/' }
-      ]
-    },
-    'paytm': {
-      companyName: 'Paytm',
-      interviewPattern: [
-        '1. Online Coding Assessment (2 questions, 90 mins)',
-        '2. Round 1: DSA Coding algorithms (60 mins)',
-        '3. Round 2: Core Java/Spring Boot & DBMS questions (60 mins)',
-        '4. Managerial & HR fitment (30 mins)'
-      ],
-      dsaTopics: ['Binary Trees', 'Linked Lists manipulation', 'Array indices mapping', 'Stacks and Queues'],
-      systemDesign: ['Design Paytm Digital Wallet transaction database', 'Design QR Code merchant payment resolver', 'Design Cashback reward distribution queue'],
-      hrQuestions: [
-        'How do you handle transactional failures in your code?',
-        'Why fintech careers?',
-        'Describe your contribution to your previous project.'
-      ],
-      salary: '₹10,00,000 - ₹18,00,000 base',
-      resources: [
-        { name: 'Paytm Candidate Recruitment Site', url: 'https://paytm.com/careers' },
-        { name: 'ACID Properties in DBMS Guide', url: 'https://www.geeksforgeeks.org/acid-properties-in-dbms/' }
-      ]
-    },
-    'dunzo': {
-      companyName: 'Dunzo',
-      interviewPattern: [
-        '1. Online Coding Test (2 questions, 90 mins)',
-        '2. Round 1: Algorithmic DSA (60 mins)',
-        '3. Round 2: Schema Design & API logic (60 mins)',
-        '4. HR Round (30 mins)'
-      ],
-      dsaTopics: ['Greedy algorithms', 'Sorting and Search indices', 'Arrays partitions', 'Basic Graphs'],
-      systemDesign: ['Design Dunzo Delivery Task Assignment solver', 'Design Merchant partner portal dashboard api', 'Design Geolocation proximity search engine'],
-      hrQuestions: [
-        'Tell me about a project you built from scratch.',
-        'Why Dunzo hyper-local logistics?',
-        'Are you open to cross-team assignments?'
-      ],
-      salary: '₹11,00,000 - ₹18,00,000 base',
-      resources: [
-        { name: 'Dunzo Main Careers Platform', url: 'https://www.dunzo.com/' },
-        { name: 'Geohashing Systems Concept', url: 'https://www.geeksforgeeks.org/geohash-in-system-design/' }
-      ]
-    }
-  };
-
-  const matched = companyData[nameKey];
-  if (matched) return matched;
-
-  // Fallback default
+  const name = companyName || 'Google';
+  
   return {
-    companyName: companyName,
-    interviewPattern: [
-      '1. Online Assessment (2 Coding Problems, 90 mins)',
-      '2. Round 1: DSA & Problem Solving (45 mins)',
-      '3. Round 2: System Design & Framework Core (65 mins)',
-      '4. Round 3: Leadership Principles / HR (45 mins)'
+    companyName: name,
+    salaryStats: {
+      fresher: name.toLowerCase() === 'google' ? '₹18,00,000 - ₹24,00,000 base + Stocks' : 
+               name.toLowerCase() === 'microsoft' ? '₹16,00,000 - ₹22,00,000 base + Stocks' :
+               name.toLowerCase() === 'amazon' ? '₹15,00,000 - ₹20,00,000 base + Stocks' : '₹8,00,000 - ₹12,00,000 base',
+      experienced: name.toLowerCase() === 'google' ? '₹28,00,000 - ₹55,00,000 base + Stocks' : 
+                   name.toLowerCase() === 'microsoft' ? '₹26,00,000 - ₹48,00,000 base + Stocks' :
+                   name.toLowerCase() === 'amazon' ? '₹24,00,000 - ₹42,00,000 base + Stocks' : '₹16,00,000 - ₹28,00,000 base'
+    },
+    interviewRounds: [
+      {
+        roundName: 'Round 1: Online Coding Assessment (OA)',
+        focus: 'Data Structures & Algorithms / Problem Solving speed',
+        questions: [
+          {
+            title: 'Merge k Sorted Lists',
+            difficulty: 'Hard',
+            platform: 'LeetCode',
+            url: 'https://leetcode.com/problems/merge-k-sorted-lists/'
+          },
+          {
+            title: 'Sliding Window Maximum',
+            difficulty: 'Hard',
+            platform: 'LeetCode',
+            url: 'https://leetcode.com/problems/sliding-window-maximum/'
+          }
+        ],
+        topics: [
+          {
+            name: 'Segment Trees',
+            articleUrl: 'https://www.geeksforgeeks.org/segment-tree-data-structure/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=segment+tree+tutorial'
+          },
+          {
+            name: 'Heaps & Priority Queues',
+            articleUrl: 'https://www.geeksforgeeks.org/max-heap-in-java/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=heap+data+structure+tutorial'
+          }
+        ]
+      },
+      {
+        roundName: 'Round 2: Technical DSA Coding Rounds (Onsite)',
+        focus: 'Deep algorithmic complexity analysis, graph theory, trees, and backtracking optimization',
+        questions: [
+          {
+            title: 'Word Search II',
+            difficulty: 'Hard',
+            platform: 'LeetCode',
+            url: 'https://leetcode.com/problems/word-search-ii/'
+          },
+          {
+            title: 'Lowest Common Ancestor of a Binary Tree',
+            difficulty: 'Medium',
+            platform: 'LeetCode',
+            url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/'
+          }
+        ],
+        topics: [
+          {
+            name: 'Trie / Prefix Tree',
+            articleUrl: 'https://www.geeksforgeeks.org/trie-insert-and-search/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=trie+data+structure+tutorial'
+          },
+          {
+            name: 'DFS / BFS Traversal',
+            articleUrl: 'https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=graph+traversal+dfs+bfs'
+          }
+        ]
+      },
+      {
+        roundName: 'Round 3: System Design & Scalability',
+        focus: 'Microservices architecture, distributed caching, database sharding, and message queues',
+        questions: [
+          {
+            title: 'Design YouTube Video Streaming Service',
+            difficulty: 'Medium',
+            platform: 'GeeksforGeeks',
+            url: 'https://www.geeksforgeeks.org/system-design-youtube/'
+          },
+          {
+            title: 'Design Google Drive / Dropbox Cloud Storage',
+            difficulty: 'Hard',
+            platform: 'GeeksforGeeks',
+            url: 'https://www.geeksforgeeks.org/design-dropbox-system-design/'
+          }
+        ],
+        topics: [
+          {
+            name: 'Load Balancers & Reverse Proxies',
+            articleUrl: 'https://www.geeksforgeeks.org/system-design-load-balancer/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=load+balancer+system+design'
+          },
+          {
+            name: 'Consistent Hashing',
+            articleUrl: 'https://www.geeksforgeeks.org/consistent-hashing-system-design/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=consistent+hashing+system+design'
+          }
+        ]
+      },
+      {
+        roundName: 'Round 4: Cultural Fitment & HR Leadership',
+        focus: 'Behavioral analysis using the STAR method, leadership values, and core alignment',
+        questions: [
+          {
+            title: 'STAR Method Interview Framework practice',
+            difficulty: 'Easy',
+            platform: 'GeeksforGeeks',
+            url: 'https://www.geeksforgeeks.org/how-to-use-star-method-for-behavioral-interviews/'
+          }
+        ],
+        topics: [
+          {
+            name: 'Leadership Principles',
+            articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=behavioral+interview+questions+star+method'
+          }
+        ]
+      }
     ],
-    dsaTopics: ['Graphs (DFS/BFS)', 'Dynamic Programming (DP)', 'Tries & HashTables', 'Array Slidings'],
-    systemDesign: ['Rate Limiters', 'Key-Value Stores', 'Load Balancers', 'Distributed Caching'],
-    hrQuestions: [
-      'Tell me about a time you resolved a major team conflict.',
-      'Why do you want to join our organization specifically?',
-      'Describe a difficult technical bug you solved under tight deadlines.'
-    ],
-    salary: '$110,000 - $165,000 base + stock options',
-    resources: [
-      { name: 'LeetCode Top Interview 150', url: 'https://leetcode.com/studyplan/top-interview-150/' },
-      { name: 'System Design Primer by Donne Martin', url: 'https://github.com/donnemartin/system-design-primer' },
-      { name: 'Behavioral Interview Guide Star Method', url: 'https://www.themuse.com/advice/star-interview-method' }
+    preparationRoadmap: [
+      {
+        phase: 'Phase 1: DSA Foundations & Graph Algorithms (Weeks 1-4)',
+        milestone: 'Solve 50+ LeetCode Medium/Hard questions on Trees, Tries, Dijkstra, and DP. Practice memory complexity optimization.'
+      },
+      {
+        phase: 'Phase 2: Scalable System Design & Database Schema (Weeks 5-8)',
+        milestone: 'Study distributed caching, load balancers, rate limiters, and consistent hashing. Read the System Design Primer.'
+      },
+      {
+        phase: 'Phase 3: Star Method & Mock Simulations (Weeks 9-10)',
+        milestone: 'Prepare detailed stories for standard behavioral queries. Conduct 3x mock interview runs under active timers.'
+      }
     ]
   };
 }
