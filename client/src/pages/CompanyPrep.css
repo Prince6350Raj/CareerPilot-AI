@@ -345,3 +345,14 @@
 :root[data-theme="goldlight"] .popular-company-card:hover {
   box-shadow: 0 4px 15px rgba(148, 163, 184, 0.1);
 }
+
+.practice-question-row-link {
+  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease !important;
+}
+
+.practice-question-row-link:hover {
+  transform: translateX(4px);
+  border-color: var(--primary) !important;
+  background-color: var(--bg-item-hover) !important;
+}
+
