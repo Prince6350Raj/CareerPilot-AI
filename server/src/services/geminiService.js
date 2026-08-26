@@ -1458,6 +1458,7 @@ CareerPilot Candidate`
 
 function getMockCompanyPrep(companyName) {
   const name = companyName || 'Google';
+  const nameKey = name.toLowerCase().trim();
   const mockGuides = {
     tcs: {
       companyName: 'TCS',
