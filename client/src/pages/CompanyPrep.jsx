@@ -222,12 +222,9 @@ const CompanyPrep = () => {
     { name: 'Deloitte', color: 'rgba(134, 188, 37, 0.12)', border: '#86bc25', char: 'D' },
     { name: 'Google', color: 'rgba(219, 68, 85, 0.12)', border: '#db4437', char: 'G' },
     { name: 'Microsoft', color: 'rgba(0, 164, 239, 0.12)', border: '#00a4ef', char: 'M' },
-    { name: 'Amazon', color: 'rgba(255, 153, 0, 0.12)', border: '#ff9900', char: 'A' },
     { name: 'Meta', color: 'rgba(6, 104, 226, 0.12)', border: '#0668e2', char: 'Meta' },
     { name: 'Uber', color: 'rgba(15, 15, 15, 0.4)', border: 'var(--text-primary)', char: 'U' },
-    { name: 'Flipkart', color: 'rgba(40, 116, 240, 0.12)', border: '#2874f0', char: 'F' },
-    { name: 'Zomato', color: 'rgba(226, 55, 68, 0.12)', border: '#e23744', char: 'Z' },
-    { name: 'Meesho', color: 'rgba(244, 51, 151, 0.12)', border: '#f43397', char: 'M' }
+    { name: 'Zomato', color: 'rgba(226, 55, 68, 0.12)', border: '#e23744', char: 'Z' }
   ];
 
   return (
