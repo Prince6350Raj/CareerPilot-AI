@@ -198,12 +198,16 @@ const CompanyPrep = () => {
   };
 
   const companiesList = [
-    'Google', 'Microsoft', 'Amazon', 'Meta', 'Samsung', 'Accenture',
+    'TCS', 'Wipro', 'KPMG', 'Deloitte', 'Google', 'Microsoft', 'Amazon', 'Meta', 'Samsung', 'Accenture',
     'Flipkart', 'Zomato', 'Lenskart', 'Uber', 'Ola',
     'Meesho', 'Zepto', 'Razorpay', 'ShareChat', 'Paytm', 'Dunzo'
   ];
 
   const popularCompanies = [
+    { name: 'TCS', color: 'rgba(0, 102, 204, 0.12)', border: '#0066cc', char: 'TCS' },
+    { name: 'Wipro', color: 'rgba(90, 39, 142, 0.12)', border: '#5a278e', char: 'W' },
+    { name: 'KPMG', color: 'rgba(0, 51, 153, 0.12)', border: '#003399', char: 'KPMG' },
+    { name: 'Deloitte', color: 'rgba(134, 188, 37, 0.12)', border: '#86bc25', char: 'D' },
     { name: 'Google', color: 'rgba(219, 68, 85, 0.12)', border: '#db4437', char: 'G' },
     { name: 'Microsoft', color: 'rgba(0, 164, 239, 0.12)', border: '#00a4ef', char: 'M' },
     { name: 'Amazon', color: 'rgba(255, 153, 0, 0.12)', border: '#ff9900', char: 'A' },

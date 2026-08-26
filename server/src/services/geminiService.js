@@ -1458,9 +1458,443 @@ CareerPilot Candidate`
 
 function getMockCompanyPrep(companyName) {
   const name = companyName || 'Google';
-  const nameKey = name.toLowerCase().trim();
-
   const mockGuides = {
+    tcs: {
+      companyName: 'TCS',
+      salaryStats: {
+        fresher: '₹3,36,000 - ₹7,00,000 base',
+        experienced: '₹8,00,000 - ₹15,00,000 base (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: National Qualifier Test (NQT)',
+          focus: 'Aptitude, quantitative ability, verbal skills, basic programming, and fundamental computer science MCQ check',
+          questions: [
+            {
+              title: 'Swap two numbers without using a third variable',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/swap-two-numbers-without-using-temporary-variable/'
+            },
+            {
+              title: 'Given an array of 1s and 0s arrange 1s and 0s together in single scan',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/segregate-0s-and-1s-in-an-array-by-one-traverse/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Basic Variable Swapping',
+              articleUrl: 'https://www.geeksforgeeks.org/swap-two-numbers-without-using-temporary-variable/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=swap+two+numbers+without+third+variable'
+            },
+            {
+              name: 'Two Pointer array manipulation',
+              articleUrl: 'https://www.geeksforgeeks.org/two-pointers-technique/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=two+pointers+dsa+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical Interview',
+          focus: 'Linked lists, core OOP principles, inheritance, normalization of databases, SQL joins and keys',
+          questions: [
+            {
+              title: 'Explain functionality of a Linked List',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/data-structures/linked-list/'
+            },
+            {
+              title: 'What are the four basic principles of OOPs',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/'
+            },
+            {
+              title: 'Difference between Clustered and Non-Clustered Index',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-clustered-and-non-clustered-index/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Linked List Fundamentals',
+              articleUrl: 'https://www.geeksforgeeks.org/data-structures/linked-list/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=linked+list+data+structure+tutorial'
+            },
+            {
+              name: 'Object Oriented Programming',
+              articleUrl: 'https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=oops+concepts+tutorial'
+            },
+            {
+              name: 'Database Indexing',
+              articleUrl: 'https://www.geeksforgeeks.org/sql-indexes/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=clustered+vs+non-clustered+indexes'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: HR & Managerial Round',
+          focus: 'Domain adjustments, relocation flexibility, strengths & weaknesses analysis, and general behavioral check',
+          questions: [
+            {
+              title: 'TCS Behavioral & HR Interview Questions practice',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/tcs-interview-experience/'
+            }
+          ],
+          topics: [
+            {
+              name: 'STAR method HR Questions',
+              articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=tcs+hr+interview+questions'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: NQT Aptitude & Logic (Weeks 1-4)',
+          milestone: 'Practice quantitative aptitude, verbal logical reasoning, and basic coding exercises under 60-second limits.'
+        },
+        {
+          phase: 'Phase 2: OOP & Core CS Fundamentals (Weeks 5-8)',
+          milestone: 'Study C++/Java syntax, OOPs principles (inheritance, polymorphism, abstraction), database normalization, and SQL joins.'
+        },
+        {
+          phase: 'Phase 3: HR & Placement Papers (Weeks 9-10)',
+          milestone: 'Read TCS previous years placement papers and behavioral interview experiences. Practice self-introduction.'
+        }
+      ]
+    },
+    wipro: {
+      companyName: 'Wipro',
+      salaryStats: {
+        fresher: '₹3,50,000 - ₹6,50,000 base',
+        experienced: '₹8,00,000 - ₹14,00,000 base (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Assessment (Aptitude & Programming)',
+          focus: 'Aptitude test (48 mins), Written communication essay test (20 mins), and Online programming test (2 questions, 30 mins)',
+          questions: [
+            {
+              title: 'Write a program to print n Fibonacci numbers',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/program-for-nth-fibonacci-number/'
+            },
+            {
+              title: 'Find the factorial of a number',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/program-for-factorial-of-a-number/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Loops and recursion basics',
+              articleUrl: 'https://www.geeksforgeeks.org/recursion/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=recursion+programming+tutorial'
+            },
+            {
+              name: 'Written Essay & Grammar',
+              articleUrl: 'https://www.geeksforgeeks.org/accenture-recruitment-process/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=written+communication+test+preparation'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical Interview',
+          focus: 'Data structures, DBMS, Operating systems, networking, and programming fundamentals',
+          questions: [
+            {
+              title: 'What are DDL and DML commands in SQL',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/sql-ddl-dcl-dml-dql-tcl-commands/'
+            },
+            {
+              title: 'Difference between Errors and Exceptions',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-error-and-exception-in-java/'
+            }
+          ],
+          topics: [
+            {
+              name: 'SQL Commands',
+              articleUrl: 'https://www.geeksforgeeks.org/sql-ddl-dcl-dml-dql-tcl-commands/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=ddl+vs+dml+commands+in+sql'
+            },
+            {
+              name: 'Exception Handling',
+              articleUrl: 'https://www.geeksforgeeks.org/exceptions-in-java/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=exception+handling+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: HR Round',
+          focus: 'Communication skills validation, relocations, team conflicts, CEO & foundation awareness',
+          questions: [
+            {
+              title: 'Wipro HR Behavioral questions practice',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/wipro-interview-experience/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Communication & Fitment',
+              articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=wipro+hr+interview+questions'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Aptitude & Essay Practice (Weeks 1-4)',
+          milestone: 'Solve verbal and logical aptitude questions daily. Write 2-3 short essays under 20-minute timers.'
+        },
+        {
+          phase: 'Phase 2: DSA & DBMS Basics (Weeks 5-8)',
+          milestone: 'Revise core CS concepts (Stack, Queue, array searches, SQL commands, error exception details).'
+        },
+        {
+          phase: 'Phase 3: HR & WILP specific guides (Weeks 9-10)',
+          milestone: 'Prepare answers for standard HR questions (relocation, weekends night shifts, adaptability).'
+        }
+      ]
+    },
+    kpmg: {
+      companyName: 'KPMG',
+      salaryStats: {
+        fresher: '₹6,00,000 - ₹9,50,000 base',
+        experienced: '₹12,00,000 - ₹22,00,000 base (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Assessment (OA)',
+          focus: 'Quantitative aptitude, logical reasoning, and basic coding quizzes',
+          questions: [
+            {
+              title: 'Merge Two Sorted Linked Lists',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/merge-two-sorted-lists/'
+            },
+            {
+              title: 'Array Left Rotation by d positions',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/rotate-array/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Array Left Rotations',
+              articleUrl: 'https://www.geeksforgeeks.org/array-rotation/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=array+rotation+by+d+positions'
+            },
+            {
+              name: 'Merge sorted lists',
+              articleUrl: 'https://www.geeksforgeeks.org/merge-two-sorted-linked-lists/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=merge+two+sorted+lists+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical Interview (PI Questions)',
+          focus: 'RDBMS, Primary/Foreign keys, ACID properties, Normalization (3NF vs BCNF), OSI Model, VPNs, OS (processes vs threads)',
+          questions: [
+            {
+              title: 'Difference between 3NF and BCNF in DBMS',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-3nf-and-bcnf-in-dbms/'
+            },
+            {
+              title: 'Explain the concept of ACID properties in DBMS',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/acid-properties-in-dbms/'
+            },
+            {
+              title: 'Difference between Process and Thread',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-process-and-thread/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Database Normalization',
+              articleUrl: 'https://www.geeksforgeeks.org/difference-between-3nf-and-bcnf-in-dbms/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=3nf+vs+bcnf+normalization'
+            },
+            {
+              name: 'ACID Properties in Transactions',
+              articleUrl: 'https://www.geeksforgeeks.org/acid-properties-in-dbms/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=acid+properties+dbms'
+            },
+            {
+              name: 'OS Process vs Thread',
+              articleUrl: 'https://www.geeksforgeeks.org/difference-between-process-and-thread/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=process+vs+thread+operating+system'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: HR & Partner Round',
+          focus: 'Behavioral analysis, professional services mindset, team conflict resolution, and client consulting scenarios',
+          questions: [
+            {
+              title: 'KPMG Behavioral Fitment questions',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/kpmg-interview-experience/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Client Consulting and Advisory',
+              articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=kpmg+interview+preparation'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Aptitude & SQL basics (Weeks 1-4)',
+          milestone: 'Practice Quantitative aptitude and SQL queries (joins, key constraints, normalizations).'
+        },
+        {
+          phase: 'Phase 2: OS, Networking & Core DSA (Weeks 5-8)',
+          milestone: 'Revise OSI Model layers, VPNs, Operating system (paging, segmentation, deadlocks), and list traversals.'
+        },
+        {
+          phase: 'Phase 3: Advisory Case study & HR (Weeks 9-10)',
+          milestone: 'Prepare for consulting behavioral cases. Study KPMG business lines and client management principles.'
+        }
+      ]
+    },
+    deloitte: {
+      companyName: 'Deloitte',
+      salaryStats: {
+        fresher: '₹6,50,000 - ₹10,00,000 base',
+        experienced: '₹13,00,000 - ₹24,00,000 base (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Assessment (OA)',
+          focus: 'Logical, quantitative, and computer science MCQ quizzes',
+          questions: [
+            {
+              title: 'Write a program to find power of a number using recursion',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/write-a-program-to-calculate-powx-n/'
+            },
+            {
+              title: 'Database Normalization',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/dbms-normalization/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Recursion basics',
+              articleUrl: 'https://www.geeksforgeeks.org/recursion/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=recursion+in+programming'
+            },
+            {
+              name: 'DBMS Normalization',
+              articleUrl: 'https://www.geeksforgeeks.org/dbms-normalization/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=database+normalization+dbms'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Group Discussion & Just A Minute (JAM)',
+          focus: 'Communication skills, presentation speed, and spontaneous speaking',
+          questions: [
+            {
+              title: 'Just A Minute (JAM) Session guidelines',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/how-to-prepare-for-group-discussion/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Spontaneous English Speaking',
+              articleUrl: 'https://www.geeksforgeeks.org/how-to-prepare-for-group-discussion/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=just+a+minute+presentation+topics'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: Technical & HR Interview',
+          focus: 'Operating systems, computer networks, malloc vs calloc, pointers, and behavioral fitment',
+          questions: [
+            {
+              title: 'What is the difference between malloc() and calloc()',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-malloc-and-calloc-with-examples/'
+            },
+            {
+              title: 'Difference Between Call by Value and Call by Reference',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/difference-between-call-by-value-and-call-by-reference/'
+            },
+            {
+              title: 'What are super, primary, candidate, and foreign keys',
+              difficulty: 'Easy',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/keys-in-dbms/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Memory allocation in C',
+              articleUrl: 'https://www.geeksforgeeks.org/difference-between-malloc-and-calloc-with-examples/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=malloc+vs+calloc+in+c'
+            },
+            {
+              name: 'Database Keys',
+              articleUrl: 'https://www.geeksforgeeks.org/keys-in-dbms/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=database+keys+primary+foreign+candidate'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Aptitude & JAM communication (Weeks 1-4)',
+          milestone: 'Solve verbal reasoning questions daily. Practice speaking on general topics for 1 minute continuously without stopping.'
+        },
+        {
+          phase: 'Phase 2: Database normalization & SQL keys (Weeks 5-8)',
+          milestone: 'Revise database normalizations, SQL keys (primary, foreign, candidate), memory allocations, and OSI Model layers.'
+        },
+        {
+          phase: 'Phase 3: Case Interview & HR (Weeks 9-10)',
+          milestone: 'Prepare detailed answers for standard Deloitte behavioral questions (Why Deloitte, are you a team player, weaknesses).'
+        }
+      ]
+    },
     google: {
       companyName: 'Google',
       salaryStats: {
