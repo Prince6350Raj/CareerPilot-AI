@@ -13,6 +13,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [modalContent, setModalContent] = useState(null);
 
   const fetchAdminData = async () => {
     try {
@@ -90,7 +91,7 @@ const Admin = () => {
 
       {/* Analytics stats */}
       <div className="analytics-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
-        <div className="analytic-card glass-card">
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setActiveTab('users')} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Total Accounts</span>
             <Users className="metric-icon blue-theme" size={20} />
@@ -98,7 +99,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{counts.users}</h3>
         </div>
 
-        <div className="analytic-card glass-card">
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setActiveTab('activities')} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Active Users (7d)</span>
             <Activity className="metric-icon green-theme" style={{ color: 'var(--accent-success)' }} size={20} />
@@ -106,7 +107,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{counts.activeUsers}</h3>
         </div>
 
-        <div className="analytic-card glass-card">
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setModalContent({ title: 'Certificate Recipients Ledger', type: 'certificates', list: analytics?.details?.certificatesList || [] })} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Certificates Issued</span>
             <Award className="metric-icon gold-theme" style={{ color: 'var(--accent-warning)' }} size={20} />
@@ -114,7 +115,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{counts.certificatesIssued}</h3>
         </div>
 
-        <div className="analytic-card glass-card">
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setModalContent({ title: 'Top Resume ATS Scores', type: 'ats', list: analytics?.details?.atsScoreList || [] })} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Avg ATS Score</span>
             <Compass className="metric-icon gold-theme" size={20} />
@@ -122,7 +123,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{avgATS}%</h3>
         </div>
 
-        <div className="analytic-card glass-card">
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setModalContent({ title: 'Top Mock Interview Grades', type: 'interviews', list: analytics?.details?.interviewScoreList || [] })} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Avg Interview Score</span>
             <TrendingUp className="metric-icon purple-theme" size={20} />
@@ -130,7 +131,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{avgInterview * 10}%</h3>
         </div>
 
-        <div className="analytic-card glass-card" style={{ gridColumn: 'span 2' }}>
+        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setModalContent({ title: 'Popular Target Career Roles', type: 'roles', list: analytics?.details?.popularRolesList || [] })} style={{ gridColumn: 'span 2', cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Most Selected Role</span>
             <Sparkles className="metric-icon cyan-theme" size={20} />
@@ -298,6 +299,133 @@ const Admin = () => {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Detail Analytics Modal */}
+      {modalContent && (
+        <div className="about-modal-overlay" onClick={() => setModalContent(null)} style={{ zIndex: 1000 }}>
+          <div className="about-modal-box glass-card animate-fade-in" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '640px', width: '100%', padding: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{modalContent.title}</h3>
+              <button className="btn btn-secondary" onClick={() => setModalContent(null)} style={{ padding: '0.25rem 0.6rem', minHeight: 'auto', fontSize: '0.8rem' }}>Close</button>
+            </div>
+            
+            <div className="table-responsive-wrapper" style={{ marginTop: 0, maxHeight: '350px', overflowY: 'auto' }}>
+              <table className="admin-users-table">
+                {modalContent.type === 'certificates' && (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Recipient</th>
+                        <th>Role / Target</th>
+                        <th>Overall Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalContent.list.map((item, idx) => (
+                        <tr key={idx}>
+                          <td className="user-name-col">
+                            <div>{item.userName}</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>{item.userEmail}</div>
+                          </td>
+                          <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{item.role}</td>
+                          <td style={{ fontWeight: 800, color: 'var(--accent-warning)' }}>{item.score.toFixed(1)} / 10</td>
+                        </tr>
+                      ))}
+                      {modalContent.list.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="empty-table-row">No certificates issued yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </>
+                )}
+
+                {modalContent.type === 'ats' && (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Candidate</th>
+                        <th>ATS Score</th>
+                        <th>Uploaded On</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalContent.list.map((item, idx) => (
+                        <tr key={idx}>
+                          <td className="user-name-col">
+                            <div>{item.userName}</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>{item.userEmail}</div>
+                          </td>
+                          <td style={{ fontWeight: 800, color: 'var(--accent-success)' }}>{item.score}%</td>
+                          <td className="date-col">{new Date(item.date).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                      {modalContent.list.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="empty-table-row">No resumes analyzed yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </>
+                )}
+
+                {modalContent.type === 'interviews' && (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Candidate</th>
+                        <th>Interview Role</th>
+                        <th>Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalContent.list.map((item, idx) => (
+                        <tr key={idx}>
+                          <td className="user-name-col">
+                            <div>{item.userName}</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>{item.userEmail}</div>
+                          </td>
+                          <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{item.role}</td>
+                          <td style={{ fontWeight: 800, color: 'var(--primary)' }}>{(item.score * 10).toFixed(0)}%</td>
+                        </tr>
+                      ))}
+                      {modalContent.list.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="empty-table-row">No interviews completed yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </>
+                )}
+
+                {modalContent.type === 'roles' && (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Suggested Career Role</th>
+                        <th>Roadmaps Created</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalContent.list.map((item, idx) => (
+                        <tr key={idx}>
+                          <td className="user-name-col" style={{ color: 'var(--text-primary)' }}>{item.role}</td>
+                          <td style={{ fontWeight: 800, color: 'var(--secondary)' }}>{item.count} times</td>
+                        </tr>
+                      ))}
+                      {modalContent.list.length === 0 && (
+                        <tr>
+                          <td colSpan={2} className="empty-table-row">No learning roadmaps generated yet.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </>
+                )}
+              </table>
+            </div>
           </div>
         </div>
       )}

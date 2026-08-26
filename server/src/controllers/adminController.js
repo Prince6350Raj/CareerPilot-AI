@@ -21,9 +21,6 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-// @desc    Get platform global analytics
-// @route   GET /api/admin/analytics
-// @access  Private/Admin
 exports.getAnalytics = async (req, res, next) => {
   try {
     const userCount = await User.countDocuments({});
@@ -42,25 +39,61 @@ exports.getAnalytics = async (req, res, next) => {
     }) || 1;
 
     // Aggregating for average ATS scores
-    const resumes = await Resume.find({}).select('atsScore');
+    const resumes = await Resume.find({})
+      .populate('userId', 'name email')
+      .select('atsScore userId createdAt')
+      .sort({ atsScore: -1 });
+
     const totalATS = resumes.reduce((sum, r) => sum + (r.atsScore || 0), 0);
     const averageATS = resumes.length > 0 ? Math.round(totalATS / resumes.length) : 0;
+    const atsScoreList = resumes.slice(0, 10).map(r => ({
+      userName: r.userId?.name || 'Unknown',
+      userEmail: r.userId?.email || 'N/A',
+      score: r.atsScore,
+      date: r.createdAt
+    }));
 
     // Aggregating for average interview score
-    const completedInterviews = await Interview.find({ overallScore: { $exists: true } }).select('overallScore');
+    const completedInterviews = await Interview.find({ overallScore: { $exists: true } })
+      .populate('userId', 'name email')
+      .select('overallScore role updatedAt')
+      .sort({ overallScore: -1 });
+
     const totalInterview = completedInterviews.reduce((sum, i) => sum + (i.overallScore || 0), 0);
     const averageInterview = completedInterviews.length > 0 ? parseFloat((totalInterview / completedInterviews.length).toFixed(1)) : 0.0;
+    
+    const interviewScoreList = completedInterviews.slice(0, 10).map(i => ({
+      userName: i.userId?.name || 'Unknown',
+      userEmail: i.userId?.email || 'N/A',
+      role: i.role,
+      score: i.overallScore,
+      date: i.updatedAt
+    }));
 
     // Certificates issued (Mock Interview score >= 4.0 passing limit)
-    const certificatesIssued = await Interview.countDocuments({ overallScore: { $gte: 4.0 } });
+    const certificatesList = completedInterviews
+      .filter(i => i.overallScore >= 4.0)
+      .map(i => ({
+        id: i._id,
+        userName: i.userId?.name || 'Unknown',
+        userEmail: i.userId?.email || 'N/A',
+        role: i.role,
+        score: i.overallScore,
+        date: i.updatedAt
+      }));
+    const certificatesIssued = certificatesList.length;
 
     // Most Selected Career Role (dynamic aggregate)
     const careerAggregation = await Roadmap.aggregate([
       { $group: { _id: '$targetRole', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
-      { $limit: 1 }
+      { $limit: 10 }
     ]);
     const mostSelectedCareer = careerAggregation.length > 0 ? careerAggregation[0]._id : 'Fullstack Developer';
+    const popularRolesList = careerAggregation.map(c => ({
+      role: c._id,
+      count: c.count
+    }));
 
     res.status(200).json({
       success: true,
@@ -81,6 +114,12 @@ exports.getAnalytics = async (req, res, next) => {
         popular: {
           mostSelectedCareer,
           mostViewedResource: 'React/DSA Documentation'
+        },
+        details: {
+          atsScoreList,
+          interviewScoreList,
+          certificatesList,
+          popularRolesList
         }
       }
     });
