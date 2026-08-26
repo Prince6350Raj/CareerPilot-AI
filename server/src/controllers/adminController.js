@@ -3,6 +3,7 @@ const Resume = require('../models/Resume');
 const Roadmap = require('../models/Roadmap');
 const Interview = require('../models/Interview');
 const Feedback = require('../models/Feedback');
+const ActivityLog = require('../models/ActivityLog');
 
 // @desc    Get all users list
 // @route   GET /api/admin/users
@@ -101,6 +102,25 @@ exports.getFeedbacks = async (req, res, next) => {
       success: true,
       count: feedbacks.length,
       data: feedbacks
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get latest user activity logs
+// @route   GET /api/admin/activities
+// @access  Private/Admin
+exports.getActivities = async (req, res, next) => {
+  try {
+    const logs = await ActivityLog.find({})
+      .sort({ timestamp: -1 })
+      .limit(100);
+
+    res.status(200).json({
+      success: true,
+      count: logs.length,
+      data: logs
     });
   } catch (error) {
     next(error);

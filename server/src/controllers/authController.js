@@ -2,6 +2,7 @@ const User = require('../models/User');
 const sendEmail = require('../utils/sendEmail');
 const generateToken = require('../utils/token');
 const crypto = require('crypto');
+const { logActivity } = require('../utils/activityLogger');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -65,6 +66,8 @@ exports.register = async (req, res, next) => {
         html
       });
 
+      await logActivity(user._id, 'Account Registered', 'Pending email verification sent');
+
       res.status(201).json({
         success: true,
         message: 'Registration successful. Verification email sent.'
@@ -103,6 +106,8 @@ exports.verifyEmail = async (req, res, next) => {
     user.verificationToken = undefined;
     user.verificationExpire = undefined;
     await user.save();
+
+    await logActivity(user._id, 'Account Verified', 'Email verified successfully');
 
     res.status(200).json({
       success: true,
@@ -149,6 +154,8 @@ exports.login = async (req, res, next) => {
     if (!user.isVerified) {
       return res.status(403).json({ success: false, message: 'Please verify your email to log in.' });
     }
+
+    await logActivity(user._id, 'User Login', 'Successful authentication via email');
 
     // Send JWT token
     res.status(200).json({

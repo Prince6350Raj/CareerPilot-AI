@@ -4,6 +4,7 @@ const Resume = require('../models/Resume');
 const Progress = require('../models/Progress');
 const User = require('../models/User');
 const geminiService = require('../services/geminiService');
+const { logActivity } = require('../utils/activityLogger');
 
 // Configure Cloudinary if credentials exist
 if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
@@ -93,6 +94,8 @@ exports.uploadResume = async (req, res, next) => {
       suggestedSkills: analysis.suggestedSkills,
       feedback: analysis.feedback
     });
+
+    await logActivity(req.user.id, 'Resume Audit', `Analyzed uploaded PDF resume file. ATS Score: ${analysis.atsScore}%`);
 
     // Update User profile skills to build AI memory context
     if (analysis.detectedSkills && analysis.detectedSkills.length > 0) {
@@ -315,6 +318,8 @@ exports.analyzeBuiltResume = async (req, res, next) => {
       suggestedSkills: analysis.suggestedSkills,
       feedback: analysis.feedback
     });
+
+    await logActivity(req.user.id, 'Resume Audit', `Analyzed built/text resume content. ATS Score: ${analysis.atsScore}%`);
 
     // Update User profile skills to build AI memory context
     if (analysis.detectedSkills && analysis.detectedSkills.length > 0) {

@@ -2,6 +2,7 @@ const Roadmap = require('../models/Roadmap');
 const Resume = require('../models/Resume');
 const Progress = require('../models/Progress');
 const geminiService = require('../services/geminiService');
+const { logActivity } = require('../utils/activityLogger');
 
 // @desc    Recommend career paths based on user skills/resume
 // @route   POST /api/career/recommend
@@ -96,6 +97,8 @@ exports.createRoadmap = async (req, res, next) => {
       await progress.save();
     }
 
+    await logActivity(req.user.id, 'Roadmap Generation', `Target Role: ${targetRole}`);
+
     res.status(201).json({
       success: true,
       message: 'Roadmap generated successfully',
@@ -135,6 +138,8 @@ exports.getCompanyPrep = async (req, res, next) => {
     }
 
     const prepData = await geminiService.getCompanyPrep(companyName);
+
+    await logActivity(req.user.id, 'Company Prep Guide View', `Company: ${companyName}`);
     
     res.status(200).json({
       success: true,
@@ -165,6 +170,8 @@ exports.getChatbotResponse = async (req, res, next) => {
 
     const chatbotResponse = await geminiService.getCareerChatbotResponse(message, context);
 
+    await logActivity(req.user.id, 'Career Advisor Chat', `Message: "${message.substring(0, 60)}${message.length > 60 ? '...' : ''}"`);
+
     res.status(200).json({
       success: true,
       data: chatbotResponse
@@ -186,6 +193,8 @@ exports.getPortfolioReview = async (req, res, next) => {
     }
 
     const suggestions = await geminiService.getPortfolioSuggestions(portfolioUrl);
+
+    await logActivity(req.user.id, 'Portfolio Audit', `URL: ${portfolioUrl}`);
 
     res.status(200).json({
       success: true,

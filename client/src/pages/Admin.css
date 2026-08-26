@@ -183,3 +183,47 @@
   color: #ffffff;
   border-color: var(--primary);
 }
+
+/* Activity Badge Classes */
+.activity-action-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+.activity-action-badge.blue-badge {
+  background: hsla(217, 91%, 60%, 0.1) !important;
+  color: #3b82f6 !important;
+  border: 1px solid hsla(217, 91%, 60%, 0.2) !important;
+}
+.activity-action-badge.green-badge {
+  background: hsla(142, 70%, 45%, 0.1) !important;
+  color: var(--accent-success) !important;
+  border: 1px solid hsla(142, 70%, 45%, 0.2) !important;
+}
+.activity-action-badge.purple-badge {
+  background: hsla(265, 85%, 60%, 0.1) !important;
+  color: #8b5cf6 !important;
+  border: 1px solid hsla(265, 85%, 60%, 0.2) !important;
+}
+.activity-action-badge.yellow-badge {
+  background: hsla(38, 92%, 50%, 0.1) !important;
+  color: var(--accent-warning) !important;
+  border: 1px solid hsla(38, 92%, 50%, 0.2) !important;
+}
+.activity-action-badge.cyan-badge {
+  background: hsla(190, 90%, 50%, 0.1) !important;
+  color: #06b6d4 !important;
+  border: 1px solid hsla(190, 90%, 50%, 0.2) !important;
+}
+.activity-action-badge.pink-badge {
+  background: hsla(327, 85%, 60%, 0.1) !important;
+  color: #ec4899 !important;
+  border: 1px solid hsla(327, 85%, 60%, 0.2) !important;
+}
+.activity-action-badge.gray-badge {
+  background: hsla(222, 28%, 20%, 0.3) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+}

@@ -8,6 +8,7 @@ const Admin = () => {
   
   const [users, setUsers] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [activeTab, setActiveTab] = useState('users');
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,15 @@ const Admin = () => {
       const feedbackData = await feedbackRes.json();
       if (feedbackData.success) {
         setFeedbacks(feedbackData.data);
+      }
+
+      // Fetch activity logs
+      const activitiesRes = await fetch(`${API_URL}/admin/activities`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const activitiesData = await activitiesRes.json();
+      if (activitiesData.success) {
+        setActivities(activitiesData.data);
       }
 
       // Fetch analytics
@@ -138,6 +148,12 @@ const Admin = () => {
           Registered Accounts ({users.length})
         </button>
         <button
+          className={`admin-tab-btn ${activeTab === 'activities' ? 'active' : ''}`}
+          onClick={() => setActiveTab('activities')}
+        >
+          Real-Time Activity Log ({activities.length})
+        </button>
+        <button
           className={`admin-tab-btn ${activeTab === 'feedbacks' ? 'active' : ''}`}
           onClick={() => setActiveTab('feedbacks')}
         >
@@ -145,7 +161,7 @@ const Admin = () => {
         </button>
       </div>
 
-      {activeTab === 'users' ? (
+      {activeTab === 'users' && (
         <div className="users-table-card glass-card">
           <h3 className="section-title">Registered Accounts</h3>
           <div className="table-responsive-wrapper">
@@ -188,7 +204,65 @@ const Admin = () => {
             </table>
           </div>
         </div>
-      ) : (
+      )}
+
+      {activeTab === 'activities' && (
+        <div className="users-table-card glass-card">
+          <h3 className="section-title">Real-Time User Activity Monitor</h3>
+          <div className="table-responsive-wrapper">
+            <table className="admin-users-table">
+              <thead>
+                <tr>
+                  <th>User Info</th>
+                  <th>Action performed</th>
+                  <th>Activity Description</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activities.map(act => {
+                  let badgeClass = 'gray-badge';
+                  if (act.action === 'User Login' || act.action === 'Account Verified') badgeClass = 'blue-badge';
+                  else if (act.action === 'Resume Audit') badgeClass = 'green-badge';
+                  else if (act.action === 'Roadmap Generation') badgeClass = 'purple-badge';
+                  else if (act.action.startsWith('Mock Interview')) badgeClass = 'yellow-badge';
+                  else if (act.action === 'Coding Challenge Submit') badgeClass = 'cyan-badge';
+                  else if (act.action === 'Portfolio Audit') badgeClass = 'pink-badge';
+
+                  return (
+                    <tr key={act._id}>
+                      <td className="user-name-col">
+                        <div>{act.userName}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 'normal', opacity: 0.7 }}>
+                          {act.userEmail}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`activity-action-badge ${badgeClass}`}>
+                          {act.action}
+                        </span>
+                      </td>
+                      <td style={{ maxWidth: '400px', wordBreak: 'break-word', color: 'var(--text-primary)', fontWeight: 500 }}>
+                        {act.details}
+                      </td>
+                      <td className="date-col">
+                        {new Date(act.timestamp).toLocaleDateString()} {new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                    </tr>
+                  );
+                })}
+                {activities.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="empty-table-row">No system activities recorded yet.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'feedbacks' && (
         <div className="users-table-card glass-card">
           <h3 className="section-title">User Feedbacks & Suggestions</h3>
           <div className="table-responsive-wrapper">

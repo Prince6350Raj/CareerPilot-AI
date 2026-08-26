@@ -1,6 +1,7 @@
 const geminiService = require('../services/geminiService');
 const Progress = require('../models/Progress');
 const sendEmail = require('../utils/sendEmail');
+const { logActivity } = require('../utils/activityLogger');
 
 // @desc    Generate a random coding challenge based on difficulty & topic
 // @route   POST /api/challenge/generate
@@ -83,6 +84,8 @@ exports.submitChallenge = async (req, res, next) => {
     } catch (mailErr) {
       console.error('Email notification failed for challenge submit:', mailErr);
     }
+
+    await logActivity(req.user.id, 'Coding Challenge Submit', `Problem: ${problemTitle}, Lang: ${language}, Correctness: ${evaluation.isCorrect ? 'Correct' : 'Incorrect'}, Score: ${evaluation.score}/100`);
 
     res.status(200).json({
       success: true,

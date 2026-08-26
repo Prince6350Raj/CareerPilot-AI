@@ -2,6 +2,7 @@ const Interview = require('../models/Interview');
 const Progress = require('../models/Progress');
 const User = require('../models/User');
 const geminiService = require('../services/geminiService');
+const { logActivity } = require('../utils/activityLogger');
 
 // @desc    Start mock interview session
 // @route   POST /api/interview/start
@@ -50,6 +51,8 @@ exports.startInterview = async (req, res, next) => {
       format: sessionFormat,
       questions
     });
+
+    await logActivity(req.user.id, 'Mock Interview Start', `Role: ${role}, Category: ${type || 'Mixed'}, Format: ${sessionFormat}`);
 
     res.status(201).json({
       success: true,
@@ -207,6 +210,8 @@ exports.completeInterview = async (req, res, next) => {
     if (badgeUnlocked) {
       await progress.save();
     }
+
+    await logActivity(req.user.id, 'Mock Interview Finish', `Role: ${interview.role}, Score: ${overallScore.toFixed(1)}/10, Medal: ${medal.toUpperCase()}`);
 
     res.status(200).json({
       success: true,
