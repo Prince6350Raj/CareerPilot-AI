@@ -1458,28 +1458,704 @@ CareerPilot Candidate`
 
 function getMockCompanyPrep(companyName) {
   const name = companyName || 'Google';
-  
+  const nameKey = name.toLowerCase().trim();
+
+  const mockGuides = {
+    google: {
+      companyName: 'Google',
+      salaryStats: {
+        fresher: '₹18,00,000 - ₹24,00,000 base + Stocks',
+        experienced: '₹28,00,000 - ₹55,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Coding Assessment (OA)',
+          focus: 'DSA and Problem Solving under strict time limits (2 questions, 90 mins)',
+          questions: [
+            {
+              title: 'Sliding Window Maximum',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/sliding-window-maximum/'
+            },
+            {
+              title: 'Range Sum Query 2D - Mutable',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/range-sum-query-2d-mutable/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Segment Trees',
+              articleUrl: 'https://www.geeksforgeeks.org/segment-tree-data-structure/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=segment+tree+tutorial'
+            },
+            {
+              name: 'Sliding Window Technique',
+              articleUrl: 'https://www.geeksforgeeks.org/window-sliding-technique/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=sliding+window+technique+dsa'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical DSA Coding Rounds (Onsite)',
+          focus: 'Deep algorithmic complexity analysis, graph theory, trees, and backtracking optimization',
+          questions: [
+            {
+              title: 'Word Search II',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/word-search-ii/'
+            },
+            {
+              title: 'Lowest Common Ancestor of a Binary Tree',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Trie / Prefix Tree',
+              articleUrl: 'https://www.geeksforgeeks.org/trie-insert-and-search/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=trie+data+structure+tutorial'
+            },
+            {
+              name: 'Lowest Common Ancestor',
+              articleUrl: 'https://www.geeksforgeeks.org/lowest-common-ancestor-binary-tree-set-1/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=lowest+common+ancestor+binary+tree'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: Systems Architecture & Googleyness',
+          focus: 'Designing global scale platforms & checking alignment with Google\'s core values',
+          questions: [
+            {
+              title: 'Design Google Search Auto-Suggest',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-google-auto-suggestion/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Googleyness & Leadership Principles',
+              articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=googleyness+interview+preparation'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Advanced Graphs & Segment Trees (Weeks 1-4)',
+          milestone: 'Solve 40+ Medium/Hard Leetcode questions on Dijkstra, A* search, and Segment Trees. Focus on time and space optimizations.'
+        },
+        {
+          phase: 'Phase 2: Complex Dynamic Programming & Tries (Weeks 5-8)',
+          milestone: 'Master Multi-dimensional DP and Trie search. Practice coding on a google doc/whiteboard without IDE suggestions.'
+        },
+        {
+          phase: 'Phase 3: Googleyness & Mock Practice (Weeks 9-10)',
+          milestone: 'Prepare situations highlighting teamwork, handling ambiguity, and bias for action using the STAR method.'
+        }
+      ]
+    },
+    microsoft: {
+      companyName: 'Microsoft',
+      salaryStats: {
+        fresher: '₹16,0,000 - ₹22,0,000 base + Stocks',
+        experienced: '₹26,0,000 - ₹48,0,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Assessment (OA)',
+          focus: 'Core programming concepts, Arrays, Strings, and Linked Lists (3 questions, 90 mins)',
+          questions: [
+            {
+              title: 'Reverse Nodes in k-Group',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/reverse-nodes-in-k-group/'
+            },
+            {
+              title: 'Longest Palindromic Substring',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/longest-palindromic-substring/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Linked List operations',
+              articleUrl: 'https://www.geeksforgeeks.org/data-structures/linked-list/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=linked+list+dsa+tutorial'
+            },
+            {
+              name: 'Dynamic Programming / Palindromes',
+              articleUrl: 'https://www.geeksforgeeks.org/longest-palindromic-substring/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=longest+palindromic+substring+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical Interview 1 & 2',
+          focus: 'Recursion, Backtracking, and Binary Trees',
+          questions: [
+            {
+              title: 'Binary Tree Zigzag Level Order Traversal',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/'
+            },
+            {
+              title: 'Median of Two Sorted Arrays',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/median-of-two-sorted-arrays/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Binary Trees & Traversals',
+              articleUrl: 'https://www.geeksforgeeks.org/binary-tree-data-structure/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=binary+tree+zigzag+level+order'
+            },
+            {
+              name: 'Binary Search Optimization',
+              articleUrl: 'https://www.geeksforgeeks.org/binary-search/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=binary+search+optimization'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: System Design & Hiring Manager',
+          focus: 'Building scalable storage, notification pipelines, and growth mindset validation',
+          questions: [
+            {
+              title: 'Design Dropbox / OneDrive Storage',
+              difficulty: 'Hard',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-dropbox-system-design/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Distributed Cloud Storage',
+              articleUrl: 'https://www.geeksforgeeks.org/system-design-basics/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=system+design+dropbox+onedrive'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Linear DS & Trees (Weeks 1-4)',
+          milestone: 'Solve all Microsoft-tagged LeetCode questions on Linked Lists, Binary Trees, and Binary Search.'
+        },
+        {
+          phase: 'Phase 2: System Design & Cloud basics (Weeks 5-8)',
+          milestone: 'Read about client-server models, microservices, load balancers, and consistent hashing.'
+        },
+        {
+          phase: 'Phase 3: Core CS Fundamentals (Weeks 9-10)',
+          milestone: 'Revise Operating Systems (OS), Thread synchronization, and Database Indexes. Prepare growth-mindset stories.'
+        }
+      ]
+    },
+    amazon: {
+      companyName: 'Amazon',
+      salaryStats: {
+        fresher: '₹15,00,000 - ₹20,00,000 base + Stocks',
+        experienced: '₹24,00,000 - ₹42,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Online Assessment (OA)',
+          focus: 'DSA and Amazon Leadership Principles (2 Coding + Leadership questions, 120 mins)',
+          questions: [
+            {
+              title: 'K Closest Points to Origin',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/k-closest-points-to-origin/'
+            },
+            {
+              title: 'Course Schedule II',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/course-schedule-ii/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Heaps & Priority Queues',
+              articleUrl: 'https://www.geeksforgeeks.org/heap-data-structure/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=heap+priority+queue+tutorial'
+            },
+            {
+              name: 'Graph Topological Sort',
+              articleUrl: 'https://www.geeksforgeeks.org/topological-sorting/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=topological+sort+graph+dsa'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Technical & Leadership Rounds',
+          focus: 'DSA coding questions and deep behavioural questions checking alignment with Amazon\'s 16 Leadership Principles',
+          questions: [
+            {
+              title: 'LRU Cache',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/lru-cache/'
+            },
+            {
+              title: 'Word Ladder',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/word-ladder/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Least Recently Used (LRU) Cache',
+              articleUrl: 'https://www.geeksforgeeks.org/lru-cache-implementation/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=lru+cache+system+design'
+            },
+            {
+              name: 'BFS Shortest Paths in Graphs',
+              articleUrl: 'https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=breadth+first+search+graph+bfs'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 3: System Design & Bar Raiser',
+          focus: 'Designing transactional shopping systems & challenging behavioral checkups',
+          questions: [
+            {
+              title: 'Design Amazon Shopping Cart service',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/system-design-shopping-cart/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Amazon 16 Leadership Principles',
+              articleUrl: 'https://www.amazon.jobs/en/principles',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=amazon+leadership+principles+interview'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Leadership Principles & STAR Prep (Weeks 1-3)',
+          milestone: 'Draft 2 distinct professional stories for each of the 16 Leadership Principles (Customer Obsession, Ownership, Bias for Action).'
+        },
+        {
+          phase: 'Phase 2: Graph Theory & Heaps (Weeks 4-7)',
+          milestone: 'Solve Amazon top 100 questions on LeetCode. Focus heavily on Heaps, Graphs, and HashMaps.'
+        },
+        {
+          phase: 'Phase 3: System Design & Scaling (Weeks 8-10)',
+          milestone: 'Study relational databases, database replication, and write-through caching. Practice LLD for shopping systems.'
+        }
+      ]
+    },
+    meta: {
+      companyName: 'Meta',
+      salaryStats: {
+        fresher: '₹22,0,000 - ₹28,0,000 base + Stocks',
+        experienced: '₹32,0,000 - ₹55,0,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Coding Screen',
+          focus: 'Solving 2 medium/hard DSA questions under 45 minutes with clear code complexity explanation',
+          questions: [
+            {
+              title: 'Subarray Sum Equals K',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/subarray-sum-equals-k/'
+            },
+            {
+              title: 'Product of Array Except Self',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/product-of-array-except-self/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Prefix Sum hashing',
+              articleUrl: 'https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-design/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=prefix+sum+array+dsa'
+            },
+            {
+              name: 'Two Pointers Array optimization',
+              articleUrl: 'https://www.geeksforgeeks.org/two-pointers-technique/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=two+pointers+dsa+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: Onsite Coding & System Design',
+          focus: 'Product Architecture design, news feed distribution, and speed coding optimization',
+          questions: [
+            {
+              title: 'Minimum Window Substring',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/minimum-window-substring/'
+            },
+            {
+              title: 'Design Facebook News Feed',
+              difficulty: 'Hard',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-facebook-news-feed-system-design/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Sliding Window Strings',
+              articleUrl: 'https://www.geeksforgeeks.org/window-sliding-technique/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=sliding+window+substring'
+            },
+            {
+              name: 'News Feed Fanout Architecture',
+              articleUrl: 'https://www.geeksforgeeks.org/system-design-basics/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=facebook+news+feed+system+design'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: High Speed Coding practice (Weeks 1-4)',
+          milestone: 'Practice coding 2-3 LeetCode Meta-tagged medium questions daily under 35-minute timers.'
+        },
+        {
+          phase: 'Phase 2: Product Architecture & Feeds (Weeks 5-8)',
+          milestone: 'Study caching, fan-out logic (push vs pull model), web sockets, and CDN deployment patterns.'
+        },
+        {
+          phase: 'Phase 3: Jedi Interview behavioral (Weeks 9-10)',
+          milestone: 'Draft behavioral answers highlighting collaboration, empathy, and working in flat hierarchical setups.'
+        }
+      ]
+    },
+    uber: {
+      companyName: 'Uber',
+      salaryStats: {
+        fresher: '₹24,00,000 - ₹30,00,000 base + Stocks',
+        experienced: '₹34,00,000 - ₹60,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Codesignal Coding Test',
+          focus: 'General algorithmic speed, space complexity, and advanced math (4 questions, 70 mins)',
+          questions: [
+            {
+              title: 'Bus Routes',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/bus-routes/'
+            },
+            {
+              title: 'Regular Expression Matching',
+              difficulty: 'Hard',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/regular-expression-matching/'
+            }
+          ],
+          topics: [
+            {
+              name: 'BFS on Graph grids',
+              articleUrl: 'https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=bus+routes+leetcode'
+            },
+            {
+              name: 'Dynamic Programming matching',
+              articleUrl: 'https://www.geeksforgeeks.org/dynamic-programming/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=regular+expression+matching+dp'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: System Design (Uber Matchmaker)',
+          focus: 'Designing real-time dispatch systems, surged fares, maps rendering, and concurrency routing',
+          questions: [
+            {
+              title: 'Design Uber Ride-Hailing Matchmaker dispatch',
+              difficulty: 'Hard',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/system-design-uber-lyft/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Geohashing and Spatial Indexing',
+              articleUrl: 'https://www.geeksforgeeks.org/geohash-in-system-design/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=geohash+system+design+tutorial'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Advanced Graph Theory & Math (Weeks 1-4)',
+          milestone: 'Solve advanced graph queries, topological sorts, and geometric spatial maths.'
+        },
+        {
+          phase: 'Phase 2: Geospatial System Design & Surge (Weeks 5-8)',
+          milestone: 'Learn about Redis Geo commands, quadtrees, surge matching queues, and web-sockets scalability.'
+        },
+        {
+          phase: 'Phase 3: Multi-threading & Locks (Weeks 9-10)',
+          milestone: 'Prepare concurrency locking constructs, thread pools, and race condition prevention.'
+        }
+      ]
+    },
+    flipkart: {
+      companyName: 'Flipkart',
+      salaryStats: {
+        fresher: '₹16,00,000 - ₹20,00,000 base + Stocks',
+        experienced: '₹22,00,000 - ₹38,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Machine Coding (Working Console/Backend application)',
+          focus: 'Design a working local service on your machine under 120 minutes conforming to OOP guidelines',
+          questions: [
+            {
+              title: 'Design Snake and Ladder game with OOPs',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/snake-and-ladder-game-object-oriented-design/'
+            },
+            {
+              title: 'Design Movie Ticket Booking System',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-movie-ticket-booking-system-like-bookmyshow-object-oriented-design/'
+            }
+          ],
+          topics: [
+            {
+              name: 'SOLID Design Principles',
+              articleUrl: 'https://www.geeksforgeeks.org/solid-principles-in-programming-understanding-solid-design-principles/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=solid+design+principles'
+            },
+            {
+              name: 'Factory and Singleton Patterns',
+              articleUrl: 'https://www.geeksforgeeks.org/design-patterns/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=design+patterns+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: System Design & Scalable Flash Sales',
+          focus: 'High load concurrency system, flash sale coupons, caching, and database schemas',
+          questions: [
+            {
+              title: 'Design Flipkart Big Billion Day Flash Sale',
+              difficulty: 'Hard',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-e-commerce-website-like-amazon-flipkart-system-design/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Distributed lock mechanisms',
+              articleUrl: 'https://www.geeksforgeeks.org/redis-distributed-lock/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=distributed+lock+system+design'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Machine Coding practice (Weeks 1-4)',
+          milestone: 'Practice building complete, clean console utilities for Splitwise, Movie booking, and Parking lot under 120 minutes.'
+        },
+        {
+          phase: 'Phase 2: LLD & Design Patterns (Weeks 5-7)',
+          milestone: 'Master Observer, Strategy, Decorator, and State patterns. Write clean, modular codes.'
+        },
+        {
+          phase: 'Phase 3: Large-scale e-commerce scaling (Weeks 8-10)',
+          milestone: 'Read about message brokers (Kafka), inventory caching, database write buffers, and horizontal scaling.'
+        }
+      ]
+    },
+    zomato: {
+      companyName: 'Zomato',
+      salaryStats: {
+        fresher: '₹14,00,000 - ₹18,00,000 base + Stocks',
+        experienced: '₹20,00,000 - ₹34,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: Technical DSA Coding',
+          focus: 'Solving short path graph algorithms and data structures (60 mins)',
+          questions: [
+            {
+              title: 'Cheapest Flights Within K Stops',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/'
+            },
+            {
+              title: 'Top K Frequent Elements',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/top-k-frequent-elements/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Dijkstra / Bellman-Ford Shortest Path',
+              articleUrl: 'https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=cheapest+flights+k+stops+leetcode'
+            },
+            {
+              name: 'Min Heap / HashMaps counting',
+              articleUrl: 'https://www.geeksforgeeks.org/top-k-frequent-elements-in-array/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=top+k+frequent+elements+leetcode'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: System Design (Zomato Rider Dispatch)',
+          focus: 'Real-time agent routing, geofencing Dark stores, and notification streams',
+          questions: [
+            {
+              title: 'Design Zomato Delivery Agent Tracking System',
+              difficulty: 'Hard',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/design-food-delivery-system-like-zomato-swiggy/'
+            }
+          ],
+          topics: [
+            {
+              name: 'Realtime Location Tracking (WebSockets)',
+              articleUrl: 'https://www.geeksforgeeks.org/web-socket-in-system-design/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=websocket+system+design+tutorial'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Shortest Paths in Graphs (Weeks 1-4)',
+          milestone: 'Solve graph questions (DFS, BFS, Dijkstra, MST). Understand concurrency structures.'
+        },
+        {
+          phase: 'Phase 2: Realtime Dispatch & Geohash LLD (Weeks 5-8)',
+          milestone: 'Practice drawing system design blueprints for food ordering services. Master Redis caches.'
+        },
+        {
+          phase: 'Phase 3: Startup Culture Fit (Weeks 9-10)',
+          milestone: 'Prepare answers showing quick problem resolution and taking ownership of platform features.'
+        }
+      ]
+    },
+    meesho: {
+      companyName: 'Meesho',
+      salaryStats: {
+        fresher: '₹12,00,000 - ₹16,00,000 base',
+        experienced: '₹18,00,000 - ₹28,00,000 base + Stocks (3+ Yrs)'
+      },
+      interviewRounds: [
+        {
+          roundName: 'Round 1: DSA Algorithms & HashMap optimization',
+          focus: 'Core HashMap operations, dynamic programming grids, and sorting validation (60 mins)',
+          questions: [
+            {
+              title: 'Task Scheduler',
+              difficulty: 'Medium',
+              platform: 'LeetCode',
+              url: 'https://leetcode.com/problems/task-scheduler/'
+            },
+            {
+              title: 'Design a Coupon System (HashMap LLD)',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/coupon-management-system-design/'
+            }
+          ],
+          topics: [
+            {
+              name: 'HashMap duplicates / counts',
+              articleUrl: 'https://www.geeksforgeeks.org/hashing-data-structure/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=task+scheduler+leetcode'
+            },
+            {
+              name: 'Priority Queue Scheduling',
+              articleUrl: 'https://www.geeksforgeeks.org/priority-queue-in-cpp-stl/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=priority+queue+dsa+tutorial'
+            }
+          ]
+        },
+        {
+          roundName: 'Round 2: LLD System Design (Social Selling API)',
+          focus: 'Designing coupon distributions, catalog syncing caches, and shopping cart validation',
+          questions: [
+            {
+              title: 'Design Meesho reseller catalog indexing',
+              difficulty: 'Medium',
+              platform: 'GeeksforGeeks',
+              url: 'https://www.geeksforgeeks.org/system-design-basics/'
+            }
+          ],
+          topics: [
+            {
+              name: 'NoSQL DB Catalog Caching',
+              articleUrl: 'https://www.geeksforgeeks.org/introduction-to-nosql/',
+              youtubeUrl: 'https://www.youtube.com/results?search_query=meesho+system+design+interview'
+            }
+          ]
+        }
+      ],
+      preparationRoadmap: [
+        {
+          phase: 'Phase 1: Linear Arrays & Caches (Weeks 1-4)',
+          milestone: 'Revise basic sorting, searching, and caching structures (HashMap, LRU).'
+        },
+        {
+          phase: 'Phase 2: Java Spring/Node REST LLD (Weeks 5-8)',
+          milestone: 'Practice designing clean API endpoints, database schemas, and SOLID controller architectures.'
+        },
+        {
+          phase: 'Phase 3: Scalability and DB sync (Weeks 9-10)',
+          milestone: 'Study read-heavy catalogs optimization, elastic search indexes, and relational database sharding.'
+        }
+      ]
+    }
+  };
+
+  if (mockGuides[nameKey]) {
+    return mockGuides[nameKey];
+  }
+
+  // Fallback default
   return {
     companyName: name,
     salaryStats: {
-      fresher: name.toLowerCase() === 'google' ? '₹18,00,000 - ₹24,00,000 base + Stocks' : 
-               name.toLowerCase() === 'microsoft' ? '₹16,00,000 - ₹22,00,000 base + Stocks' :
-               name.toLowerCase() === 'amazon' ? '₹15,00,000 - ₹20,00,000 base + Stocks' : '₹8,00,000 - ₹12,00,000 base',
-      experienced: name.toLowerCase() === 'google' ? '₹28,00,000 - ₹55,00,000 base + Stocks' : 
-                   name.toLowerCase() === 'microsoft' ? '₹26,00,000 - ₹48,00,000 base + Stocks' :
-                   name.toLowerCase() === 'amazon' ? '₹24,00,000 - ₹42,00,000 base + Stocks' : '₹16,00,000 - ₹28,00,000 base'
+      fresher: '₹8,00,000 - ₹12,00,000 base',
+      experienced: '₹14,00,000 - ₹25,00,000 base'
     },
     interviewRounds: [
       {
-        roundName: 'Round 1: Online Coding Assessment (OA)',
-        focus: 'Data Structures & Algorithms / Problem Solving speed',
+        roundName: 'Round 1: Online Assessment (OA)',
+        focus: 'DSA and basic problem-solving logic (2 questions, 90 mins)',
         questions: [
-          {
-            title: 'Merge k Sorted Lists',
-            difficulty: 'Hard',
-            platform: 'LeetCode',
-            url: 'https://leetcode.com/problems/merge-k-sorted-lists/'
-          },
           {
             title: 'Sliding Window Maximum',
             difficulty: 'Hard',
@@ -1489,109 +2165,40 @@ function getMockCompanyPrep(companyName) {
         ],
         topics: [
           {
-            name: 'Segment Trees',
-            articleUrl: 'https://www.geeksforgeeks.org/segment-tree-data-structure/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=segment+tree+tutorial'
-          },
-          {
-            name: 'Heaps & Priority Queues',
-            articleUrl: 'https://www.geeksforgeeks.org/max-heap-in-java/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=heap+data+structure+tutorial'
+            name: 'Array sliding techniques',
+            articleUrl: 'https://www.geeksforgeeks.org/window-sliding-technique/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=sliding+window+dsa'
           }
         ]
       },
       {
-        roundName: 'Round 2: Technical DSA Coding Rounds (Onsite)',
-        focus: 'Deep algorithmic complexity analysis, graph theory, trees, and backtracking optimization',
+        roundName: 'Round 2: Technical Interview (LLD & Schema)',
+        focus: 'Designing clean schemas and basic database systems (60 mins)',
         questions: [
           {
-            title: 'Word Search II',
-            difficulty: 'Hard',
-            platform: 'LeetCode',
-            url: 'https://leetcode.com/problems/word-search-ii/'
-          },
-          {
-            title: 'Lowest Common Ancestor of a Binary Tree',
-            difficulty: 'Medium',
-            platform: 'LeetCode',
-            url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/'
-          }
-        ],
-        topics: [
-          {
-            name: 'Trie / Prefix Tree',
-            articleUrl: 'https://www.geeksforgeeks.org/trie-insert-and-search/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=trie+data+structure+tutorial'
-          },
-          {
-            name: 'DFS / BFS Traversal',
-            articleUrl: 'https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=graph+traversal+dfs+bfs'
-          }
-        ]
-      },
-      {
-        roundName: 'Round 3: System Design & Scalability',
-        focus: 'Microservices architecture, distributed caching, database sharding, and message queues',
-        questions: [
-          {
-            title: 'Design YouTube Video Streaming Service',
+            title: 'Design Movie Ticket Booking System',
             difficulty: 'Medium',
             platform: 'GeeksforGeeks',
-            url: 'https://www.geeksforgeeks.org/system-design-youtube/'
-          },
-          {
-            title: 'Design Google Drive / Dropbox Cloud Storage',
-            difficulty: 'Hard',
-            platform: 'GeeksforGeeks',
-            url: 'https://www.geeksforgeeks.org/design-dropbox-system-design/'
+            url: 'https://www.geeksforgeeks.org/design-movie-ticket-booking-system-like-bookmyshow-object-oriented-design/'
           }
         ],
         topics: [
           {
-            name: 'Load Balancers & Reverse Proxies',
-            articleUrl: 'https://www.geeksforgeeks.org/system-design-load-balancer/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=load+balancer+system+design'
-          },
-          {
-            name: 'Consistent Hashing',
-            articleUrl: 'https://www.geeksforgeeks.org/consistent-hashing-system-design/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=consistent+hashing+system+design'
-          }
-        ]
-      },
-      {
-        roundName: 'Round 4: Cultural Fitment & HR Leadership',
-        focus: 'Behavioral analysis using the STAR method, leadership values, and core alignment',
-        questions: [
-          {
-            title: 'STAR Method Interview Framework practice',
-            difficulty: 'Easy',
-            platform: 'GeeksforGeeks',
-            url: 'https://www.geeksforgeeks.org/how-to-use-star-method-for-behavioral-interviews/'
-          }
-        ],
-        topics: [
-          {
-            name: 'Leadership Principles',
-            articleUrl: 'https://www.geeksforgeeks.org/behavioral-interview-questions/',
-            youtubeUrl: 'https://www.youtube.com/results?search_query=behavioral+interview+questions+star+method'
+            name: 'Object-Oriented Design',
+            articleUrl: 'https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-java/',
+            youtubeUrl: 'https://www.youtube.com/results?search_query=oops+design+patterns'
           }
         ]
       }
     ],
     preparationRoadmap: [
       {
-        phase: 'Phase 1: DSA Foundations & Graph Algorithms (Weeks 1-4)',
-        milestone: 'Solve 50+ LeetCode Medium/Hard questions on Trees, Tries, Dijkstra, and DP. Practice memory complexity optimization.'
+        phase: 'Phase 1: DSA Foundations (Weeks 1-5)',
+        milestone: 'Solve basic topics including Arrays, Linked Lists, Trees, and Sorting.'
       },
       {
-        phase: 'Phase 2: Scalable System Design & Database Schema (Weeks 5-8)',
-        milestone: 'Study distributed caching, load balancers, rate limiters, and consistent hashing. Read the System Design Primer.'
-      },
-      {
-        phase: 'Phase 3: Star Method & Mock Simulations (Weeks 9-10)',
-        milestone: 'Prepare detailed stories for standard behavioral queries. Conduct 3x mock interview runs under active timers.'
+        phase: 'Phase 2: LLD & System design (Weeks 6-10)',
+        milestone: 'Practice schema drawing, REST API creation, database scaling, and coding structures.'
       }
     ]
   };
