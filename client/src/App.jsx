@@ -19,6 +19,7 @@ import CompanyPrep from './pages/CompanyPrep';
 import PortfolioReview from './pages/PortfolioReview';
 import CareerChatbot from './pages/CareerChatbot';
 import CodingChallenge from './pages/CodingChallenge';
+import Settings from './pages/Settings';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,6 +32,23 @@ function ScrollToTop() {
 }
 
 function App() {
+  useEffect(() => {
+    // Apply local storage custom user style configurations on boot
+    const font = localStorage.getItem('app-font-family') || "'Plus Jakarta Sans', sans-serif";
+    const size = localStorage.getItem('app-font-size') || "15px";
+    const weight = localStorage.getItem('app-font-weight') || "normal";
+    const style = localStorage.getItem('app-font-style') || "normal";
+    const bgType = localStorage.getItem('app-bg-type') || "dynamic";
+
+    document.documentElement.style.setProperty('--app-font-body', font);
+    document.documentElement.style.setProperty('--app-font-size', size);
+    document.documentElement.style.setProperty('--app-font-weight', weight);
+    document.documentElement.style.setProperty('--app-font-style', style);
+    
+    document.documentElement.classList.toggle('flat-bg', bgType === 'flat');
+    document.documentElement.classList.toggle('grid-bg', bgType === 'grid');
+  }, []);
+
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -62,6 +80,7 @@ function App() {
             <Route path="coding-challenge" element={<CodingChallenge />} />
             <Route path="progress" element={<Progress />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="settings" element={<Settings />} />
             <Route path="admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
           </Route>
 

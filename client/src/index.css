@@ -2,8 +2,8 @@
 
 :root {
   /* Typography */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: var(--app-font-heading, 'Outfit', sans-serif);
+  --font-body: var(--app-font-body, 'Plus Jakarta Sans', sans-serif);
   
   /* Deep Space Color Palette (HSL) */
   --bg-dark: hsl(225, 40%, 10%); /* Vibrant space-blue/purple background */
@@ -217,11 +217,34 @@ body {
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-body);
+  font-size: var(--app-font-size, 15px) !important;
+  font-weight: var(--app-font-weight, normal) !important;
+  font-style: var(--app-font-style, normal) !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+}
+
+/* Custom Background Configurations */
+:root.flat-bg body {
+  background-image: none !important;
+}
+
+:root.grid-bg::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(rgba(147, 51, 234, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 51, 234, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 100;
 }
 
 :root[data-theme="light"] body {

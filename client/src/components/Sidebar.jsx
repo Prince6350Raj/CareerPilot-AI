@@ -17,7 +17,8 @@ import {
   Briefcase,
   Sparkles,
   Search,
-  Code
+  Code,
+  Settings
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -121,6 +122,11 @@ const Sidebar = () => {
         <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
           <User size={20} />
           <span>Profile Setting</span>
+        </NavLink>
+
+        <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <Settings size={20} />
+          <span>System Settings</span>
         </NavLink>
 
         {user?.role === 'admin' && (
