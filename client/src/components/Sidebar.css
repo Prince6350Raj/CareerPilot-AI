@@ -102,6 +102,7 @@
   flex-direction: column;
   gap: 0.3rem;
   flex: 1;
+  min-height: 0; /* Prevents overflow in flex layouts */
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
 }
@@ -337,5 +338,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideUpDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
