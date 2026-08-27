@@ -477,6 +477,14 @@
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
+:root[data-theme="ocean"] .dashboard-heading-row .dashboard-date-time-bar {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+:root[data-theme="ocean"] .dashboard-heading-row .dashboard-date-time-bar span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
 :root[data-theme="ocean"] .dashboard-heading-row .streak-badge {
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.18);
