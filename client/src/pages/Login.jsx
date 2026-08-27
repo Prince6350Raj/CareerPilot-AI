@@ -9,6 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [mode, setMode] = useState('signin'); // signin, signup, forgot
+  const [theme, setTheme] = useState('frosted-glass'); // space-blue, frosted-glass, cyberpunk-gold, emerald-forest, frosted-slate, ocean-blue, golden-pastel
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,7 +47,24 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className={`login-container theme-${theme}`}>
+      {/* Theme Selector Dropdown */}
+      <div className="theme-selector-container">
+        <select 
+          value={theme} 
+          onChange={(e) => setTheme(e.target.value)}
+          className="theme-select-control"
+        >
+          <option value="space-blue">🌌 Space Blue</option>
+          <option value="frosted-glass">❄️ Frosted Glass</option>
+          <option value="cyberpunk-gold">⚡ Cyberpunk Gold</option>
+          <option value="emerald-forest">🌲 Emerald Forest</option>
+          <option value="frosted-slate">🌸 Frosted Slate</option>
+          <option value="ocean-blue">🌊 Ocean Blue</option>
+          <option value="golden-pastel">👑 Golden Pastel</option>
+        </select>
+      </div>
+
       {/* Floating Animated Particles & Career Icons in Background */}
       <div className="background-decorations">
         <div className="glow-circle glow-1"></div>
