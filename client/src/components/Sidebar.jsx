@@ -135,42 +135,35 @@ const Sidebar = () => {
         <div className="theme-selector-label" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.15rem' }}>
           Theme Presets
         </div>
-        <div className="theme-palette-row" style={{ display: 'flex', gap: '0.35rem', justifyContent: 'space-between', padding: '0.35rem 0.5rem', background: 'var(--bg-item)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-          {[
-            { id: 'dark', name: 'Deep Space', color: '#4f46e5', label: 'D' },
-            { id: 'light', name: 'Frosted Glass', color: '#94a3b8', label: 'L' },
-            { id: 'cyberpunk', name: 'Midnight Gold', color: '#eab308', label: 'M' },
-            { id: 'emerald', name: 'Emerald Forest', color: '#10b981', label: 'E' },
-            { id: 'sakura', name: 'Aura Obsidian', color: '#d97706', label: 'A' },
-            { id: 'ocean', name: 'Geeta Portal', color: '#1e3a8a', label: 'G' },
-            { id: 'goldlight', name: 'White & Yellow', color: '#f59e0b', label: 'W' }
-          ].map(t => (
-            <button
-              key={t.id}
-              className={`theme-dot ${theme === t.id ? 'active' : ''}`}
-              onClick={() => setTheme(t.id)}
-              title={t.name}
-              style={{
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                background: t.color,
-                border: theme === t.id ? '2px solid var(--text-primary)' : '2px solid transparent',
-                cursor: 'pointer',
-                transition: 'var(--transition-smooth)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.6rem',
-                fontWeight: 800,
-                color: (t.id === 'light' || t.id === 'goldlight') ? '#0f172a' : '#ffffff',
-                boxShadow: theme === t.id ? `0 0 10px ${t.color}` : 'none'
-              }}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+        <select 
+          value={theme} 
+          onChange={(e) => setTheme(e.target.value)}
+          className="theme-select-control"
+          style={{
+            width: '100%',
+            background: 'var(--bg-item)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid var(--border-color)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '0.5rem 0.75rem',
+            fontSize: '0.85rem',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            cursor: 'pointer',
+            outline: 'none',
+            transition: 'var(--transition-smooth)',
+            appearance: 'auto',
+            marginBottom: '0.25rem'
+          }}
+        >
+          <option value="dark" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>🌌 Space Blue</option>
+          <option value="light" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>❄️ Frosted Glass</option>
+          <option value="cyberpunk" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>⚡ Cyberpunk Gold</option>
+          <option value="emerald" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>🌲 Emerald Forest</option>
+          <option value="sakura" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>🌸 Frosted Slate</option>
+          <option value="ocean" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>🌊 Ocean Blue</option>
+          <option value="goldlight" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>👑 Golden Pastel</option>
+        </select>
         <button className="btn btn-secondary" onClick={logout} title="Sign Out" style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
           <LogOut size={16} />
           <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Sign Out</span>

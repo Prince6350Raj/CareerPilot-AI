@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, Brain, Cpu, Activity, Briefcase, GraduationCap, Target, TrendingUp, Award } from 'lucide-react';
@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [mode, setMode] = useState('signin'); // signin, signup, forgot
-  const [theme, setTheme] = useState('frosted-glass'); // space-blue, frosted-glass, cyberpunk-gold, emerald-forest, frosted-slate, ocean-blue, golden-pastel
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light'); // Sync with global theme (default light/frosted glass)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +17,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Sync theme selection to document root attributes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,8 +52,20 @@ const Login = () => {
     }
   };
 
+  const themeClassMap = {
+    'dark': 'space-blue',
+    'light': 'frosted-glass',
+    'cyberpunk': 'cyberpunk-gold',
+    'emerald': 'emerald-forest',
+    'sakura': 'frosted-slate',
+    'ocean': 'ocean-blue',
+    'goldlight': 'golden-pastel'
+  };
+
+  const currentThemeClass = themeClassMap[theme] || 'frosted-glass';
+
   return (
-    <div className={`login-container theme-${theme}`}>
+    <div className={`login-container theme-${currentThemeClass}`}>
       {/* Theme Selector Dropdown */}
       <div className="theme-selector-container">
         <select 
@@ -55,13 +73,13 @@ const Login = () => {
           onChange={(e) => setTheme(e.target.value)}
           className="theme-select-control"
         >
-          <option value="space-blue">🌌 Space Blue</option>
-          <option value="frosted-glass">❄️ Frosted Glass</option>
-          <option value="cyberpunk-gold">⚡ Cyberpunk Gold</option>
-          <option value="emerald-forest">🌲 Emerald Forest</option>
-          <option value="frosted-slate">🌸 Frosted Slate</option>
-          <option value="ocean-blue">🌊 Ocean Blue</option>
-          <option value="golden-pastel">👑 Golden Pastel</option>
+          <option value="dark">🌌 Space Blue</option>
+          <option value="light">❄️ Frosted Glass</option>
+          <option value="cyberpunk">⚡ Cyberpunk Gold</option>
+          <option value="emerald">🌲 Emerald Forest</option>
+          <option value="sakura">🌸 Frosted Slate</option>
+          <option value="ocean">🌊 Ocean Blue</option>
+          <option value="goldlight">👑 Golden Pastel</option>
         </select>
       </div>
 
