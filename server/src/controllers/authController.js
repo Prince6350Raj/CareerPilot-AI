@@ -24,8 +24,13 @@ exports.register = async (req, res, next) => {
       password
     });
 
-    // If email configuration is missing, auto-verify the user so demos work instantly for your friends!
-    if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
+    // If email configuration is missing (empty or undefined), auto-verify the user so demos work instantly!
+    if (
+      !process.env.EMAIL_USERNAME || 
+      !process.env.EMAIL_PASSWORD || 
+      process.env.EMAIL_USERNAME.trim() === '' || 
+      process.env.EMAIL_PASSWORD.trim() === ''
+    ) {
       user.isVerified = true;
       await user.save();
       return res.status(201).json({
@@ -73,9 +78,27 @@ exports.register = async (req, res, next) => {
         message: 'Registration successful. Verification email sent.'
       });
     } catch (err) {
-      // If email fails, rollback user creation
-      await User.findByIdAndDelete(user._id);
-      return res.status(500).json({ success: false, message: 'Email could not be sent. Registration cancelled.' });
+      // If email fails, do NOT rollback user creation!
+      // Instead, auto-verify the user so demo users can join without email issues.
+      console.error('Email sending failed. Auto-verifying user for demo convenience:', err.message);
+      user.isVerified = true;
+      user.verificationToken = undefined;
+      user.verificationExpire = undefined;
+      await user.save();
+
+      await logActivity(user._id, 'Account Registered (Auto-Verified)', 'Email sending failed, auto-activated');
+
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful. Account active (email server offline).',
+        token: generateToken(user._id),
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      });
     }
   } catch (error) {
     next(error);

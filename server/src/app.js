@@ -8,6 +8,13 @@ dotenv.config();
 const path = require('path');
 const app = express();
 
+// Custom Request Logger to help diagnose connectivity issues
+app.use((req, res, next) => {
+  const mongoose = require('mongoose');
+  console.log(`[API REQUEST] ${req.method} ${req.originalUrl} - DB: ${mongoose.connection.name} - Host: ${mongoose.connection.host}`);
+  next();
+});
+
 // Middlewares
 app.use(cors({
   origin: function (origin, callback) {
