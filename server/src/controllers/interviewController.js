@@ -206,6 +206,19 @@ exports.completeInterview = async (req, res, next) => {
       });
       badgeUnlocked = true;
     }
+    // Calculate the medal string based on score
+    let medal = 'None';
+    if (overallScore >= 8.5) {
+      medal = 'Gold';
+    } else if (overallScore >= 7.0) {
+      medal = 'Silver';
+    } else if (overallScore >= 6.0) {
+      medal = 'Bronze';
+    } else if (overallScore >= 4.0) {
+      medal = 'Fair';
+    } else {
+      medal = 'Fail';
+    }
 
     if (badgeUnlocked) {
       await progress.save();
