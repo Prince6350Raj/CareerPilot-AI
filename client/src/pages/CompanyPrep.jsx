@@ -216,13 +216,13 @@ const CompanyPrep = () => {
   ];
 
   const popularCompanies = [
-    { name: 'TCS', color: 'rgba(0, 102, 204, 0.12)', border: '#0066cc', char: 'TCS' },
+    { name: 'TCS', color: 'rgba(0, 102, 204, 0.12)', border: '#0066cc', char: 'T' },
     { name: 'Wipro', color: 'rgba(90, 39, 142, 0.12)', border: '#5a278e', char: 'W' },
-    { name: 'KPMG', color: 'rgba(0, 51, 153, 0.12)', border: '#003399', char: 'KPMG' },
+    { name: 'KPMG', color: 'rgba(0, 51, 153, 0.12)', border: '#003399', char: 'K' },
     { name: 'Deloitte', color: 'rgba(134, 188, 37, 0.12)', border: '#86bc25', char: 'D' },
     { name: 'Google', color: 'rgba(219, 68, 85, 0.12)', border: '#db4437', char: 'G' },
     { name: 'Microsoft', color: 'rgba(0, 164, 239, 0.12)', border: '#00a4ef', char: 'M' },
-    { name: 'Meta', color: 'rgba(6, 104, 226, 0.12)', border: '#0668e2', char: 'Meta' },
+    { name: 'Meta', color: 'rgba(6, 104, 226, 0.12)', border: '#0668e2', char: 'M' },
     { name: 'Uber', color: 'rgba(15, 15, 15, 0.4)', border: 'var(--text-primary)', char: 'U' },
     { name: 'Zomato', color: 'rgba(226, 55, 68, 0.12)', border: '#e23744', char: 'Z' }
   ];

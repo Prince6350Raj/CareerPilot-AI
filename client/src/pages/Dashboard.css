@@ -460,6 +460,13 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+:root[data-theme="ocean"] .dashboard-heading-row .dynamic-pop-name {
+  background: linear-gradient(135deg, #38bdf8 0%, #fb923c 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
+}
+
 :root[data-theme="ocean"] .dashboard-heading-row .page-title {
   color: white !important;
   font-size: 2.1rem;
