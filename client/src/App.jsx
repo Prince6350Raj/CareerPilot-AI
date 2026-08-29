@@ -34,6 +34,9 @@ function ScrollToTop() {
 function App() {
   useEffect(() => {
     // Apply local storage custom user style configurations on boot
+    const theme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+
     const font = localStorage.getItem('app-font-family') || "'Plus Jakarta Sans', sans-serif";
     const size = localStorage.getItem('app-font-size') || "15px";
     const weight = localStorage.getItem('app-font-weight') || "normal";

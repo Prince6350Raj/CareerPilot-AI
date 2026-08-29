@@ -24,25 +24,7 @@ import './Sidebar.css';
 
 const Sidebar = () => {
   const { user, logout } = useContext(AuthContext);
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [showAboutModal, setShowAboutModal] = useState(false);
-  const [isThemeOpen, setIsThemeOpen] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  // Click outside to close custom select dropdown
-  useEffect(() => {
-    const handleOutsideClick = () => setIsThemeOpen(false);
-    if (isThemeOpen) {
-      window.addEventListener('click', handleOutsideClick);
-    }
-    return () => {
-      window.removeEventListener('click', handleOutsideClick);
-    };
-  }, [isThemeOpen]);
 
   return (
     <aside className="sidebar-container glass-card">
@@ -150,121 +132,6 @@ const Sidebar = () => {
       </nav>
 
       <div className="sidebar-footer-row" style={{ flexDirection: 'column', gap: '0.75rem', alignItems: 'stretch' }}>
-        <div className="theme-selector-label" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.15rem' }}>
-          Theme Presets
-        </div>
-        
-        {/* Custom Premium Dropdown Selector */}
-        <div className="custom-theme-dropdown" style={{ position: 'relative', width: '100%', marginBottom: '0.25rem' }}>
-          <button 
-            type="button" 
-            onClick={(e) => { e.stopPropagation(); setIsThemeOpen(!isThemeOpen); }}
-            className="theme-select-control"
-            style={{
-              width: '100%',
-              background: 'var(--bg-item)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '0.55rem 0.75rem',
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              outline: 'none',
-              transition: 'var(--transition-smooth)'
-            }}
-          >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span>
-                {theme === 'dark' && '🌌'}
-                {theme === 'light' && '❄️'}
-                {theme === 'cyberpunk' && '⚡'}
-                {theme === 'emerald' && '🌲'}
-                {theme === 'sakura' && '🌸'}
-                {theme === 'ocean' && '🌊'}
-                {theme === 'goldlight' && '👑'}
-              </span>
-              <span>
-                {theme === 'dark' && 'Space Blue'}
-                {theme === 'light' && 'Frosted Glass'}
-                {theme === 'cyberpunk' && 'Cyberpunk Gold'}
-                {theme === 'emerald' && 'Emerald Forest'}
-                {theme === 'sakura' && 'Frosted Slate'}
-                {theme === 'ocean' && 'Ocean Blue'}
-                {theme === 'goldlight' && 'Golden Pastel'}
-              </span>
-            </span>
-            <span style={{ fontSize: '0.6rem', transform: isThemeOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}>▼</span>
-          </button>
-
-          {isThemeOpen && (
-            <div 
-              className="custom-theme-options" 
-              style={{
-                position: 'absolute',
-                bottom: '108%',
-                left: 0,
-                width: '100%',
-                background: 'var(--bg-card)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-sm)',
-                boxShadow: 'var(--glass-shadow)',
-                zIndex: 1000,
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '0.35rem',
-                gap: '0.2rem',
-                animation: 'slideUpDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              {[
-                { id: 'dark', emoji: '🌌', name: 'Space Blue' },
-                { id: 'light', emoji: '❄️', name: 'Frosted Glass' },
-                { id: 'cyberpunk', emoji: '⚡', name: 'Cyberpunk Gold' },
-                { id: 'emerald', emoji: '🌲', name: 'Emerald Forest' },
-                { id: 'sakura', emoji: '🌸', name: 'Frosted Slate' },
-                { id: 'ocean', emoji: '🌊', name: 'Ocean Blue' },
-                { id: 'goldlight', emoji: '👑', name: 'Golden Pastel' }
-              ].map((t) => (
-                <div
-                  key={t.id}
-                  onClick={() => {
-                    setTheme(t.id);
-                    setIsThemeOpen(false);
-                  }}
-                  className={`custom-theme-option ${theme === t.id ? 'active' : ''}`}
-                  style={{
-                    padding: '0.5rem 0.75rem',
-                    fontSize: '0.82rem',
-                    fontWeight: 700,
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    color: theme === t.id ? 'var(--primary)' : 'var(--text-secondary)',
-                    background: theme === t.id ? 'var(--bg-item)' : 'transparent',
-                    transition: 'var(--transition-smooth)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (theme !== t.id) e.currentTarget.style.background = 'var(--bg-item-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (theme !== t.id) e.currentTarget.style.background = 'transparent';
-                  }}
-                >
-                  <span>{t.emoji}</span>
-                  <span>{t.name}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
         <button className="btn btn-secondary" onClick={logout} title="Sign Out" style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
           <LogOut size={16} />
           <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Sign Out</span>
