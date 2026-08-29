@@ -249,6 +249,54 @@
   flex-shrink: 0;
 }
 
+/* Sidebar Divider */
+.sidebar-divider {
+  height: 1px;
+  background: var(--border-color);
+  opacity: 0.5;
+  margin: 0.8rem 0;
+  width: 100%;
+}
+
+/* Premium Sidebar Logout Button */
+.sidebar-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background: hsla(0, 84%, 60%, 0.05);
+  border: 1px solid hsla(0, 84%, 60%, 0.18);
+  border-radius: var(--radius-sm);
+  color: hsla(0, 84%, 60%, 0.95);
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.sidebar-logout-btn svg {
+  color: hsla(0, 84%, 60%, 0.95);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-logout-btn:hover {
+  background: hsl(0, 84%, 60%) !important;
+  border-color: hsl(0, 84%, 60%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px hsla(0, 84%, 60%, 0.3);
+  transform: translateY(-2px);
+}
+
+.sidebar-logout-btn:hover svg {
+  color: #ffffff !important;
+  transform: translateX(3px);
+}
+
 
 
 /* About Modal Overlay */

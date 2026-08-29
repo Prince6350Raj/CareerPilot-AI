@@ -132,10 +132,12 @@ const Sidebar = () => {
         )}
       </nav>
 
+      <div className="sidebar-divider"></div>
+
       <div className="sidebar-footer-row" style={{ flexDirection: 'column', gap: '0.75rem', alignItems: 'stretch' }}>
-        <button className="btn btn-secondary" onClick={logout} title="Sign Out" style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+        <button className="sidebar-logout-btn" onClick={logout} title="Sign Out">
           <LogOut size={16} />
-          <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Sign Out</span>
+          <span>Sign Out</span>
         </button>
       </div>
 
