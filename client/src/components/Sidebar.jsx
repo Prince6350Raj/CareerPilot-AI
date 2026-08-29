@@ -127,6 +127,7 @@ const Sidebar = () => {
           <NavLink to="/admin" className={({ isActive }) => `nav-item admin-item ${isActive ? 'active' : ''}`}>
             <ShieldAlert size={20} />
             <span>Admin Control</span>
+            <span className="admin-glowing-tag">Console</span>
           </NavLink>
         )}
       </nav>

@@ -152,19 +152,79 @@
 
 .admin-item {
   margin-top: 1.5rem;
-  border: 1px dashed hsla(0, 85%, 60%, 0.2);
+  background: linear-gradient(90deg, hsla(0, 84%, 60%, 0.06) 0%, hsla(24, 95%, 50%, 0.02) 100%) !important;
+  border: 1px solid hsla(0, 84%, 60%, 0.22) !important;
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.admin-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent-error);
+  opacity: 0.7;
+}
+
 .admin-item:hover {
-  background: hsla(0, 85%, 60%, 0.05);
-  border-color: var(--accent-error);
+  background: linear-gradient(90deg, hsla(0, 84%, 60%, 0.12) 0%, hsla(24, 95%, 50%, 0.04) 100%) !important;
+  border-color: var(--accent-error) !important;
+  box-shadow: 0 4px 15px hsla(0, 84%, 60%, 0.08);
+  transform: translateY(-1px);
 }
+
 .admin-item.active {
-  border-left-color: var(--accent-error);
-  box-shadow: inset 5px 0 15px -5px hsla(0, 85%, 60%, 0.2);
+  background: linear-gradient(90deg, hsla(0, 84%, 60%, 0.15) 0%, hsla(24, 95%, 50%, 0.08) 100%) !important;
+  border-color: var(--accent-error) !important;
+  box-shadow: inset 4px 0 10px hsla(0, 84%, 60%, 0.15), 0 4px 12px hsla(0, 84%, 60%, 0.08);
 }
+
+.admin-item svg {
+  color: var(--accent-error) !important;
+}
+
 .admin-item.active svg {
-  color: var(--accent-error);
-  filter: drop-shadow(0 0 5px hsla(0, 85%, 60%, 0.4));
+  color: var(--accent-error) !important;
+  filter: drop-shadow(0 0 8px var(--accent-error));
+}
+
+/* Glowing Console Badge */
+.admin-glowing-tag {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-error) !important;
+  background: hsla(0, 84%, 60%, 0.1);
+  border: 1px solid hsla(0, 84%, 60%, 0.35);
+  border-radius: 20px;
+  padding: 0.12rem 0.45rem;
+  margin-left: auto;
+  box-shadow: 0 0 6px hsla(0, 84%, 60%, 0.08);
+  animation: adminPulse 2s infinite ease-in-out;
+}
+
+@keyframes adminPulse {
+  0% {
+    box-shadow: 0 0 6px hsla(0, 84%, 60%, 0.08);
+    border-color: hsla(0, 84%, 60%, 0.3);
+    background: hsla(0, 84%, 60%, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 12px hsla(0, 84%, 60%, 0.2);
+    border-color: hsla(0, 84%, 60%, 0.55);
+    background: hsla(0, 84%, 60%, 0.16);
+  }
+  100% {
+    box-shadow: 0 0 6px hsla(0, 84%, 60%, 0.08);
+    border-color: hsla(0, 84%, 60%, 0.3);
+    background: hsla(0, 84%, 60%, 0.1);
+  }
 }
 
 .sidebar-footer-row {
