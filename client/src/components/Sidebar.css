@@ -122,6 +122,7 @@
   font-weight: 500;
   font-size: 0.95rem;
   transition: var(--transition-smooth);
+  white-space: nowrap;
 }
 
 .nav-item svg {
@@ -151,7 +152,7 @@
 }
 
 .admin-item {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   background: linear-gradient(90deg, hsla(0, 84%, 60%, 0.06) 0%, hsla(24, 95%, 50%, 0.02) 100%) !important;
   border: 1px solid hsla(0, 84%, 60%, 0.22) !important;
   border-radius: var(--radius-sm);
@@ -203,7 +204,7 @@
   background: hsla(0, 84%, 60%, 0.1);
   border: 1px solid hsla(0, 84%, 60%, 0.35);
   border-radius: 20px;
-  padding: 0.12rem 0.45rem;
+  padding: 0.1rem 0.4rem;
   margin-left: auto;
   box-shadow: 0 0 6px hsla(0, 84%, 60%, 0.08);
   animation: adminPulse 2s infinite ease-in-out;
