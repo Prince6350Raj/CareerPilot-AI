@@ -91,10 +91,11 @@
   position: absolute;
   inset: 0;
   background-image: 
-    radial-gradient(circle at center, transparent 35%, var(--bg-dark, #ffffff) 100%),
-    linear-gradient(to right, var(--primary-glow, rgba(2, 132, 199, 0.04)) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--primary-glow, rgba(2, 132, 199, 0.04)) 1px, transparent 1px);
-  background-size: 100% 100%, 36px 36px, 36px 36px;
+    radial-gradient(circle at center, transparent 20%, var(--bg-dark, #ffffff) 95%),
+    linear-gradient(to right, var(--border-color, rgba(2, 132, 199, 0.18)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-color, rgba(2, 132, 199, 0.18)) 1px, transparent 1px);
+  background-size: 100% 100%, 38px 38px, 38px 38px;
+  opacity: 0.85;
   z-index: 2;
   pointer-events: none;
 }
@@ -102,35 +103,39 @@
 .ambient-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.45;
+  filter: blur(80px);
+  opacity: 0.75;
   animation: floatAmbient 16s ease-in-out infinite alternate;
   z-index: 0;
+  pointer-events: none;
 }
 
 .blob-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--primary-glow, rgba(2, 132, 199, 0.16)) 0%, var(--secondary-glow, rgba(37, 99, 235, 0.06)) 70%, transparent 100%);
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, var(--primary, #0284c7) 0%, var(--primary-glow, rgba(2, 132, 199, 0.35)) 45%, transparent 70%);
+  opacity: 0.22;
   top: -15%;
   left: -10%;
 }
 
 .blob-2 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--secondary-glow, rgba(59, 130, 246, 0.12)) 0%, var(--primary-glow, rgba(14, 165, 233, 0.04)) 70%, transparent 100%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, var(--secondary, #2563eb) 0%, var(--secondary-glow, rgba(59, 130, 246, 0.35)) 45%, transparent 70%);
+  opacity: 0.20;
   bottom: -20%;
   right: -10%;
   animation-delay: -6s;
 }
 
 .blob-3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--primary-glow, rgba(147, 197, 253, 0.2)) 0%, transparent 70%);
-  top: 30%;
-  left: 35%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--primary, #0284c7) 0%, var(--primary-glow, rgba(147, 197, 253, 0.35)) 50%, transparent 70%);
+  opacity: 0.18;
+  top: 25%;
+  left: 30%;
   animation-delay: -10s;
 }
 
