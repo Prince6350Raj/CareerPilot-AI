@@ -152,7 +152,7 @@ const Admin = () => {
       {error && <div className="alert-message error-alert">{error}</div>}
 
       {/* Analytics stats */}
-      <div className="analytics-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+      <div className="analytics-metrics-grid">
         <div className="analytic-card glass-card clickable-metric-box" onClick={() => setActiveTab('users')} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Total Accounts</span>
@@ -193,7 +193,7 @@ const Admin = () => {
           <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{avgInterview * 10}%</h3>
         </div>
 
-        <div className="analytic-card glass-card clickable-metric-box" onClick={() => setModalContent({ title: 'Popular Target Career Roles', type: 'roles', list: analytics?.details?.popularRolesList || [] })} style={{ gridColumn: 'span 2', cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
+        <div className="analytic-card glass-card clickable-metric-box popular-role-card" onClick={() => setModalContent({ title: 'Popular Target Career Roles', type: 'roles', list: analytics?.details?.popularRolesList || [] })} style={{ cursor: 'pointer', transition: 'var(--transition-smooth)' }}>
           <div className="meta-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Most Selected Role</span>
             <Sparkles className="metric-icon cyan-theme" size={20} />
@@ -203,7 +203,7 @@ const Admin = () => {
       </div>
 
       {/* SYSTEM PULSE & INSIGHTS MONITOR */}
-      <div className="system-pulse-insights-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+      <div className="system-pulse-insights-grid">
         {/* Left Card: System Diagnostics & Controls */}
         <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <h3 style={{ fontSize: '1.05rem', fontWeight: 800, borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>

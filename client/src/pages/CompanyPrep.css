@@ -357,3 +357,38 @@
   background-color: var(--bg-item-hover) !important;
 }
 
+@media (max-width: 768px) {
+  .company-prep-view {
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .company-hero-banner {
+    padding: 1.25rem 1rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .company-selector-bar {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .company-search-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .popular-companies-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  .details-columns-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+

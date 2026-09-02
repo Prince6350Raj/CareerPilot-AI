@@ -826,3 +826,94 @@
 .devpass-info-chip:hover {
   border-color: var(--primary);
 }
+
+/* ==========================================================
+   CODING CHALLENGE & DEVPASS MOBILE RESPONSIVENESS (< 768px)
+   ========================================================== */
+@media (max-width: 768px) {
+  .coding-challenge-view {
+    height: auto !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+  }
+
+  .leetcode-dashboard-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 1rem !important;
+  }
+
+  .devpass-card-enhanced {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.25rem 1rem !important;
+  }
+
+  .solved-gauge-container {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .solved-gauge-container svg {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .leetcode-problems-table-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1rem 0.75rem !important;
+  }
+
+  .topic-filter-pills-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    padding-bottom: 0.35rem !important;
+    gap: 0.35rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .topic-filter-pill {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 0.3rem 0.65rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  .challenge-workspace-split {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 1rem !important;
+    width: 100% !important;
+  }
+
+  .problem-statement-card {
+    max-height: none !important;
+    height: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .editor-window-card {
+    height: 320px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .code-textarea-editor {
+    font-size: 0.78rem !important;
+    padding: 0.75rem !important;
+  }
+}

@@ -832,3 +832,179 @@
   border-color: #2563eb !important;
 }
 
+/* ==========================================================
+   MOBILE RESPONSIVE STYLES (< 768px)
+   ========================================================== */
+@media (max-width: 768px) {
+  .career-chatbot-view {
+    padding: 0.5rem 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    min-height: auto !important;
+    gap: 0.75rem !important;
+  }
+
+  .chatbot-hero-card {
+    padding: 1rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .chatbot-hero-left {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .chatbot-main-title {
+    font-size: 1.15rem !important;
+  }
+
+  .chatbot-header-actions {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  .chatbot-stat-chip {
+    padding: 0.35rem 0.6rem !important;
+  }
+
+  .auto-speak-pill-btn,
+  .chatbot-clear-btn {
+    padding: 0.4rem 0.65rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .chat-interface-layout {
+    height: calc(100vh - 180px) !important;
+    min-height: 480px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: var(--radius-sm) !important;
+  }
+
+  .chat-messages-container {
+    padding: 0.85rem 0.65rem !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .chat-bubble-row {
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .chat-avatar-box {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .avatar-ai, .avatar-user {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .chat-bubble-bubble {
+    max-width: calc(100% - 36px) !important;
+    padding: 0.85rem 0.95rem !important;
+    border-radius: 10px !important;
+    font-size: 0.85rem !important;
+    line-height: 1.55 !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .chat-bubble-row.user .chat-bubble-bubble {
+    max-width: calc(100% - 36px) !important;
+    padding: 0.85rem 0.95rem !important;
+  }
+
+  .bubble-header-bar {
+    padding-bottom: 0.3rem !important;
+  }
+
+  .bubble-sender-name {
+    font-size: 0.7rem !important;
+  }
+
+  .chatbot-prompt-hub {
+    padding: 0.45rem 0.65rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .category-tabs-bar {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 0.35rem !important;
+    gap: 0.35rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .cat-tab-btn {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.72rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .prompt-chips-carousel {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 0.35rem !important;
+    gap: 0.4rem !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .prompt-starter-chip {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.72rem !important;
+    max-width: 80vw !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .chat-input-bar {
+    padding: 0.6rem 0.65rem !important;
+    gap: 0.45rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .chat-text-input-field {
+    height: 40px !important;
+    font-size: 0.82rem !important;
+    padding: 0 1.75rem 0 0.75rem !important;
+  }
+
+  .chat-mic-btn,
+  .chat-send-btn {
+    width: 40px !important;
+    height: 40px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .followup-prompts-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.35rem !important;
+  }
+
+  .followup-chip {
+    width: 100% !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+}
+
