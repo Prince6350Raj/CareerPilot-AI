@@ -11,6 +11,19 @@ const ResumeAnalyzer = () => {
   const [history, setHistory] = useState([]);
   const [activeResume, setActiveResume] = useState(null);
   const [error, setError] = useState('');
+
+  const getFileName = (url) => {
+    if (!url) return 'Resume.pdf';
+    const parts = url.split('/');
+    const rawName = parts[parts.length - 1];
+    return rawName.replace(/^\d+-/, '');
+  };
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return { bg: 'rgba(16, 185, 129, 0.1)', text: '#10b981' };
+    if (score >= 60) return { bg: 'rgba(249, 115, 22, 0.1)', text: '#f97316' };
+    return { bg: 'rgba(239, 68, 68, 0.1)', text: '#ef4444' };
+  };
   
   // Tab states: 'ats', 'compare', 'coverletter', 'versions'
   const [activeTab, setActiveTab] = useState('ats');
@@ -615,26 +628,71 @@ const ResumeAnalyzer = () => {
           </div>
 
           {/* History list */}
-          <div className="scan-history-card glass-card">
-            <h3 className="card-mini-title">Scan History</h3>
-            <div className="history-list-items">
-              {history.map((item, index) => (
-                <div
-                  key={item._id}
-                  className={`history-item ${activeResume?._id === item._id ? 'active' : ''}`}
-                  onClick={() => setActiveResume(item)}
-                >
-                  <div className="history-meta">
-                    <span className="history-date">
-                      V{history.length - index}: {new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                    </span>
-                    <span className="history-score">{item.atsScore}% ATS</span>
+          <div className="scan-history-card glass-card" style={{ padding: '1.25rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
+            <h3 className="card-mini-title" style={{ fontSize: '0.9rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-primary)' }}>Scan History</h3>
+            <div className="history-list-items" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {history.map((item, index) => {
+                const scoreColors = getScoreColor(item.atsScore);
+                const fileName = getFileName(item.fileUrl);
+                return (
+                  <div
+                    key={item._id}
+                    className={`history-item ${activeResume?._id === item._id ? 'active' : ''}`}
+                    onClick={() => setActiveResume(item)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.75rem',
+                      background: activeResume?._id === item._id ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      position: 'relative'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: 0 }}>
+                      <FileText size={20} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={fileName}>
+                          {fileName}
+                        </span>
+                        <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+                          Scanned {new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                      <span style={{
+                        fontSize: '0.7rem',
+                        fontWeight: 800,
+                        padding: '0.25rem 0.6rem',
+                        borderRadius: '4px',
+                        background: scoreColors.bg,
+                        color: scoreColors.text
+                      }}>
+                        {item.atsScore} Score
+                      </span>
+                      <button 
+                        className="delete-history-btn" 
+                        onClick={(e) => handleDelete(item._id, e)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--accent-danger)',
+                          cursor: 'pointer',
+                          padding: '0.25rem',
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
                   </div>
-                  <button className="delete-history-btn" onClick={(e) => handleDelete(item._id, e)}>
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
               {history.length === 0 && (
                 <p className="empty-text">No previous scans found.</p>
               )}
@@ -1544,50 +1602,83 @@ const ResumeAnalyzer = () => {
                         View Scanned File Source
                       </a>
                     </div>
-                    <div className="radial-score-box">
-                      <div className="score-number-bubble">
-                        <span className="score-val">{activeResume.atsScore}</span>
-                        <span className="score-pct">%</span>
+                     <div className="radial-score-box" style={{
+                      background: 'linear-gradient(135deg, #7c3aed, #2563eb)',
+                      padding: '1.25rem',
+                      borderRadius: '50%',
+                      width: '78px',
+                      height: '78px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+                      color: '#ffffff',
+                      flexShrink: 0
+                    }}>
+                      <div className="score-number-bubble" style={{ display: 'flex', alignItems: 'baseline', color: '#ffffff' }}>
+                        <span className="score-val" style={{ fontSize: '1.6rem', fontWeight: 900 }}>{activeResume.atsScore}</span>
+                        <span className="score-pct" style={{ fontSize: '0.9rem', fontWeight: 700 }}>%</span>
                       </div>
-                      <span className="score-caption">ATS MATCH</span>
+                      <span className="score-caption" style={{ fontSize: '0.52rem', fontWeight: 800, color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '2px' }}>ATS MATCH</span>
                     </div>
                   </div>
 
                   {/* Breakdown metrics */}
                   <div className="breakdown-grid">
                     {[
-                      { name: 'Keyword Density', val: activeResume.breakdown?.keywordMatch || 0 },
-                      { name: 'Formatting & Layout', val: activeResume.breakdown?.formatting || 0 },
-                      { name: 'Impact & Action Verbs', val: activeResume.breakdown?.impactPhrases || 0 },
-                      { name: 'Redundancy Filter', val: activeResume.breakdown?.redundancies || 0 }
+                      { name: 'Keyword Density', val: activeResume.breakdown?.keywordMatch || 0, gradient: 'linear-gradient(90deg, #10b981, #059669)' },
+                      { name: 'Formatting & Layout', val: activeResume.breakdown?.formatting || 0, gradient: 'linear-gradient(90deg, #3b82f6, #06b6d4)' },
+                      { name: 'Impact & Action Verbs', val: activeResume.breakdown?.impactPhrases || 0, gradient: 'linear-gradient(90deg, #8b5cf6, #4f46e5)' },
+                      { name: 'Redundancy Filter', val: activeResume.breakdown?.redundancies || 0, gradient: 'linear-gradient(90deg, #f97316, #eab308)' }
                     ].map((metric, i) => (
                       <div key={i} className="breakdown-metric">
                         <div className="metric-header">
                           <span>{metric.name}</span>
                           <span>{metric.val}%</span>
                         </div>
-                        <div className="bar-track">
-                          <div className="bar-fill" style={{ width: `${metric.val}%` }}></div>
+                        <div className="bar-track" style={{ background: 'rgba(15, 23, 42, 0.06)', height: '7px', borderRadius: '3.5px', overflow: 'hidden' }}>
+                          <div className="bar-fill" style={{ width: `${metric.val}%`, height: '100%', background: metric.gradient, borderRadius: '3.5px', transition: 'width 0.8s ease-out' }}></div>
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Skills Cloud */}
-                  <div className="skills-cloud-section">
-                    <h3 className="subsection-title">Skills Detected</h3>
-                    <div className="tags-container">
+                  {/* Skills Analysis */}
+                  <div className="skills-cloud-section glass-card" style={{ padding: '1.25rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem', background: 'var(--bg-item)' }}>
+                    <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', marginTop: 0 }}>Resume Skills Analysis</h3>
+                    
+                    <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Detected Skills</span>
+                    <div className="tags-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
                       {activeResume.detectedSkills?.map((skill, i) => (
-                        <span key={i} className="skill-tag detected-tag">{skill}</span>
+                        <span key={i} style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          padding: '0.25rem 0.6rem',
+                          background: 'rgba(16, 185, 129, 0.08)',
+                          color: '#10b981',
+                          borderRadius: '4px'
+                        }}>{skill}</span>
                       ))}
                     </div>
-                  </div>
 
-                  <div className="skills-cloud-section">
-                    <h3 className="subsection-title">Suggested High-Impact Skills</h3>
-                    <div className="tags-container">
+                    <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>AI Recommended Skills</span>
+                    <div className="tags-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {activeResume.suggestedSkills?.map((skill, i) => (
-                        <span key={i} className="skill-tag suggested-tag">{skill}</span>
+                        <span key={i} style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          padding: '0.25rem 0.6rem',
+                          border: '1px solid #2563eb',
+                          color: '#2563eb',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          background: 'transparent'
+                        }}>
+                          {skill} <span style={{ fontWeight: 800 }}>+</span>
+                        </span>
                       ))}
                     </div>
                   </div>

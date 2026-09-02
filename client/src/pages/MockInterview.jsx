@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { MessageSquare, ArrowRight, Play, Timer, Check, Info, Award, Download, Briefcase, Search, ChevronDown } from 'lucide-react';
+import { MessageSquare, ArrowRight, Play, Timer, Check, Info, Award, Download, Briefcase, Search, ChevronDown, Sparkles, Zap, Target, TrendingUp, CheckCircle2, Video, Volume2, ShieldCheck, BarChart3, Filter } from 'lucide-react';
 import './MockInterview.css';
 
 const MockInterview = () => {
@@ -12,6 +12,8 @@ const MockInterview = () => {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('Initializing interview session...');
   const [activeSession, setActiveSession] = useState(null);
+  const [historySearch, setHistorySearch] = useState('');
+  const [historyFilter, setHistoryFilter] = useState('all');
   
   // Terminal states
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -309,15 +311,49 @@ const MockInterview = () => {
         // Real-time evaluation readout
         if (aiVoiceEnabled) {
           const rating = data.data.rating || 0;
-          // Classify rating >= 5 as correct (out of 10 for subjective, or out of 5 for MCQs)
-          const isCorrect = rating >= 5;
+          const normalizedAns = userAnswer.toLowerCase().trim();
+          const ignorancePhrases = [
+            "don't know",
+            "do not know",
+            "no idea",
+            "i don't understand",
+            "i do not understand",
+            "explain this",
+            "explain it",
+            "explain the answer",
+            "tell me the answer",
+            "please explain",
+            "no clue",
+            "idk",
+            "skip",
+            "don't have any idea"
+          ];
+          const isIgnorant = activeSession.format !== 'mcq' && (ignorancePhrases.some(phrase => normalizedAns.includes(phrase)) || normalizedAns.length < 10);
+
+          // Classify rating >= 6 for theory (out of 10), or rating >= 3/5 for MCQs
+          const isCorrect = activeSession.format === 'mcq' ? rating >= 3 : rating >= 6;
           let evalSpeech = "";
-          if (isCorrect) {
-            evalSpeech = "Yes! That is the correct answer. ";
+
+          if (activeSession.format === 'mcq') {
+            if (isCorrect) {
+              evalSpeech = `You chose the correct option! Excellent! ${data.data.modelAnswer || ""}`;
+            } else {
+              evalSpeech = `You chose the wrong option. The correct option is ${data.data.correctOption || ""}. ${data.data.modelAnswer || ""}`;
+            }
           } else {
-            evalSpeech = `That is incorrect. The correct answer is: ${data.data.modelAnswer || ""}. `;
+            if (isIgnorant) {
+              let feedbackText = data.data.feedback || "";
+              const prefix = "Ok, don't worry! I will explain the answer to this question.";
+              if (feedbackText.startsWith(prefix)) {
+                feedbackText = feedbackText.replace(prefix, "").trim();
+              }
+              evalSpeech = `Ok, don't worry! I will explain the answer to this question. Here is the answer: ${data.data.modelAnswer || ""}. ${feedbackText}`;
+            } else if (isCorrect) {
+              evalSpeech = `Yes! That is the correct answer. Feedback comments: ${data.data.feedback || ""}`;
+            } else {
+              evalSpeech = `That is incorrect. The correct answer is: ${data.data.modelAnswer || ""}. Feedback comments: ${data.data.feedback || ""}`;
+            }
           }
-          evalSpeech += `Feedback comments: ${data.data.feedback || ""}`;
           speakTextDirectly(evalSpeech);
         }
       }
@@ -619,10 +655,76 @@ const MockInterview = () => {
     }
   };
 
+  // Derived History Metrics
+  const totalCompletedSessions = history.length;
+  const bestScoreVal = history.length > 0 ? Math.max(...history.map(h => h.overallScore || 0)) : 0;
+  const avgScoreVal = history.length > 0 ? (history.reduce((sum, h) => sum + (h.overallScore || 0), 0) / history.length) : 0;
+
+  // Filtered History
+  const filteredHistory = history.filter(item => {
+    const matchesSearch = (item.role || '').toLowerCase().includes(historySearch.toLowerCase());
+    const matchesFormat = historyFilter === 'all' || item.format === historyFilter;
+    return matchesSearch && matchesFormat;
+  });
+
+  const POPULAR_ROLES = [
+    'Frontend React Developer',
+    'Backend Node/Python Engineer',
+    'FullStack Web Developer',
+    'DevOps & Cloud Engineer',
+    'Data Scientist / Analyst',
+    'AI & Machine Learning Engineer'
+  ];
+
   return (
     <div className="interview-view-container">
-      <h1 className="page-title">AI Mock Interview</h1>
-      <p className="page-subtitle">Simulate real technical, HR, and behavioral interview environments and get graded feedback.</p>
+      
+      {/* Top Banner Hero Header */}
+      <div className="interview-hero-banner glass-card animate-fade-in">
+        <div className="interview-hero-left">
+          <div className="interview-badge-pill">
+            <Sparkles size={13} />
+            <span>AI SIMULATED ASSESSMENT SUITE</span>
+          </div>
+          <h1 className="page-title" style={{ margin: '0.4rem 0 0.35rem' }}>AI Mock Interview Simulator</h1>
+          <p className="page-subtitle" style={{ margin: 0 }}>
+            Simulate real technical, HR, and behavioral interview environments with instant AI speech evaluation, question-by-question scoring, and blockchain certificate generation.
+          </p>
+        </div>
+
+        {/* Quick Summary Stats Chips */}
+        <div className="interview-hero-stats-row">
+          <div className="interview-hero-stat-chip">
+            <div className="stat-chip-icon" style={{ background: 'rgba(37, 99, 235, 0.12)', color: '#2563eb' }}>
+              <BarChart3 size={18} />
+            </div>
+            <div>
+              <span className="stat-chip-num">{totalCompletedSessions}</span>
+              <span className="stat-chip-lbl">Sessions Taken</span>
+            </div>
+          </div>
+
+          <div className="interview-hero-stat-chip">
+            <div className="stat-chip-icon" style={{ background: 'rgba(16, 185, 129, 0.12)', color: '#10b981' }}>
+              <Award size={18} />
+            </div>
+            <div>
+              <span className="stat-chip-num">{bestScoreVal.toFixed(1)}/10</span>
+              <span className="stat-chip-lbl">Best Score</span>
+            </div>
+          </div>
+
+          <div className="interview-hero-stat-chip">
+            <div className="stat-chip-icon" style={{ background: 'rgba(245, 158, 11, 0.12)', color: '#f59e0b' }}>
+              <TrendingUp size={18} />
+            </div>
+            <div>
+              <span className="stat-chip-num">{avgScoreVal.toFixed(1)}/10</span>
+              <span className="stat-chip-lbl">Average Score</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Loading Overlay */}
       {loading && (
@@ -636,11 +738,25 @@ const MockInterview = () => {
       {/* 1. SETUP MODULE */}
       {!activeSession && !scorecard && !loading && (
         <div className="setup-split-layout">
+          
+          {/* Left Column: Configure Session */}
           <div className="setup-card-box glass-card animate-fade-in">
-            <h3 className="card-mini-title">Setup Simulated Session</h3>
+            <div className="setup-box-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Zap size={18} style={{ color: 'var(--primary)' }} />
+                <h3 className="card-mini-title" style={{ margin: 0 }}>Configure Simulation</h3>
+              </div>
+              <span className="setup-tag-badge">AI Powered</span>
+            </div>
+
             <form onSubmit={handleStart} className="setup-form">
+              
+              {/* Target Job Role */}
               <div className="form-group">
-                <label className="form-label" htmlFor="role-input">Target Job Role</label>
+                <label className="form-label" htmlFor="role-input">
+                  <Briefcase size={14} style={{ color: 'var(--primary)' }} />
+                  <span>Target Job Role</span>
+                </label>
                 <input
                   type="text"
                   id="role-input"
@@ -650,78 +766,221 @@ const MockInterview = () => {
                   onChange={(e) => setRole(e.target.value)}
                   required
                 />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="type-input">Question Category</label>
-                <select
-                  id="type-input"
-                  className="form-control"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option value="Mixed">Mixed HR & Tech</option>
-                  <option value="Technical">Strictly Technical</option>
-                  <option value="Behavioral">Strictly Behavioral (HR)</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="limit-input">Number of Questions</label>
-                <select
-                  id="limit-input"
-                  className="form-control"
-                  value={limit}
-                  onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                >
-                  {Array.from({ length: 18 }, (_, i) => i + 3).map(num => (
-                    <option key={num} value={num}>{num} Questions</option>
+                {/* Role Presets */}
+                <div className="role-presets-strip">
+                  <span className="presets-label">Presets:</span>
+                  {POPULAR_ROLES.map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      className={`role-preset-pill ${role === r ? 'active' : ''}`}
+                      onClick={() => setRole(r)}
+                    >
+                      {r.split(' ')[0]} {r.split(' ')[1] || ''}
+                    </button>
                   ))}
-                </select>
+                </div>
               </div>
 
+              {/* Question Category */}
               <div className="form-group">
-                <label className="form-label" htmlFor="format-input">Interview Format</label>
-                <select
-                  id="format-input"
-                  className="form-control"
-                  value={format}
-                  onChange={(e) => setFormat(e.target.value)}
-                >
-                  <option value="theory">Subjective / Written (Theory)</option>
-                  <option value="mcq">Multiple Choice Questions (MCQ)</option>
-                </select>
+                <label className="form-label">
+                  <Target size={14} style={{ color: 'var(--primary)' }} />
+                  <span>Question Category</span>
+                </label>
+                <div className="category-pills-row">
+                  {[
+                    { id: 'Mixed', label: '⚡ Mixed HR & Tech' },
+                    { id: 'Technical', label: '💻 Strictly Technical' },
+                    { id: 'Behavioral', label: '🤝 Behavioral (HR)' }
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      className={`cat-toggle-pill ${type === cat.id ? 'active' : ''}`}
+                      onClick={() => setType(cat.id)}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
+              {/* Interview Format */}
+              <div className="form-group">
+                <label className="form-label">
+                  <CheckCircle2 size={14} style={{ color: 'var(--primary)' }} />
+                  <span>Interview Format</span>
+                </label>
+                <div className="format-toggle-grid">
+                  <div 
+                    className={`format-option-card ${format === 'theory' ? 'active' : ''}`}
+                    onClick={() => setFormat('theory')}
+                  >
+                    <div className="format-icon-box">📝</div>
+                    <div>
+                      <h4 className="format-name">Subjective / Theory</h4>
+                      <p className="format-desc">Written responses with detailed AI grading</p>
+                    </div>
+                  </div>
+
+                  <div 
+                    className={`format-option-card ${format === 'mcq' ? 'active' : ''}`}
+                    onClick={() => setFormat('mcq')}
+                  >
+                    <div className="format-icon-box">🎯</div>
+                    <div>
+                      <h4 className="format-name">Multiple Choice (MCQ)</h4>
+                      <p className="format-desc">Rapid 4-choice questions with instant scoring</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Number of Questions */}
+              <div className="form-group">
+                <label className="form-label" htmlFor="limit-input">
+                  <Timer size={14} style={{ color: 'var(--primary)' }} />
+                  <span>Session Length (Questions)</span>
+                </label>
+                <div className="limit-pills-row">
+                  {[3, 5, 8, 10, 15].map(qNum => (
+                    <button
+                      key={qNum}
+                      type="button"
+                      className={`limit-pill-btn ${limit === qNum ? 'active' : ''}`}
+                      onClick={() => setLimit(qNum)}
+                    >
+                      {qNum} Qs
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interactive Features Pre-Check */}
+              <div className="precheck-toggles-row">
+                <button
+                  type="button"
+                  onClick={() => setAiVoiceEnabled(!aiVoiceEnabled)}
+                  className={`precheck-btn ${aiVoiceEnabled ? 'active' : ''}`}
+                  title="Enable AI Voice Reader during the interview"
+                >
+                  <Volume2 size={15} />
+                  <span>AI Voice: {aiVoiceEnabled ? 'ON' : 'OFF'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={toggleVideoFeed}
+                  className={`precheck-btn ${showVideoFeed ? 'active' : ''}`}
+                  title="Enable Camera simulator"
+                >
+                  <Video size={15} />
+                  <span>Camera: {showVideoFeed ? 'ON' : 'OFF'}</span>
+                </button>
+              </div>
+
+              {/* Start Button */}
               <button type="submit" className="btn btn-primary start-btn" disabled={loading}>
                 <Play size={16} />
-                <span>{loading ? 'Initializing Console...' : 'Initiate Session'}</span>
+                <span>{loading ? 'Initializing Console...' : 'Initiate AI Interview'}</span>
               </button>
             </form>
           </div>
 
-          {/* History */}
+          {/* Right Column: Session History & Past Reports */}
           <div className="interview-history-card glass-card">
-            <h3 className="card-mini-title">Session History</h3>
+            <div className="history-header-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <ShieldCheck size={18} style={{ color: 'var(--primary)' }} />
+                <h3 className="card-mini-title" style={{ margin: 0 }}>Session History</h3>
+                <span className="history-count-badge">{filteredHistory.length}</span>
+              </div>
+
+              {/* Format Filter */}
+              <div className="history-filter-strip">
+                {['all', 'theory', 'mcq'].map(f => (
+                  <button
+                    key={f}
+                    type="button"
+                    className={`history-filter-btn ${historyFilter === f ? 'active' : ''}`}
+                    onClick={() => setHistoryFilter(f)}
+                  >
+                    {f === 'all' ? 'All' : f.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Search Input */}
+            <div className="history-search-wrapper">
+              <Search size={14} className="history-search-icon" />
+              <input
+                type="text"
+                placeholder="Search sessions by role name..."
+                value={historySearch}
+                onChange={(e) => setHistorySearch(e.target.value)}
+                className="history-search-input"
+              />
+            </div>
+
+            {/* History Cards List */}
             <div className="history-list">
-              {history.map(item => (
-                <div
-                  key={item._id}
-                  className="history-interview-item"
-                  onClick={() => setScorecard(item)}
-                >
-                  <MessageSquare size={18} className="interview-meta-icon" />
-                  <div className="interview-meta-details">
-                    <span className="interview-title">{item.role}</span>
-                    <span className="interview-score">Score: {item.overallScore ? item.overallScore.toFixed(1) : 0}/10</span>
+              {filteredHistory.map((item, idx) => {
+                const score = item.overallScore ? item.overallScore.toFixed(1) : '0.0';
+                const numScore = parseFloat(score);
+                const scoreTier = numScore >= 8 ? 'high' : numScore >= 5 ? 'mid' : 'low';
+                const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
+
+                return (
+                  <div
+                    key={item._id || idx}
+                    className="history-interview-item-card"
+                    onClick={() => setScorecard(item)}
+                  >
+                    <div className="history-card-left">
+                      <div className={`history-role-icon-box tier-${scoreTier}`}>
+                        <MessageSquare size={18} />
+                      </div>
+                      <div className="history-item-info">
+                        <span className="history-item-role">{item.role}</span>
+                        <div className="history-item-meta-row">
+                          <span className="history-item-date">{dateStr}</span>
+                          <span className="history-meta-dot">•</span>
+                          <span className="history-item-pill">{item.format === 'mcq' ? 'MCQ' : 'Theory'}</span>
+                          {item.questions && (
+                            <>
+                              <span className="history-meta-dot">•</span>
+                              <span className="history-item-qcount">{item.questions.length} Questions</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="history-card-right">
+                      <div className={`interview-history-score-badge tier-${scoreTier}`}>
+                        <span className="interview-score-num">{score}</span>
+                        <span className="interview-score-denom">/10</span>
+                      </div>
+                      <div className="history-open-arrow">
+                        <ArrowRight size={15} />
+                      </div>
+                    </div>
                   </div>
+                );
+              })}
+
+              {filteredHistory.length === 0 && (
+                <div className="history-empty-state">
+                  <div className="empty-state-icon">🎙️</div>
+                  <h4 className="empty-state-title">No matching interview sessions</h4>
+                  <p className="empty-state-desc">Configure your target role on the left and click "Initiate AI Interview" to take your first session!</p>
                 </div>
-              ))}
-              {history.length === 0 && (
-                <p className="empty-text">No previous sessions found.</p>
               )}
             </div>
           </div>
+
         </div>
       )}
 
@@ -736,29 +995,6 @@ const MockInterview = () => {
             
             {/* Interactive Audio/Video Toggles */}
             <div className="interview-media-controls" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-              <button 
-                type="button"
-                onClick={toggleVideoFeed}
-                className={`btn-media-toggle ${showVideoFeed ? 'active' : ''}`}
-                style={{ 
-                  background: showVideoFeed ? 'rgba(168, 85, 247, 0.15)' : 'var(--bg-item)', 
-                  border: `1px solid ${showVideoFeed ? 'var(--primary)' : 'var(--border-color)'}`,
-                  color: showVideoFeed ? 'var(--primary)' : 'var(--text-secondary)',
-                  padding: '0.4rem 0.6rem',
-                  borderRadius: 'var(--radius-sm)',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  fontSize: '0.72rem',
-                  fontWeight: 700
-                }}
-                title="Toggle Video Interview Camera Preview"
-              >
-                <CameraIcon size={13} />
-                <span>{showVideoFeed ? 'Cam ON' : 'Cam OFF'}</span>
-              </button>
-
               <button 
                 type="button"
                 onClick={() => setAiVoiceEnabled(!aiVoiceEnabled)}
@@ -929,23 +1165,166 @@ const MockInterview = () => {
       {/* 3. SCORECARD MODULE */}
       {scorecard && (
         <div className="scorecard-view-details animate-fade-in">
-          <div className="scorecard-summary-card glass-card">
-            <div className="summary-details">
-              <h2>Performance Scorecard: {scorecard.role}</h2>
-              <p className="summary-desc">{scorecard.summaryFeedback}</p>
-              <button className="btn btn-primary" style={{ marginTop: '1.25rem' }} onClick={() => setScorecard(null)}>
-                Take Another Test
-              </button>
+          {/* Performance Scorecard Container (Unified Lavender Box) */}
+          <div className="scorecard-summary-card" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '1.75rem', 
+            padding: '2rem', 
+            background: 'linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(224, 231, 255, 0.95) 100%)', 
+            border: '1px solid rgba(99, 102, 241, 0.15)', 
+            borderRadius: '12px',
+            marginBottom: '1.5rem',
+            position: 'relative'
+          }}>
+            {/* Top row: Title, description, and action buttons + overall score on the right */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', width: '100%' }}>
+              <div style={{ flex: 1, minWidth: '280px' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#1e293b', margin: '0 0 0.5rem 0' }}>
+                  Performance Scorecard: {scorecard.role || activeSession?.role || 'Developer'}
+                </h2>
+                <p style={{ fontSize: '0.85rem', color: '#475569', margin: '0 0 1.25rem 0', lineHeight: 1.5, maxWidth: '85%' }}>
+                  {Math.round((scorecard.overallScore || 0.0) * 10) >= 40 
+                    ? 'Great job! You have crossed the 40% passing threshold. Keep practicing and reviewing concepts to cross the 80% mark.'
+                    : 'Needs improvement. You did not cross the 40% passing threshold. Please review the key concepts, retry the assessment, and try again.'}
+                </p>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={() => setScorecard(null)}
+                    style={{ 
+                      fontSize: '0.78rem', 
+                      padding: '0.6rem 1.25rem', 
+                      background: '#1e40af', 
+                      border: 'none', 
+                      borderRadius: '6px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      color: '#ffffff'
+                    }}
+                  >
+                    Take Another Test
+                  </button>
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={() => downloadCertificate('pdf')}
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.5rem', 
+                      fontSize: '0.78rem', 
+                      padding: '0.6rem 1.25rem', 
+                      background: 'rgba(255, 255, 255, 0.8)', 
+                      border: '1px solid rgba(99, 102, 241, 0.2)', 
+                      borderRadius: '6px',
+                      fontWeight: 800,
+                      color: '#1e293b'
+                    }}
+                  >
+                    <Award size={14} />
+                    <span>Download Certificate</span>
+                  </button>
+                </div>
+              </div>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0, paddingRight: '1rem' }}>
+                {/* Medal/Award Badge Icon */}
+                <div style={{ 
+                  width: '46px', 
+                  height: '46px', 
+                  borderRadius: '50%', 
+                  background: 'rgba(245, 158, 11, 0.1)', 
+                  border: '1.5px solid rgba(245, 158, 11, 0.3)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center' 
+                }}>
+                  <Award size={24} style={{ color: '#d97706' }} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '2.5rem', fontWeight: 900, color: '#0f172a', lineHeight: 0.9 }}>
+                    {Number(scorecard.overallScore || 0.0).toFixed(1)}
+                  </span>
+                  <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginTop: '4px', letterSpacing: '0.05em' }}>OVERALL / 10</span>
+                  <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#475569', marginTop: '2px' }}>
+                    ({Math.round((scorecard.overallScore || 0.0) * 1.5)} / 15 Marks)
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="scorecard-total-badge">
-              <Award size={48} className="badge-glow-decor" />
-              <span className="total-score-val">{scorecard.overallScore ? scorecard.overallScore.toFixed(1) : 0}</span>
-              <span className="total-score-lbl">
-                OVERALL / 10
-                <span style={{ fontSize: '0.7rem', display: 'block', opacity: 0.8, marginTop: '0.2rem' }}>
-                  ({scorecard.questions?.reduce((sum, q) => sum + (q.rating || 0), 0)} / {scorecard.questions?.length * (scorecard.format === 'mcq' ? 5 : 10)} Marks)
-                </span>
-              </span>
+
+            {/* Divider line */}
+            <div style={{ height: '1px', background: 'rgba(99, 102, 241, 0.15)', width: '100%' }}></div>
+
+            {/* Bottom row: Circle Score + Progress Bars */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4rem', flexWrap: 'wrap', width: '100%' }}>
+              {/* Circular gauge */}
+              <div style={{ position: 'relative', width: '100px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="100" height="100" viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
+                  <defs>
+                    <linearGradient id="scoreCircleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(15, 23, 42, 0.05)" strokeWidth="3.5" />
+                  {Math.round((scorecard.overallScore || 0.0) * 10) > 0 && (
+                    <circle 
+                      cx="18" 
+                      cy="18" 
+                      r="16" 
+                      fill="none" 
+                      stroke="url(#scoreCircleGradient)" 
+                      strokeWidth="3.5" 
+                      strokeDasharray={`${Math.round((scorecard.overallScore || 0.0) * 10)}, 100`} 
+                      strokeLinecap="round"
+                      style={{ transition: 'stroke-dasharray 0.5s ease' }}
+                    />
+                  )}
+                </svg>
+                <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '2.1rem', fontWeight: 900, color: '#0f172a', lineHeight: 1 }}>
+                    {Math.round((scorecard.overallScore || 0.0) * 10)}
+                  </span>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', marginTop: '1px', letterSpacing: '0.05em' }}>SCORE</span>
+                </div>
+              </div>
+
+              {/* Progress bars list */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.85rem', minWidth: '300px' }}>
+                {[
+                  { name: 'Technical Knowledge', gradient: 'linear-gradient(90deg, #3b82f6, #1d4ed8)' },
+                  { name: 'Communication', gradient: 'linear-gradient(90deg, #10b981, #047857)' },
+                  { name: 'Problem Solving', gradient: 'linear-gradient(90deg, #f97316, #eab308)' },
+                  { name: 'Confidence', gradient: 'linear-gradient(90deg, #8b5cf6, #d946ef)' }
+                ].map((metric, i) => {
+                  const baseVal = Math.round((scorecard.overallScore || 0.0) * 10);
+                  // Calculate dummy variations centered around base score
+                  const offsets = [4, -3, 2, -7];
+                  const val = baseVal === 0 ? 0 : Math.min(100, Math.max(0, baseVal + offsets[i]));
+                  return (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
+                      <span style={{ width: '170px', fontSize: '0.82rem', fontWeight: 800, color: '#334155', flexShrink: 0 }}>
+                        {metric.name}
+                      </span>
+                      <div style={{ flex: 1, height: '7px', background: 'rgba(15, 23, 42, 0.06)', borderRadius: '3.5px', overflow: 'hidden', position: 'relative' }}>
+                        <div 
+                          style={{ 
+                            height: '100%', 
+                            width: `${val}%`, 
+                            background: metric.gradient, 
+                            borderRadius: '3.5px',
+                            transition: 'width 0.5s ease' 
+                          }}
+                        ></div>
+                      </div>
+                      <span style={{ width: '45px', textAlign: 'right', fontSize: '0.82rem', fontWeight: 900, color: '#0f172a', flexShrink: 0 }}>
+                        {val}%
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

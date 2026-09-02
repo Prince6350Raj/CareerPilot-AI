@@ -1,4 +1,5 @@
 const geminiService = require('../services/geminiService');
+const codeExecutionService = require('../services/codeExecutionService');
 const Progress = require('../models/Progress');
 const sendEmail = require('../utils/sendEmail');
 const { logActivity } = require('../utils/activityLogger');
@@ -29,18 +30,32 @@ exports.getRandomChallenge = async (req, res, next) => {
 // @access  Private
 exports.submitChallenge = async (req, res, next) => {
   try {
-    const { problemTitle, problemStatement, userCode, language } = req.body;
+    const { problemTitle, problemStatement, userCode, language, funcName, testCases } = req.body;
 
     if (!problemTitle || !userCode || !language) {
       return res.status(400).json({ success: false, message: 'Please provide title, code, and language' });
     }
 
-    const evaluation = await geminiService.evaluateCodeSubmission(
-      problemTitle,
-      problemStatement || '',
-      userCode,
-      language
-    );
+    let evaluation = null;
+
+    // 1. If test cases are provided, execute code through real execution engine
+    if (Array.isArray(testCases) && testCases.length > 0 && funcName) {
+      try {
+        evaluation = await codeExecutionService.evaluateCode(userCode, language, funcName, testCases);
+      } catch (execErr) {
+        console.warn('Sandbox execution fallback:', execErr.message);
+      }
+    }
+
+    // 2. Fallback to Gemini / algorithmic evaluation if execution engine didn't run
+    if (!evaluation) {
+      evaluation = await geminiService.evaluateCodeSubmission(
+        problemTitle,
+        problemStatement || '',
+        userCode,
+        language
+      );
+    }
 
     // Update user gamification progress
     let progress = await Progress.findOne({ userId: req.user.id });

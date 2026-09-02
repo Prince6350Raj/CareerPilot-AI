@@ -342,7 +342,8 @@
 }
 
 :root[data-theme="light"] .popular-company-card:hover,
-:root[data-theme="goldlight"] .popular-company-card:hover {
+:root[data-theme="goldlight"] .popular-company-card:hover,
+:root[data-theme="whiteblue"] .popular-company-card:hover {
   box-shadow: 0 4px 15px rgba(148, 163, 184, 0.1);
 }
 

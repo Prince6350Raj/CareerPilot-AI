@@ -47,8 +47,8 @@
 
 /* Light Mode Overrides (Frosted Glass & Pastel Gradient Theme) */
 :root[data-theme="light"] {
-  --bg-dark: hsl(215, 30%, 94%); /* Pastel slate-blue base */
-  --bg-card: hsla(215, 30%, 98%, 0.7); /* Translucent frosted glass card */
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #f9fafb; /* Light clean off-white card background */
   --border-color: hsla(215, 20%, 80%, 0.4);
   --text-primary: hsl(220, 40%, 12%);
   --text-secondary: hsl(220, 20%, 28%);
@@ -61,14 +61,14 @@
   --secondary: hsl(195, 95%, 32%);
   --secondary-glow: hsla(195, 95%, 32%, 0.08);
   
-  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6); /* Clean white glass border */
-  --glass-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.12);
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.06);
   
-  --bg-item: hsla(0, 0%, 100%, 0.55); /* Clean floating white glass */
-  --bg-item-hover: hsla(0, 0%, 100%, 0.85);
+  --bg-item: #f4f4f5; /* Clean light gray item blocks */
+  --bg-item-hover: #e4e4e7;
   
-  --bg-input: hsla(0, 0%, 100%, 0.85); /* Soft frosted input in light mode */
-  --bg-header-banner: linear-gradient(135deg, hsla(215, 30%, 90%, 0.8) 0%, hsla(215, 30%, 84%, 0.85) 100%);
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(215, 30%, 94%, 0.8) 0%, hsla(215, 30%, 88%, 0.85) 100%);
 }
 
 /* Midnight Gold Theme Overrides (Black and Yellow) */
@@ -123,58 +123,58 @@
 
 /* Aura Obsidian Theme Overrides (Frosted Slate Variant) */
 :root[data-theme="sakura"] {
-  --bg-dark: hsl(220, 15%, 94%); /* Soft Slate Off-White */
-  --bg-card: hsla(220, 15%, 87%, 0.75); /* Darker Frosted Gray Glass */
-  --border-color: hsla(220, 15%, 75%, 0.35); /* Softer Slate Gray Border */
-  --text-primary: hsl(220, 35%, 15%); /* Deep Slate Charcoal Text */
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #fdf2f8; /* Soft slate-pink light card */
+  --border-color: hsla(220, 15%, 75%, 0.35);
+  --text-primary: hsl(220, 35%, 15%);
   --text-secondary: hsl(220, 20%, 30%);
   --text-muted: hsl(220, 10%, 52%);
   
-  --primary: hsl(45, 95%, 42%); /* Rich Amber Gold */
+  --primary: hsl(45, 95%, 42%);
   --primary-glow: hsla(45, 95%, 42%, 0.15);
   --primary-hover: hsl(45, 95%, 48%);
   
-  --secondary: hsl(190, 100%, 32%); /* Deep Aqua Cyan */
+  --secondary: hsl(190, 100%, 32%);
   --secondary-glow: hsla(190, 100%, 32%, 0.15);
   
   --glass-border: 1px solid hsla(220, 15%, 75%, 0.4);
   --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
   
-  --bg-item: hsla(220, 15%, 91%, 0.8);
-  --bg-item-hover: hsla(220, 15%, 83%, 0.9);
-  --bg-input: hsla(220, 15%, 96%, 0.9);
-  --bg-header-banner: linear-gradient(135deg, hsla(220, 15%, 85%, 0.8) 0%, hsla(220, 15%, 78%, 0.85) 100%);
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(220, 15%, 94%, 0.8) 0%, hsla(220, 15%, 88%, 0.85) 100%);
 }
 
 /* Ocean Classic Theme Overrides (White Cards, Blue Accents) */
 :root[data-theme="ocean"] {
-  --bg-dark: hsl(215, 25%, 86%); /* Softer ice-slate background, clearly not white */
-  --bg-card: hsla(215, 30%, 93%, 0.98); /* Light gray-blue card background */
-  --border-color: hsla(215, 20%, 76%, 0.5); /* Soft slate-blue card border */
-  --text-primary: hsl(217, 60%, 12%); /* Dark navy blue text */
-  --text-secondary: hsl(217, 30%, 25%); /* Deep blue text */
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #f0f9ff; /* Soft ice-blue card background */
+  --border-color: hsla(215, 20%, 76%, 0.5);
+  --text-primary: hsl(217, 60%, 12%);
+  --text-secondary: hsl(217, 30%, 25%);
   --text-muted: hsl(217, 15%, 48%);
   
-  --primary: hsl(217, 65%, 36%); /* Lighter Navy Blue */
+  --primary: hsl(217, 65%, 36%);
   --primary-glow: hsla(217, 65%, 36%, 0.12);
   --primary-hover: hsl(217, 65%, 42%);
   
-  --secondary: hsl(24, 95%, 50%); /* Warm Sunset Orange */
+  --secondary: hsl(24, 95%, 50%);
   --secondary-glow: hsla(24, 95%, 50%, 0.15);
   
   --glass-border: 1px solid hsla(215, 30%, 78%, 0.6);
-  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04); /* Soft shadow */
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04);
   
-  --bg-item: hsl(215, 25%, 82%); /* Soft light blue-gray for checklist items/history */
-  --bg-item-hover: hsl(215, 25%, 78%);
-  --bg-input: hsl(0, 0%, 100%); /* Pure white inputs */
-  --bg-header-banner: linear-gradient(135deg, hsla(217, 30%, 90%, 0.8) 0%, hsla(217, 30%, 82%, 0.85) 100%);
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(217, 30%, 94%, 0.8) 0%, hsla(217, 30%, 88%, 0.85) 100%);
 }
 
 /* Gold Light Theme Overrides (White and Yellow) */
 :root[data-theme="goldlight"] {
-  --bg-dark: hsl(48, 40%, 94%); 
-  --bg-card: hsla(48, 30%, 98%, 0.75); 
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #fefbeb; /* Soft golden-white card background */
   --border-color: hsla(48, 50%, 80%, 0.4);
   --text-primary: hsl(48, 80%, 10%);
   --text-secondary: hsl(48, 85%, 22%);
@@ -184,16 +184,208 @@
   --primary-glow: hsla(45, 95%, 45%, 0.08);
   --primary-hover: hsl(45, 95%, 50%);
   
-  --secondary: hsl(38, 90%, 35%); 
+  --secondary: hsl(38, 90%, 35%);
   --secondary-glow: hsla(38, 90%, 35%, 0.08);
   
-  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6); 
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
   --glass-shadow: 0 8px 32px 0 rgba(234, 179, 8, 0.06);
   
-  --bg-item: hsla(0, 0%, 100%, 0.6);
-  --bg-item-hover: hsla(45, 95%, 45%, 0.12);
-  --bg-input: hsla(0, 0%, 100%, 0.85); 
-  --bg-header-banner: linear-gradient(135deg, hsla(48, 40%, 92%, 0.8) 0%, hsla(48, 40%, 86%, 0.85) 100%);
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(48, 40%, 94%, 0.8) 0%, hsla(48, 40%, 88%, 0.85) 100%);
+}
+
+/* Red & White Light Theme Overrides */
+:root[data-theme="redlight"] {
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #fef2f2; /* Soft pastel red card */
+  --border-color: hsla(0, 30%, 80%, 0.4);
+  --text-primary: hsl(0, 45%, 12%);
+  --text-secondary: hsl(0, 40%, 25%);
+  --text-muted: hsl(0, 15%, 48%);
+  
+  --primary: hsl(0, 80%, 45%);
+  --primary-glow: hsla(0, 80%, 45%, 0.08);
+  --primary-hover: hsl(0, 80%, 50%);
+  
+  --secondary: hsl(0, 60%, 35%);
+  --secondary-glow: hsla(0, 60%, 35%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(239, 68, 68, 0.06);
+  
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(0, 30%, 94%, 0.8) 0%, hsla(0, 30%, 88%, 0.85) 100%);
+}
+
+/* Orange & White Light Theme Overrides */
+:root[data-theme="orangelight"] {
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #fff7ed; /* Soft pastel orange card */
+  --border-color: hsla(24, 30%, 80%, 0.4);
+  --text-primary: hsl(24, 50%, 12%);
+  --text-secondary: hsl(24, 45%, 25%);
+  --text-muted: hsl(24, 15%, 48%);
+  
+  --primary: hsl(24, 90%, 45%);
+  --primary-glow: hsla(24, 90%, 45%, 0.08);
+  --primary-hover: hsl(24, 90%, 50%);
+  
+  --secondary: hsl(24, 70%, 35%);
+  --secondary-glow: hsla(24, 70%, 35%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(249, 115, 22, 0.06);
+  
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(24, 30%, 94%, 0.8) 0%, hsla(24, 30%, 88%, 0.85) 100%);
+}
+
+/* Light Green & White Theme Overrides */
+:root[data-theme="greenlight"] {
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #f0fdf4; /* Soft pastel green card */
+  --border-color: hsla(120, 20%, 80%, 0.4);
+  --text-primary: hsl(120, 50%, 12%);
+  --text-secondary: hsl(120, 45%, 25%);
+  --text-muted: hsl(120, 15%, 48%);
+  
+  --primary: hsl(120, 75%, 36%);
+  --primary-glow: hsla(120, 75%, 36%, 0.08);
+  --primary-hover: hsl(120, 75%, 42%);
+  
+  --secondary: hsl(120, 60%, 28%);
+  --secondary-glow: hsla(120, 60%, 28%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.06);
+  
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(120, 25%, 94%, 0.8) 0%, hsla(120, 25%, 88%, 0.85) 100%);
+}
+
+/* Skyblue Theme Overrides */
+:root[data-theme="skyblue"] {
+  --bg-dark: #ffffff; /* Pure white background */
+  --bg-card: #f0f9ff; /* Soft pastel skyblue card */
+  --border-color: hsla(199, 30%, 80%, 0.4);
+  --text-primary: hsl(199, 65%, 12%);
+  --text-secondary: hsl(199, 50%, 25%);
+  --text-muted: hsl(199, 15%, 48%);
+  
+  --primary: hsl(199, 85%, 45%);
+  --primary-glow: hsla(199, 85%, 45%, 0.08);
+  --primary-hover: hsl(199, 85%, 50%);
+  
+  --secondary: hsl(199, 65%, 35%);
+  --secondary-glow: hsla(199, 65%, 35%, 0.08);
+  
+  --glass-border: 1px solid hsla(0, 0%, 100%, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.06);
+  
+  --bg-item: #f4f4f5;
+  --bg-item-hover: #e4e4e7;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, hsla(199, 40%, 94%, 0.8) 0%, hsla(199, 40%, 88%, 0.85) 100%);
+}
+
+/* White, Grey & Blue (Pure Real White, Black Font & Blue Accents) */
+:root[data-theme="whiteblue"] {
+  --bg-dark: #ffffff; /* Real Pure White background */
+  --bg-card: #ffffff; /* Real Pure White cards & boxes */
+  --border-color: #e5e7eb; /* Crisp Clean Grey border */
+  --text-primary: #000000; /* Pure Real Black text */
+  --text-secondary: #374151; /* Dark Slate Grey text */
+  --text-muted: #6b7280; /* Medium Grey text */
+  
+  --primary: #2563eb; /* Vibrant Modern Tech Blue */
+  --primary-glow: rgba(37, 99, 235, 0.15);
+  --primary-hover: #1d4ed8;
+  
+  --secondary: #1d4ed8; /* Deep Cobalt Blue */
+  --secondary-glow: rgba(29, 78, 216, 0.15);
+  
+  --glass-border: 1px solid #e5e7eb;
+  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+  
+  --bg-item: #f3f4f6; /* Clean Neutral Grey item block */
+  --bg-item-hover: #e5e7eb; /* Medium Grey on hover */
+  --bg-input: #ffffff; /* Pure White input */
+  --bg-header-banner: #ffffff;
+}
+
+:root[data-theme="whiteblue"] h1,
+:root[data-theme="whiteblue"] h2,
+:root[data-theme="whiteblue"] h3,
+:root[data-theme="whiteblue"] h4,
+:root[data-theme="whiteblue"] h5,
+:root[data-theme="whiteblue"] h6,
+:root[data-theme="whiteblue"] .page-title {
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .glass-card,
+:root[data-theme="whiteblue"] .card,
+:root[data-theme="whiteblue"] .dashboard-card,
+:root[data-theme="whiteblue"] .sidebar-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  backdrop-filter: none !important;
+}
+
+:root[data-theme="whiteblue"] .nav-item.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+
+:root[data-theme="whiteblue"] .nav-item.active svg {
+  color: #ffffff !important;
+}
+
+:root[data-theme="whiteblue"] .nav-item:hover:not(.active) {
+  background: #f3f4f6 !important;
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .btn-primary {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .btn-primary:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+}
+
+:root[data-theme="whiteblue"] .devpass-card-enhanced::before {
+  background: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .devpass-title-gradient {
+  background: #2563eb !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+:root[data-theme="whiteblue"] .devpass-avatar-wrapper {
+  background: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .devpass-role-badge {
+  background: #f3f4f6 !important;
+  color: #2563eb !important;
+  border: 1px solid #e5e7eb !important;
 }
 
 /* Global Select Options Styling to fix readability across all themes */
@@ -248,9 +440,8 @@ body {
 }
 
 :root[data-theme="light"] body {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(265, 90%, 85%, 0.55) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(195, 90%, 85%, 0.55) 0px, transparent 50%);
+  background-image: none;
+  background-color: #ffffff;
 }
 
 :root[data-theme="cyberpunk"] body {
@@ -266,21 +457,43 @@ body {
 }
 
 :root[data-theme="sakura"] body {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(45, 95%, 42%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(190, 100%, 32%, 0.06) 0px, transparent 50%);
+  background-image: none;
+  background-color: #ffffff;
 }
 
 :root[data-theme="ocean"] body {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(217, 75%, 20%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(24, 95%, 50%, 0.08) 0px, transparent 50%);
+  background-image: none;
+  background-color: #ffffff;
 }
 
 :root[data-theme="goldlight"] body {
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(45, 95%, 50%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(38, 90%, 50%, 0.06) 0px, transparent 50%);
+  background-image: none;
+  background-color: #ffffff;
+}
+
+:root[data-theme="redlight"] body {
+  background-image: none;
+  background-color: #ffffff;
+}
+
+:root[data-theme="orangelight"] body {
+  background-image: none;
+  background-color: #ffffff;
+}
+
+:root[data-theme="greenlight"] body {
+  background-image: none;
+  background-color: #ffffff;
+}
+
+:root[data-theme="skyblue"] body {
+  background-image: none;
+  background-color: #ffffff;
+}
+
+:root[data-theme="whiteblue"] body {
+  background-image: none;
+  background-color: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6 {

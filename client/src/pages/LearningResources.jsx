@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Search, Video, Globe, BookOpen, ExternalLink, GraduationCap } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 import './LearningResources.css';
 
 const resourceData = [
@@ -191,6 +192,7 @@ const resourceData = [
 ];
 
 const LearningResources = () => {
+  const { user } = useContext(AuthContext);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -262,6 +264,25 @@ const LearningResources = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="resource-card glass-card"
+              onClick={() => {
+                try {
+                  const userSuffix = user ? `_${user._id || user.email || user.name}` : '';
+                  const stored = localStorage.getItem(`clickedResources${userSuffix}`);
+                  let list = stored ? JSON.parse(stored) : [];
+                  list = list.filter(item => item.url !== res.url);
+                  list.unshift({
+                    title: res.title,
+                    provider: res.provider,
+                    type: res.type,
+                    url: res.url,
+                    timestamp: Date.now()
+                  });
+                  list = list.slice(0, 3);
+                  localStorage.setItem(`clickedResources${userSuffix}`, JSON.stringify(list));
+                } catch (e) {
+                  console.error('Error saving clicked resource:', e);
+                }
+              }}
             >
               <div className="resource-card-header">
                 <span className={`provider-badge ${res.type}`}>

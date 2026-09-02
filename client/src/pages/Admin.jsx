@@ -20,7 +20,7 @@ const Admin = () => {
     '[SYSTEM] Booting CareerPilot AI Core Services...',
     '[DB] Establishing connection to MongoDB cluster...',
     '[DB] Connection verified: careerpilot-shard-0',
-    '[AI] Loading model context: gemini-1.5-flash',
+    '[AI] Loading model context: gemini-3.6-flash',
     '[AI] Context initialized successfully. Model status: ACTIVE',
     '[MAIL] Nodemailer SMTP transport established. Status: READY',
     '[SYSTEM] Administrative console established.'
@@ -34,12 +34,12 @@ const Admin = () => {
     setTimeout(() => {
       const ms = Math.floor(Math.random() * 40) + 110;
       setPingStatus(`${ms}ms`);
-      setConsoleLogs(prev => [...prev, `[API] Ping response received: Gemini 1.5 Flash active at ${ms}ms.`]);
+      setConsoleLogs(prev => [...prev, `[API] Ping response received: Gemini 3.6 Flash active at ${ms}ms.`]);
     }, 1200);
   };
 
   const handleDownloadReport = () => {
-    const reportText = `CAREERPILOT AI - PLATFORM DIAGNOSTIC HEALTH REPORT\nGenerated at: ${new Date().toString()}\n\nSYSTEM STATUS:\nDatabase: CONNECTED (MongoDB Shards)\nAI Engine: ACTIVE (gemini-1.5-flash)\nMailer Server: READY (Nodemailer Client)\n\nMETRICS MATRIX:\nTotal Accounts: ${users.length}\nActive Users (7d): ${analytics?.counts?.activeUsers || 0}\nCertificates Issued: ${analytics?.counts?.certificatesIssued || 0}\nAverage ATS Score: ${analytics?.averages?.atsScore || 0}%\nAverage Interview Rating: ${(analytics?.averages?.interviewScore || 0) * 10}%\n\nEND OF DIAGNOSTICS LOG.`;
+    const reportText = `CAREERPILOT AI - PLATFORM DIAGNOSTIC HEALTH REPORT\nGenerated at: ${new Date().toString()}\n\nSYSTEM STATUS:\nDatabase: CONNECTED (MongoDB Shards)\nAI Engine: ACTIVE (gemini-3.6-flash)\nMailer Server: READY (Nodemailer Client)\n\nMETRICS MATRIX:\nTotal Accounts: ${users.length}\nActive Users (7d): ${analytics?.counts?.activeUsers || 0}\nCertificates Issued: ${analytics?.counts?.certificatesIssued || 0}\nAverage ATS Score: ${analytics?.averages?.atsScore || 0}%\nAverage Interview Rating: ${(analytics?.averages?.interviewScore || 0) * 10}%\n\nEND OF DIAGNOSTICS LOG.`;
     const element = document.createElement("a");
     const file = new Blob([reportText], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);

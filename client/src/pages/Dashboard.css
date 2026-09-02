@@ -682,6 +682,19 @@
   overflow: hidden;
 }
 
+:root[data-theme="light"] .career-score-hero-card,
+:root[data-theme="sakura"] .career-score-hero-card,
+:root[data-theme="ocean"] .career-score-hero-card,
+:root[data-theme="goldlight"] .career-score-hero-card,
+:root[data-theme="redlight"] .career-score-hero-card,
+:root[data-theme="orangelight"] .career-score-hero-card,
+:root[data-theme="greenlight"] .career-score-hero-card,
+:root[data-theme="skyblue"] .career-score-hero-card {
+  background: linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(224, 231, 255, 0.95) 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 25px rgba(99, 102, 241, 0.08) !important;
+}
+
 /* Score Circle section */
 .score-circle-section {
   display: flex;
@@ -717,7 +730,7 @@
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background: #0b1528; /* Matches the dark background of dashboard */
+  background: var(--bg-card, #0b1528);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -725,21 +738,17 @@
   z-index: 2;
 }
 
-:root[data-theme="ocean"] .score-circle-inner {
-  background: #111e3b !important;
-}
-
 .score-number {
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-primary, #ffffff);
   line-height: 1;
 }
 
 .score-label {
   font-size: 0.65rem;
-  color: var(--text-muted);
+  color: var(--text-secondary, var(--text-muted));
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 0.15rem;
@@ -976,4 +985,137 @@
   .dashboard-learning-box {
     grid-column: span 4;
   }
+}
+
+/* ==========================================================
+   PURE WHITE, BLACK FONT & BLUE DASHBOARD THEME OVERRIDES
+   ========================================================== */
+:root[data-theme="whiteblue"] .dashboard-view-container {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .career-score-hero-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+:root[data-theme="whiteblue"] .score-circle-outer {
+  background: conic-gradient(#2563eb 0deg, #3b82f6 180deg, #1d4ed8 360deg) !important;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.25) !important;
+}
+
+:root[data-theme="whiteblue"] .score-circle-inner {
+  background: #ffffff !important;
+}
+
+:root[data-theme="whiteblue"] .score-number {
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .score-label {
+  color: #6b7280 !important;
+}
+
+:root[data-theme="whiteblue"] .score-eval-text {
+  color: #2563eb !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="whiteblue"] .score-section-title {
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .pillar-info span:first-child {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+:root[data-theme="whiteblue"] .pillar-info span:last-child {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+:root[data-theme="whiteblue"] .pillar-bar {
+  background: #f3f4f6 !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+:root[data-theme="whiteblue"] .pillar-bar-fill {
+  background: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .consultant-suggestions-list .suggestion-bullet {
+  color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .consultant-suggestions-list .suggestion-text {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="whiteblue"] .metric-card-box {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+}
+
+:root[data-theme="whiteblue"] .metric-card-box svg circle:first-child {
+  stroke: #f3f4f6 !important;
+}
+
+:root[data-theme="whiteblue"] .metric-card-box svg circle:last-child {
+  stroke: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .metric-card-box h3,
+:root[data-theme="whiteblue"] .metric-card-box h2,
+:root[data-theme="whiteblue"] .metric-card-box span {
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .metric-card-box span[style*="uppercase"] {
+  color: #6b7280 !important;
+}
+
+:root[data-theme="whiteblue"] .dashboard-heading-row .dynamic-pop-name {
+  color: #2563eb !important;
+  background: none !important;
+  -webkit-text-fill-color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .streak-badge {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+:root[data-theme="whiteblue"] .streak-num {
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .streak-icon {
+  color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .portal-orbit-widget .orbit-path-circle {
+  border-color: #e5e7eb !important;
+}
+
+:root[data-theme="whiteblue"] .portal-orbit-widget .orbiting-item {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .portal-orbit-widget .inner-glass-core {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #000000 !important;
+}
+
+:root[data-theme="whiteblue"] .portal-orbit-widget .core-award-icon {
+  color: #2563eb !important;
+}
+
+:root[data-theme="whiteblue"] .portal-orbit-widget .core-core-text span {
+  color: #000000 !important;
 }

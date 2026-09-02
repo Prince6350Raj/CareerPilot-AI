@@ -32,6 +32,7 @@ const Login = () => {
 
     try {
       if (mode === 'signin') {
+        sessionStorage.clear(); // Reset welcomes for a fresh session
         await login(email, password);
         navigate('/dashboard');
       } else if (mode === 'signup') {
@@ -59,7 +60,8 @@ const Login = () => {
     'emerald': 'emerald-forest',
     'sakura': 'frosted-slate',
     'ocean': 'ocean-blue',
-    'goldlight': 'golden-pastel'
+    'goldlight': 'golden-pastel',
+    'whiteblue': 'white-blue'
   };
 
   const currentThemeClass = themeClassMap[theme] || 'frosted-glass';
@@ -80,6 +82,7 @@ const Login = () => {
           <option value="sakura">🌸 Frosted Slate</option>
           <option value="ocean">🌊 Ocean Blue</option>
           <option value="goldlight">👑 Golden Pastel</option>
+          <option value="whiteblue">💎 White, Grey & Blue</option>
         </select>
       </div>
 

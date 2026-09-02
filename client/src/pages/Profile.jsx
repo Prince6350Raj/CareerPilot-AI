@@ -10,19 +10,19 @@ const AVATAR_PRESETS = [
   { name: 'Jack', url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jack' }
 ];
 
-// Custom inline SVG icons to prevent lucide-react case-sensitive or missing export issues
+// Custom inline SVG icons for GitHub and LinkedIn with standard 24x24 viewBox
 const GithubIcon = ({ size = 18, className = '' }) => (
   <svg 
     stroke="currentColor" 
     fill="currentColor" 
     strokeWidth="0" 
-    viewBox="0 0 16 16" 
+    viewBox="0 0 24 24" 
     height={size} 
     width={size} 
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
   </svg>
 );
 
@@ -31,13 +31,13 @@ const LinkedinIcon = ({ size = 18, className = '' }) => (
     stroke="currentColor" 
     fill="currentColor" 
     strokeWidth="0" 
-    viewBox="0 0 16 16" 
+    viewBox="0 0 24 24" 
     height={size} 
     width={size} 
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm10.934 8.212V9.97c0-2.03-1.085-2.977-2.533-2.977-1.168 0-1.691.644-1.982 1.096V6.168H7.78c.03.677 0 7.225 0 7.225h2.4v-4.03c0-.216.015-.432.078-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401z"></path>
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z"></path>
   </svg>
 );
 
@@ -269,35 +269,40 @@ const Profile = () => {
       <div className="profile-layout-grid animate-fade-in">
         
         {/* Left Column: Visual Dev Passport Badge Card */}
-        <div className="profile-sidebar-card dev-id-badge glass-card">
+        <div className="profile-sidebar-card dev-id-badge glass-card devpass-card-enhanced">
           <div className="dev-badge-header">
-            <span className="badge-logo">CP // PILOT</span>
-            <span className="badge-status-dot active">VERIFIED</span>
+            <span className="devpass-title-gradient">CP // PILOT</span>
+            <span className="devpass-verified-pill">
+              <span className="devpass-verified-dot"></span>
+              VERIFIED
+            </span>
           </div>
 
           <div className="avatar-preview-section">
-            <div className="avatar-container-circle clickable" onClick={triggerFileSelect}>
-              <img 
-                src={currentAvatarUrl} 
-                alt="User Avatar" 
-                className="profile-display-avatar" 
-                style={{ 
-                  transform: `scale(${avatarScale})`, 
-                  objectPosition: `${avatarX}% ${avatarY}%`,
-                  transition: 'transform 0.1s ease, object-position 0.1s ease'
-                }} 
-              />
-              <div className="avatar-edit-icon-overlay">
-                <Camera size={18} />
-                <span style={{ fontSize: '0.62rem', fontWeight: 700, marginTop: '0.15rem' }}>CHANGE</span>
+            <div className="devpass-avatar-wrapper clickable" onClick={triggerFileSelect}>
+              <div className="avatar-container-circle" style={{ margin: 0 }}>
+                <img 
+                  src={currentAvatarUrl} 
+                  alt="User Avatar" 
+                  className="profile-display-avatar" 
+                  style={{ 
+                    transform: `scale(${avatarScale})`, 
+                    objectPosition: `${avatarX}% ${avatarY}%`,
+                    transition: 'transform 0.1s ease, object-position 0.1s ease'
+                  }} 
+                />
+                <div className="avatar-edit-icon-overlay">
+                  <Camera size={18} />
+                  <span style={{ fontSize: '0.62rem', fontWeight: 700, marginTop: '0.15rem' }}>CHANGE</span>
+                </div>
               </div>
             </div>
-            <h3 className="user-sidebar-name">{name || 'Explorer'}</h3>
-            <span className="user-sidebar-title">{title || 'Full Stack Developer'}</span>
+            <h3 className="user-sidebar-name" style={{ marginTop: '0.85rem' }}>{name || 'Explorer'}</h3>
+            <span className="devpass-role-badge">{title || 'Full Stack Developer'}</span>
           </div>
 
           {/* Social icons display */}
-          <div className="profile-sidebar-socials-row">
+          <div className="profile-sidebar-socials-row" style={{ marginTop: '1.25rem' }}>
             {github && (
               <a href={github} target="_blank" rel="noopener noreferrer" className="sidebar-social-link github" title="GitHub Profile">
                 <GithubIcon size={16} />
@@ -319,32 +324,32 @@ const Profile = () => {
               </a>
             )}
             {!github && !linkedin && !leetcode && !portfolio && (
-              <span className="no-socials-text">Social links are empty</span>
+              <span className="no-socials-text">Social links not added</span>
             )}
           </div>
 
           {/* Profile Strength Meter */}
-          <div className="profile-strength-meter-section" style={{ width: '100%', marginTop: '1.75rem', textAlign: 'left' }}>
+          <div className="profile-strength-meter-section" style={{ width: '100%', marginTop: '1.5rem', textAlign: 'left' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', fontWeight: 800, marginBottom: '0.35rem', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
               <span>Profile Strength</span>
-              <span style={{ color: strengthScore === 100 ? 'var(--accent-success)' : strengthScore > 60 ? 'var(--accent-warning)' : 'var(--accent-error)' }}>{strengthScore}%</span>
+              <span style={{ color: strengthScore === 100 ? '#10b981' : strengthScore > 60 ? '#f59e0b' : '#ef4444' }}>{strengthScore}%</span>
             </div>
-            <div className="strength-bar-bg" style={{ height: '6px', background: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
-              <div className="strength-bar-fill" style={{ height: '100%', width: `${strengthScore}%`, background: strengthScore === 100 ? 'hsl(142, 70%, 45%)' : strengthScore > 60 ? 'hsl(38, 92%, 50%)' : 'hsl(0, 84%, 60%)', transition: 'width 0.4s ease' }}></div>
+            <div className="strength-bar-bg" style={{ height: '6px', background: 'rgba(0,0,0,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div className="strength-bar-fill" style={{ height: '100%', width: `${strengthScore}%`, background: 'linear-gradient(90deg, #10b981 0%, #06b6d4 50%, #6366f1 100%)', borderRadius: '3px', transition: 'width 0.4s ease' }}></div>
             </div>
           </div>
 
           <div className="sidebar-stats-divider"></div>
 
           {/* Quick Info summary */}
-          <div className="sidebar-info-summary">
-            <div className="summary-item">
-              <span className="lbl">System ID</span>
-              <span className="val" style={{ fontFamily: 'monospace', letterSpacing: '0.05em' }}>UID-{user?.id?.slice(-8).toUpperCase() || 'EXPLORER'}</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', textAlign: 'left' }}>
+            <div className="devpass-info-chip">
+              <span style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.08em' }}>SYSTEM ID</span>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-primary)', fontFamily: 'monospace', fontWeight: 800 }}>UID-{user?.id?.slice(-8).toUpperCase() || 'EXPLORER'}</span>
             </div>
-            <div className="summary-item">
-              <span className="lbl">Email Coordinate</span>
-              <span className="val">{email || 'Not provided'}</span>
+            <div className="devpass-info-chip">
+              <span style={{ fontSize: '0.62rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.08em' }}>EMAIL COORDINATE</span>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-primary)', fontFamily: 'monospace', fontWeight: 800, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email || 'Not provided'}</span>
             </div>
           </div>
 
@@ -600,8 +605,10 @@ const Profile = () => {
             <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '1.25rem' }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-github">GitHub Profile Link</label>
-                <div className="input-with-icon">
-                  <GithubIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <div className="input-with-icon" style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', color: '#24292e', zIndex: 1 }}>
+                    <GithubIcon size={16} />
+                  </div>
                   <input
                     type="text"
                     id="prof-github"
@@ -609,15 +616,17 @@ const Profile = () => {
                     placeholder="https://github.com/username"
                     value={github}
                     onChange={(e) => setGithub(e.target.value)}
-                    style={{ paddingLeft: '38px' }}
+                    style={{ paddingLeft: '36px' }}
                   />
                 </div>
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-linkedin">LinkedIn Profile Link</label>
-                <div className="input-with-icon">
-                  <LinkedinIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <div className="input-with-icon" style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', color: '#0a66c2', zIndex: 1 }}>
+                    <LinkedinIcon size={16} />
+                  </div>
                   <input
                     type="text"
                     id="prof-linkedin"
@@ -625,7 +634,7 @@ const Profile = () => {
                     placeholder="https://linkedin.com/in/username"
                     value={linkedin}
                     onChange={(e) => setLinkedin(e.target.value)}
-                    style={{ paddingLeft: '38px' }}
+                    style={{ paddingLeft: '36px' }}
                   />
                 </div>
               </div>
@@ -634,8 +643,10 @@ const Profile = () => {
             <div className="settings-section-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-leetcode">LeetCode Profile Link</label>
-                <div className="input-with-icon">
-                  <LeetcodeIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <div className="input-with-icon" style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', color: '#f59e0b', zIndex: 1 }}>
+                    <LeetcodeIcon size={16} />
+                  </div>
                   <input
                     type="text"
                     id="prof-leetcode"
@@ -643,15 +654,17 @@ const Profile = () => {
                     placeholder="https://leetcode.com/username"
                     value={leetcode}
                     onChange={(e) => setLeetcode(e.target.value)}
-                    style={{ paddingLeft: '38px' }}
+                    style={{ paddingLeft: '36px' }}
                   />
                 </div>
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="prof-portfolio">Portfolio / Personal Website</label>
-                <div className="input-with-icon">
-                  <GlobeIcon size={15} className="input-icon" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <div className="input-with-icon" style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', color: '#10b981', zIndex: 1 }}>
+                    <GlobeIcon size={16} />
+                  </div>
                   <input
                     type="text"
                     id="prof-portfolio"
@@ -659,7 +672,7 @@ const Profile = () => {
                     placeholder="https://myportfolio.com"
                     value={portfolio}
                     onChange={(e) => setPortfolio(e.target.value)}
-                    style={{ paddingLeft: '38px' }}
+                    style={{ paddingLeft: '36px' }}
                   />
                 </div>
               </div>

@@ -269,7 +269,9 @@
   margin-bottom: 0.5rem;
 }
 
-.score-val {
+.resume-gauge-box .score-val,
+.score-box-wrapper .score-val,
+.ats-score-display .score-val {
   font-family: var(--font-heading);
   font-size: 1.75rem;
   font-weight: 800;

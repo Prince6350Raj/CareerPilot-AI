@@ -104,6 +104,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    sessionStorage.clear(); // Reset session cache so greetings refresh on next login
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
