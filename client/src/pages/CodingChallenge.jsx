@@ -819,15 +819,55 @@ const CodingChallenge = () => {
   // Solved challenges history list
   const [solvedHistory, setSolvedHistory] = useState([]);
 
-  // Load user-specific solved history metrics on boot or user change with automatic difficulty repair
+  // Load user-specific solved history metrics from MongoDB Backend API with localStorage fallback
   useEffect(() => {
-    if (user) {
-      const userSuffix = `_${user._id || user.email || user.name}`;
-      const historyStr = localStorage.getItem(`coding_solved_history_list${userSuffix}`);
-      let historyList = historyStr ? JSON.parse(historyStr) : [];
-      
+    const loadSolvedHistory = async () => {
+      const userSuffix = user ? `_${user._id || user.email || user.name}` : '';
+      const localHistoryStr = localStorage.getItem(`coding_solved_history_list${userSuffix}`) || localStorage.getItem('coding_solved_history_list');
+      let mergedList = localHistoryStr ? JSON.parse(localHistoryStr) : [];
+
+      if (token) {
+        try {
+          const res = await fetch(`${API_URL}/challenge/history`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await res.json();
+          if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+            const dbList = data.data.map(item => {
+              const curated = CURATED_CHALLENGES.find(c => c.title.toLowerCase().trim() === item.title.toLowerCase().trim());
+              return {
+                title: item.title,
+                topic: item.topic || curated?.topic || 'Arrays',
+                difficulty: item.difficulty || curated?.difficulty || 'Easy',
+                date: item.solvedAt ? new Date(item.solvedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                challengeData: curated || null,
+                submittedCode: item.submittedCode || '',
+                language: item.language || 'javascript',
+                score: item.score || 100
+              };
+            });
+
+            // Merge DB list with any existing local items
+            const titleSet = new Set();
+            const combined = [];
+            [...dbList, ...mergedList].forEach(item => {
+              const key = (item.title || '').toLowerCase().trim();
+              if (key && !titleSet.has(key)) {
+                titleSet.add(key);
+                combined.push(item);
+              }
+            });
+            mergedList = combined;
+          }
+        } catch (fetchErr) {
+          console.warn('Backend solved history sync notice:', fetchErr.message);
+        }
+      }
+
       // Auto-heal difficulty from curated database if mismatched
-      historyList = historyList.map(item => {
+      mergedList = mergedList.map(item => {
         const curated = CURATED_CHALLENGES.find(c => c.title.toLowerCase().trim() === item.title.toLowerCase().trim());
         if (curated && curated.difficulty) {
           return { ...item, difficulty: curated.difficulty };
@@ -835,10 +875,13 @@ const CodingChallenge = () => {
         return item;
       });
 
-      setSolvedHistory(historyList);
-      localStorage.setItem(`coding_solved_history_list${userSuffix}`, JSON.stringify(historyList));
-    }
-  }, [user]);
+      setSolvedHistory(mergedList);
+      localStorage.setItem(`coding_solved_history_list${userSuffix}`, JSON.stringify(mergedList));
+      localStorage.setItem('coding_solved_history_list', JSON.stringify(mergedList));
+    };
+
+    loadSolvedHistory();
+  }, [user, token, API_URL]);
 
   // Derived authentic metrics directly from solvedHistory
   const solvedEasy = solvedHistory.filter(h => (h.difficulty || h.challengeData?.difficulty || '').toLowerCase() === 'easy').length;
@@ -1227,26 +1270,31 @@ const CodingChallenge = () => {
           userCode: userCode.trim(),
           language,
           funcName,
-          testCases
+          testCases,
+          topic: challenge.topic || topic || 'Arrays',
+          difficulty: challenge.difficulty || difficulty || 'Easy'
         })
       });
       const data = await res.json();
       
       let finalEval = data.success ? data.data : null;
       
-      // If client-side or backend execution determined it is incorrect, guarantee it is marked false
-      if (!localEval.isCorrect || (finalEval && !finalEval.isCorrect)) {
+      // If JS evaluation failed on client or backend failed
+      if (language === 'javascript' && !localEval.isCorrect) {
         finalEval = {
           ...(finalEval || {}),
           isCorrect: false,
           score: 0,
           timeComplexity: 'N/A',
           spaceComplexity: 'N/A',
-          feedback: (!localEval.isCorrect ? localEval.feedback : finalEval?.feedback) || 'Wrong Answer',
-          actualOutput: (!localEval.isCorrect ? localEval.actualOutput : finalEval?.actualOutput) || 'Error',
+          feedback: localEval.feedback || 'Wrong Answer',
+          actualOutput: localEval.actualOutput || 'Error',
           expectedOutput: localEval.expectedOutput || testCases[0]?.output
         };
-      } else if (!finalEval) {
+      } else if (finalEval) {
+        // Use backend evaluation (e.g. for Python/C++/JS)
+        finalEval.isCorrect = Boolean(finalEval.isCorrect);
+      } else {
         finalEval = {
           isCorrect: localEval.isCorrect,
           score: localEval.isCorrect ? 95 : 0,
@@ -1265,45 +1313,44 @@ const CodingChallenge = () => {
       if (finalEval.isCorrect) {
         const userSuffix = user ? `_${user._id || user.email || user.name}` : '';
         
-        const alreadySolved = solvedHistory.some(h => h.title.toLowerCase().trim() === challenge.title.toLowerCase().trim());
-        
-        if (!alreadySolved) {
-          let updatedEasy = solvedEasy;
-          let updatedMedium = solvedMedium;
-          let updatedHard = solvedHard;
+        // If server returned solved challenges array from DB, use it!
+        if (Array.isArray(data.solvedChallenges) && data.solvedChallenges.length > 0) {
+          const formattedDbList = data.solvedChallenges.map(item => {
+            const curated = CURATED_CHALLENGES.find(c => c.title.toLowerCase().trim() === item.title.toLowerCase().trim());
+            return {
+              title: item.title,
+              topic: item.topic || curated?.topic || 'Arrays',
+              difficulty: item.difficulty || curated?.difficulty || 'Easy',
+              date: item.solvedAt ? new Date(item.solvedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+              challengeData: curated || null,
+              submittedCode: item.submittedCode || userCode.trim(),
+              language: item.language || language,
+              score: item.score || 100
+            };
+          });
+          setSolvedHistory(formattedDbList);
+          localStorage.setItem(`coding_solved_history_list${userSuffix}`, JSON.stringify(formattedDbList));
+          localStorage.setItem('coding_solved_history_list', JSON.stringify(formattedDbList));
+        } else {
+          // Append to local history list
+          const activeTopicObj = TOPICS.find(t => t.id === topic);
+          const solvedItem = {
+            title: challenge.title,
+            topic: challenge.topic || (activeTopicObj ? activeTopicObj.name : topic) || 'Arrays',
+            difficulty: challenge.difficulty || difficulty || 'Easy',
+            date: new Date().toISOString().split('T')[0],
+            challengeData: challenge,
+            submittedCode: userCode.trim(),
+            language,
+            score: finalEval.score || 100
+          };
 
-          if (difficulty === 'Easy') {
-            updatedEasy = solvedEasy + 1;
-            setSolvedEasy(updatedEasy);
-            localStorage.setItem(`coding_solved_easy${userSuffix}`, updatedEasy.toString());
-          } else if (difficulty === 'Medium') {
-            updatedMedium = solvedMedium + 1;
-            setSolvedMedium(updatedMedium);
-            localStorage.setItem(`coding_solved_medium${userSuffix}`, updatedMedium.toString());
-          } else if (difficulty === 'Hard') {
-            updatedHard = solvedHard + 1;
-            setSolvedHard(updatedHard);
-            localStorage.setItem(`coding_solved_hard${userSuffix}`, updatedHard.toString());
-          }
+          const cleanHistory = solvedHistory.filter(h => h.title.toLowerCase().trim() !== challenge.title.toLowerCase().trim());
+          const newHistory = [solvedItem, ...cleanHistory];
+          setSolvedHistory(newHistory);
+          localStorage.setItem(`coding_solved_history_list${userSuffix}`, JSON.stringify(newHistory));
+          localStorage.setItem('coding_solved_history_list', JSON.stringify(newHistory));
         }
-
-        // Append to history list
-        const activeTopicObj = TOPICS.find(t => t.id === topic);
-        const solvedItem = {
-          title: challenge.title,
-          topic: activeTopicObj ? activeTopicObj.name : topic,
-          difficulty: challenge.difficulty || difficulty,
-          date: new Date().toISOString().split('T')[0],
-          challengeData: challenge,
-          submittedCode: userCode.trim(),
-          language
-        };
-
-        // Filter out previous entries of the same problem to keep history clean
-        const cleanHistory = solvedHistory.filter(h => h.title.toLowerCase().trim() !== challenge.title.toLowerCase().trim());
-        const newHistory = [solvedItem, ...cleanHistory];
-        setSolvedHistory(newHistory);
-        localStorage.setItem(`coding_solved_history_list${userSuffix}`, JSON.stringify(newHistory));
       }
 
       if (data.badgeUnlocked && finalEval.isCorrect) {

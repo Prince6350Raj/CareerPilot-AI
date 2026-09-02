@@ -57,10 +57,37 @@ exports.submitChallenge = async (req, res, next) => {
       );
     }
 
-    // Update user gamification progress
+    // Update user gamification progress and solved history
     let progress = await Progress.findOne({ userId: req.user.id });
     if (!progress) {
       progress = await Progress.create({ userId: req.user.id });
+    }
+
+    if (!progress.solvedChallenges) {
+      progress.solvedChallenges = [];
+    }
+
+    // If correct, record in solved challenges database
+    if (evaluation.isCorrect) {
+      const existingIndex = progress.solvedChallenges.findIndex(
+        c => c.title.toLowerCase().trim() === problemTitle.toLowerCase().trim()
+      );
+      const challengeRecord = {
+        title: problemTitle,
+        topic: req.body.topic || 'Arrays',
+        difficulty: req.body.difficulty || 'Easy',
+        language: language,
+        submittedCode: userCode.trim(),
+        score: evaluation.score || 100,
+        solvedAt: new Date()
+      };
+
+      if (existingIndex >= 0) {
+        progress.solvedChallenges[existingIndex] = challengeRecord;
+      } else {
+        progress.solvedChallenges.unshift(challengeRecord);
+      }
+      await progress.save();
     }
 
     // Badge unlock for Coding Challenge
@@ -105,7 +132,23 @@ exports.submitChallenge = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: evaluation,
+      solvedChallenges: progress.solvedChallenges,
       badgeUnlocked
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get user's solved coding challenge history
+// @route   GET /api/challenge/history
+// @access  Private
+exports.getChallengeHistory = async (req, res, next) => {
+  try {
+    const progress = await Progress.findOne({ userId: req.user.id });
+    res.status(200).json({
+      success: true,
+      data: progress?.solvedChallenges || []
     });
   } catch (error) {
     next(error);

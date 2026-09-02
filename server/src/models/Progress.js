@@ -14,6 +14,17 @@ const BadgeSchema = new mongoose.Schema({
   unlockedAt: { type: Date, default: Date.now }
 });
 
+const SolvedChallengeSchema = new mongoose.Schema({
+  challengeId: { type: String, default: '' },
+  title: { type: String, required: true },
+  topic: { type: String, default: 'General' },
+  difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], default: 'Easy' },
+  language: { type: String, default: 'javascript' },
+  submittedCode: { type: String, default: '' },
+  score: { type: Number, default: 100 },
+  solvedAt: { type: Date, default: Date.now }
+});
+
 const ProgressSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +42,7 @@ const ProgressSchema = new mongoose.Schema({
   },
   dailyGoals: [DailyGoalSchema],
   badges: [BadgeSchema],
+  solvedChallenges: [SolvedChallengeSchema],
   createdAt: {
     type: Date,
     default: Date.now
