@@ -744,12 +744,19 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: none !important;
   }
 
+  html, body, #root, .app-container {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
   .main-content {
-    padding: 1rem;
+    padding: 0.85rem !important;
     max-height: calc(100vh - 60px);
     overflow-y: auto;
-    width: 100%;
-    box-sizing: border-box;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
 }
 

@@ -967,23 +967,167 @@
     border-right: none;
     padding-right: 0;
   }
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .col-span-2 {
+    grid-column: span 2;
+  }
+  .col-span-3,
+  .col-span-4 {
+    grid-column: span 2;
+  }
 }
 
 @media (max-width: 768px) {
+  .dashboard-view-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+  }
+
+  .dashboard-heading-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1.25rem 1rem !important;
+    margin-bottom: 1.25rem !important;
+    gap: 1.25rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .page-title {
+    font-size: 1.5rem !important;
+  }
+
+  .header-widgets-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  .streak-badge {
+    flex: 1 !important;
+    padding: 0.6rem 0.85rem !important;
+    min-width: 130px !important;
+  }
+
+  .portal-orbit-widget {
+    transform: scale(0.85);
+    transform-origin: right center;
+  }
+
   .career-score-hero-card {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+    padding: 1.25rem 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 1.25rem !important;
   }
-  .score-consultant-section {
-    grid-column: span 1;
+
+  .score-circle-section {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
+
   .score-breakdown-section {
-    border-left: none;
-    padding: 0;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border-color) !important;
+    padding: 1rem 0 0 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
+
+  .score-consultant-section {
+    grid-column: span 1 !important;
+    border-left: none !important;
+    border-top: 1px solid var(--border-color) !important;
+    padding: 1rem 0 0 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* CRITICAL: Convert dashboard grid into single-column vertical stack */
+  .dashboard-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .col-span-2,
+  .col-span-3,
+  .col-span-4 {
+    grid-column: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .metric-card-box {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .dashboard-chart-box {
+    width: 100% !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .chart-wrapper {
+    width: 100% !important;
+    height: 200px !important;
+  }
+
+  .dashboard-goals-box {
+    width: 100% !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
   .dashboard-learning-box {
-    grid-column: span 4;
+    width: 100% !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .dashboard-readiness-breakdown-box {
+    width: 100% !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .quick-actions-box {
+    width: 100% !important;
+    padding: 1.15rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .actions-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.85rem !important;
+    width: 100% !important;
+  }
+
+  .action-button-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 }
 

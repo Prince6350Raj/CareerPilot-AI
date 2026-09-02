@@ -955,7 +955,7 @@ const Login = () => {
           {/* Form Header */}
           <div className="auth-form-header">
             <h1 className="auth-heading">
-              {mode === 'signin' && 'Welcome Back'}
+              {mode === 'signin' && 'Welcome'}
               {mode === 'signup' && 'Get Started Free'}
               {mode === 'forgot' && 'Reset Password'}
             </h1>
