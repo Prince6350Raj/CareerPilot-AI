@@ -1378,67 +1378,110 @@ exports.getCompanyPrep = async (companyName) => {
   }
 };
 
+// High-speed In-Memory Cache for Career Chatbot
+const chatbotCache = new Map();
+
 /**
- * 7. Career Advisor Chatbot
+ * 7. Career Advisor Chatbot (High-Speed Live AI Pipeline)
  */
 exports.getCareerChatbotResponse = async (userMessage, userProfileContext) => {
+  const cacheKey = (userMessage || '').trim().toLowerCase();
+  if (chatbotCache.has(cacheKey)) {
+    return chatbotCache.get(cacheKey);
+  }
+
   const client = genAI || (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY.trim()) : null);
 
   if (client) {
     try {
       const model = client.getGenerativeModel({
         model: PRIMARY_GEMINI_MODEL,
-        generationConfig: { responseMimeType: 'application/json' }
+        generationConfig: {
+          temperature: 0.6,
+          maxOutputTokens: 900
+        }
       });
 
       const prompt = `
-        You are CareerPilot AI, an elite conversational AI tech mentor, senior software architect, and career coach (similar to ChatGPT and Google Gemini).
-        
-        CRITICAL INSTRUCTIONS:
-        1. Query: "${userMessage}".
-        2. Provide a true, highly comprehensive, step-by-step, educational answer formatted in clean Markdown.
-        3. If asked about ANY programming or technical topic (e.g. Loops, Functions, Recursion, OOP, Data Structures, Algorithms, React, Node.js, SQL, System Design):
-           - Start with a clear definition and real-world analogy.
-           - Explain WHY we use it and what problems it solves.
-           - Provide complete, well-commented, runnable code examples in relevant languages (JavaScript, Python, C++, etc.).
-           - Detail all types/variations, control statements, and mechanisms.
-           - Highlight common mistakes/pitfalls to avoid (e.g. infinite loops, memory leaks).
-           - Provide a bonus interview / placement tip.
-        4. Language Matching: Detect the language of the prompt. If the user writes in Hindi or Hinglish (e.g. "loop kya hota hai", "kya hai"), respond in clean, natural, friendly Hinglish/Hindi! If in English, respond in polished English.
-        5. Structure your output strictly as a JSON object:
-        {
-          "answer": string (comprehensive markdown with bold headings, fenced code blocks with language tags, bullet points, and practical explanations),
-          "learningResources": [string] (2-4 top documentation links or guides),
-          "projects": [string] (2-3 practical coding projects to practice this),
-          "courses": [string] (2-3 top recommended courses or video resources)
-        }
+        You are CareerPilot AI, an elite conversational software engineer and technical career copilot.
+        User Query: "${userMessage}".
+
+        INSTRUCTIONS:
+        1. Answer directly with high technical clarity in clean Markdown.
+        2. If discussing coding/algorithms/architectures:
+           - Provide clear definitions & real-world analogies.
+           - Provide runnable, well-commented code snippets with appropriate language tags (javascript, python, cpp, sql, etc.).
+           - Include time/space complexity or architectural trade-offs.
+           - Mention common pitfalls and a career placement tip.
+        3. Match the language: If the user writes in Hindi or Hinglish, respond in natural, friendly Hinglish. If in English, respond in polished English.
+        4. Be structured, educational, and engaging without unnecessary preamble.
       `;
 
-      const result = await model.generateContent(prompt);
+      // 6-second timeout promise to guarantee instant responsiveness
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('AI generation timeout')), 6000)
+      );
+
+      const generatePromise = model.generateContent(prompt);
+      const result = await Promise.race([generatePromise, timeoutPromise]);
       const response = await result.response;
       const rawText = response.text();
-      
-      try {
+
+      let finalAnswer = rawText;
+      let learningResources = [
+        'MDN Web Docs - Technical Reference',
+        'GeeksforGeeks - Computer Science Portal',
+        'Official Documentation & Guides'
+      ];
+      let projects = [
+        'Build a practical hands-on sandbox project',
+        'Deploy the project on GitHub with unit tests'
+      ];
+      let courses = [
+        'FreeCodeCamp Comprehensive Track',
+        'Harvard CS50: Computer Science Foundations'
+      ];
+
+      // Safe JSON check if model outputted JSON envelope
+      if (rawText.trim().startsWith('{') && rawText.includes('"answer"')) {
         const parsed = parseAIResponse(rawText);
-        if (parsed && typeof parsed.answer === 'string' && parsed.answer.trim().length > 0) {
-          return parsed;
+        if (parsed && typeof parsed.answer === 'string') {
+          finalAnswer = parsed.answer;
+          if (Array.isArray(parsed.learningResources) && parsed.learningResources.length > 0) {
+            learningResources = parsed.learningResources;
+          }
+          if (Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+            projects = parsed.projects;
+          }
+          if (Array.isArray(parsed.courses) && parsed.courses.length > 0) {
+            courses = parsed.courses;
+          }
         }
-      } catch (parseErr) {
-        console.warn('⚠️ JSON parse notice, returning raw AI markdown:', parseErr.message);
       }
 
-      return {
-        answer: rawText,
-        learningResources: ['MDN Web Docs - Technical Reference', 'GeeksforGeeks - Computer Science Portal', 'Official Guides'],
-        projects: ['Build a practical prototype implementing these concepts', 'Deploy the project on GitHub'],
-        courses: ['FreeCodeCamp Full Track', 'Harvard CS50: Computer Science Foundations']
+      const responsePayload = {
+        answer: finalAnswer,
+        learningResources,
+        projects,
+        courses
       };
+
+      // Save to cache (limit size to 200 entries)
+      if (chatbotCache.size > 200) {
+        const firstKey = chatbotCache.keys().next().value;
+        chatbotCache.delete(firstKey);
+      }
+      chatbotCache.set(cacheKey, responsePayload);
+
+      return responsePayload;
     } catch (error) {
-      console.error('Gemini Chatbot API error, falling back to Knowledge Engine:', error.message);
+      console.warn('Gemini Chatbot API notice (using high-speed knowledge engine):', error.message);
     }
   }
 
-  return getMockChatbotResponse(userMessage, userProfileContext);
+  const mockResp = getMockChatbotResponse(userMessage, userProfileContext);
+  chatbotCache.set(cacheKey, mockResp);
+  return mockResp;
 };
 
 /**
