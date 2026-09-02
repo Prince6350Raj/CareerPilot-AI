@@ -52,6 +52,203 @@ const CAREER_TRACKS = [
   { id: 'security', label: 'Cybersecurity', icon: '🛡️' }
 ];
 
+// Interactive Neural Synapse Canvas & Hologram Background Component
+const NeuralTechBackground = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Mouse interactive coordinates
+    const mouse = { x: null, y: null, radius: 140 };
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    const handleMouseLeave = () => {
+      mouse.x = null;
+      mouse.y = null;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    // Neural Synapse Particles
+    const particleCount = Math.min(Math.floor((width * height) / 22000), 55);
+    const particles = [];
+
+    class SynapseParticle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.radius = Math.random() * 2.2 + 1.2;
+        this.baseAlpha = Math.random() * 0.4 + 0.3;
+        this.pulseSpeed = Math.random() * 0.02 + 0.01;
+        this.pulse = Math.random() * Math.PI;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.pulse += this.pulseSpeed;
+
+        // Bounce from edges
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        // Mouse interaction attraction/deflection
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            this.x -= (dx / dist) * force * 1.8;
+            this.y -= (dy / dist) * force * 1.8;
+          }
+        }
+      }
+
+      draw() {
+        const currentAlpha = this.baseAlpha + Math.sin(this.pulse) * 0.2;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(2, 132, 199, ${Math.max(currentAlpha, 0.15)})`;
+        ctx.shadowColor = '#0284c7';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new SynapseParticle());
+    }
+
+    const connectParticles = () => {
+      const maxDistance = 140;
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a + 1; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxDistance) {
+            const opacity = 1 - dist / maxDistance;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.22})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+
+        // Connect to mouse cursor
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = particles[a].x - mouse.x;
+          const dy = particles[a].y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const opacity = 1 - dist / mouse.radius;
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity * 0.45})`;
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+      connectParticles();
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <div className="auth-background-neural-wrapper">
+      <canvas ref={canvasRef} className="neural-canvas-layer" />
+      <div className="grid-blueprint-overlay" />
+
+      {/* Floating 3D Tech Hologram Badges in Background */}
+      <div className="floating-hologram-badge holo-1">
+        <span className="holo-icon">🧠</span>
+        <div className="holo-info">
+          <strong>Gemini 3.6 Flash</strong>
+          <small>Neural Engine Active</small>
+        </div>
+      </div>
+
+      <div className="floating-hologram-badge holo-2">
+        <span className="holo-icon">📊</span>
+        <div className="holo-info">
+          <strong>ATS 98% Match</strong>
+          <small>Resume Keyword Scorer</small>
+        </div>
+      </div>
+
+      <div className="floating-hologram-badge holo-3">
+        <span className="holo-icon">⚡</span>
+        <div className="holo-info">
+          <strong>120+ Curated DSA</strong>
+          <small>FAANG LeetCode Matrix</small>
+        </div>
+      </div>
+
+      <div className="floating-hologram-badge holo-4">
+        <span className="holo-icon">🎯</span>
+        <div className="holo-info">
+          <strong>AI Mock Copilot</strong>
+          <small>Real-Time Verbal Scoring</small>
+        </div>
+      </div>
+
+      <div className="floating-hologram-badge holo-5">
+        <span className="holo-icon">🔒</span>
+        <div className="holo-info">
+          <strong>256-Bit Guard</strong>
+          <small>Enterprise JWT Auth</small>
+        </div>
+      </div>
+
+      <div className="ambient-blob blob-1"></div>
+      <div className="ambient-blob blob-2"></div>
+      <div className="ambient-blob blob-3"></div>
+    </div>
+  );
+};
+
 const Login = () => {
   const { login, register, guestLogin, forgotPassword } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -157,13 +354,8 @@ const Login = () => {
 
   return (
     <div className="auth-ultra-page">
-      {/* Background Ambience & Engineering Grid */}
-      <div className="auth-background-grid">
-        <div className="grid-overlay"></div>
-        <div className="ambient-blob blob-1"></div>
-        <div className="ambient-blob blob-2"></div>
-        <div className="ambient-blob blob-3"></div>
-      </div>
+      {/* Interactive Neural Synapse Canvas & AI Background */}
+      <NeuralTechBackground />
 
       {/* Main Glassmorphic Split Card */}
       <div className="auth-master-card">

@@ -16,8 +16,8 @@
   color: #0f172a;
 }
 
-/* Background Ambience & Engineering Grid */
-.auth-background-grid {
+/* Background Ambience & Interactive Neural Synapse Grid */
+.auth-background-neural-wrapper {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -25,13 +25,112 @@
   z-index: 0;
 }
 
-.grid-overlay {
+.neural-canvas-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto; /* allows mouse interaction */
+  z-index: 1;
+}
+
+.grid-blueprint-overlay {
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(to right, rgba(2, 132, 199, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(2, 132, 199, 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
+    radial-gradient(circle at center, transparent 40%, rgba(255, 255, 255, 0.9) 100%),
+    linear-gradient(to right, rgba(2, 132, 199, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(2, 132, 199, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 36px 36px, 36px 36px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Floating 3D Tech Hologram Badges */
+.floating-hologram-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  box-shadow: 
+    0 12px 28px -6px rgba(2, 132, 199, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  padding: 0.5rem 0.95rem;
+  border-radius: 9999px;
+  z-index: 3;
+  pointer-events: none;
+  animation: floatHologram 18s ease-in-out infinite alternate;
+  transition: transform 0.3s ease;
+}
+
+.holo-icon {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.holo-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.holo-info strong {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.holo-info small {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #0284c7;
+}
+
+/* Badge positions & unique drift paths */
+.holo-1 {
+  top: 6%;
+  left: 5%;
+  animation-duration: 20s;
+}
+
+.holo-2 {
+  top: 8%;
+  right: 6%;
+  animation-duration: 22s;
+  animation-delay: -4s;
+}
+
+.holo-3 {
+  bottom: 8%;
+  left: 6%;
+  animation-duration: 25s;
+  animation-delay: -8s;
+}
+
+.holo-4 {
+  bottom: 10%;
+  right: 5%;
+  animation-duration: 21s;
+  animation-delay: -12s;
+}
+
+.holo-5 {
+  top: 48%;
+  left: 2%;
+  animation-duration: 24s;
+  animation-delay: -16s;
+}
+
+@keyframes floatHologram {
+  0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  33% { transform: translateY(-16px) translateX(12px) rotate(1.5deg); }
+  66% { transform: translateY(12px) translateX(-10px) rotate(-1.5deg); }
+  100% { transform: translateY(-8px) translateX(6px) rotate(0.5deg); }
 }
 
 .ambient-blob {
@@ -40,6 +139,7 @@
   filter: blur(120px);
   opacity: 0.6;
   animation: floatAmbient 16s ease-in-out infinite alternate;
+  z-index: 0;
 }
 
 .blob-1 {
