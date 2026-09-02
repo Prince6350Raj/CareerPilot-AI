@@ -16,6 +16,57 @@
   color: #0f172a;
 }
 
+/* Top Right Floating Theme Switcher */
+.login-theme-selector-wrapper {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 50;
+}
+
+.theme-pill-glass {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid #cbd5e1;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+}
+
+.theme-pill-glass:hover {
+  border-color: #0284c7;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.18);
+  transform: translateY(-1px);
+}
+
+.theme-pill-icon {
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.theme-dropdown-select {
+  background: transparent;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  padding-right: 0.25rem;
+}
+
+.theme-dropdown-select option {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  padding: 0.5rem;
+}
+
 /* Background Ambience & Clean Interactive Neural Synapse Grid */
 .auth-background-neural-wrapper {
   position: absolute;

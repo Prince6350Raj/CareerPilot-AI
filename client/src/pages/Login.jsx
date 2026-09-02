@@ -5,7 +5,7 @@ import {
   Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, 
   Brain, Briefcase, Target, Award, CheckCircle2, ShieldCheck, 
   Zap, Code2, Check, Stars, Volume2, VolumeX, X, Info, GraduationCap,
-  Play, Pause, ChevronRight, CheckCircle, HelpCircle
+  Play, Pause, ChevronRight, CheckCircle, HelpCircle, Palette
 } from 'lucide-react';
 import './Login.css';
 
@@ -433,6 +433,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'whiteblue');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -444,6 +445,12 @@ const Login = () => {
   const [guestLoading, setGuestLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Sync theme selection to document root attributes & localStorage
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Project details modal state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
@@ -554,6 +561,32 @@ const Login = () => {
 
   return (
     <div className="auth-ultra-page">
+      {/* Top Right Floating Theme Switcher */}
+      <div className="login-theme-selector-wrapper">
+        <div className="theme-pill-glass">
+          <Palette size={15} className="theme-pill-icon" />
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            className="theme-dropdown-select"
+            aria-label="Select Theme"
+          >
+            <option value="whiteblue">💎 White & Royal Blue</option>
+            <option value="dark">🌌 Space Blue</option>
+            <option value="light">❄️ Frosted Glass</option>
+            <option value="cyberpunk">⚡ Cyberpunk Gold</option>
+            <option value="emerald">🌲 Emerald Forest</option>
+            <option value="sakura">🌸 Frosted Slate</option>
+            <option value="ocean">🌊 Ocean Blue</option>
+            <option value="goldlight">👑 Golden Pastel</option>
+            <option value="redlight">🔴 Crimson White</option>
+            <option value="orangelight">🟠 Sunset Light</option>
+            <option value="greenlight">🟢 Mint Light</option>
+            <option value="skyblue">☁️ Sky Blue</option>
+          </select>
+        </div>
+      </div>
+
       {/* Interactive Clean Neural Synapse Canvas & AI Background */}
       <NeuralCanvasBackground />
 
