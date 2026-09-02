@@ -271,6 +271,18 @@ exports.resetPassword = async (req, res, next) => {
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
+    await user.save();
+
+    await logActivity(user._id, 'Password Reset', 'Password changed successfully');
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successful. You can now login with your new password.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // @desc    1-Click Instant Guest / Demo Login (For recruiters & reviewers)
 // @route   POST /api/auth/guest-login

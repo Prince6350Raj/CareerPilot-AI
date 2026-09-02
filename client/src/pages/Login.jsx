@@ -4,7 +4,8 @@ import { AuthContext } from '../context/AuthContext';
 import { 
   Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, 
   Brain, Briefcase, Target, Award, CheckCircle2, ShieldCheck, 
-  Zap, Code2, Check, Stars
+  Zap, Code2, Check, Stars, Volume2, VolumeX, X, Info, GraduationCap,
+  Play, Pause, ChevronRight, CheckCircle, HelpCircle
 } from 'lucide-react';
 import './Login.css';
 
@@ -44,6 +45,7 @@ const SHOWCASE_TABS = [
 ];
 
 const CAREER_TRACKS = [
+  { id: 'student', label: 'Student / Fresher', icon: '🎓' },
   { id: 'fullstack', label: 'Full Stack SDE', icon: '🚀' },
   { id: 'ai_ml', label: 'AI & ML Engineer', icon: '🧠' },
   { id: 'cloud', label: 'Cloud & DevOps', icon: '☁️' },
@@ -52,8 +54,8 @@ const CAREER_TRACKS = [
   { id: 'security', label: 'Cybersecurity', icon: '🛡️' }
 ];
 
-// Interactive Neural Synapse Canvas & Hologram Background Component
-const NeuralTechBackground = () => {
+// Interactive Clean Neural Synapse Canvas Component
+const NeuralCanvasBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const NeuralTechBackground = () => {
     window.addEventListener('resize', handleResize);
 
     // Mouse interactive coordinates
-    const mouse = { x: null, y: null, radius: 140 };
+    const mouse = { x: null, y: null, radius: 150 };
     const handleMouseMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
@@ -85,53 +87,49 @@ const NeuralTechBackground = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
-    // Neural Synapse Particles
-    const particleCount = Math.min(Math.floor((width * height) / 22000), 55);
+    // Neural particles count calibrated for sleek, non-congested elegance
+    const particleCount = Math.min(Math.floor((width * height) / 28000), 45);
     const particles = [];
 
     class SynapseParticle {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.7;
-        this.vy = (Math.random() - 0.5) * 0.7;
-        this.radius = Math.random() * 2.2 + 1.2;
-        this.baseAlpha = Math.random() * 0.4 + 0.3;
-        this.pulseSpeed = Math.random() * 0.02 + 0.01;
+        this.vx = (Math.random() - 0.5) * 0.45;
+        this.vy = (Math.random() - 0.5) * 0.45;
+        this.radius = Math.random() * 2 + 1;
+        this.baseAlpha = Math.random() * 0.35 + 0.2;
         this.pulse = Math.random() * Math.PI;
       }
 
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        this.pulse += this.pulseSpeed;
+        this.pulse += 0.015;
 
-        // Bounce from edges
+        // Bounce gently from edges
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
 
-        // Mouse interaction attraction/deflection
+        // Subtle mouse interaction
         if (mouse.x !== null && mouse.y !== null) {
           const dx = mouse.x - this.x;
           const dy = mouse.y - this.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < mouse.radius) {
             const force = (mouse.radius - dist) / mouse.radius;
-            this.x -= (dx / dist) * force * 1.8;
-            this.y -= (dy / dist) * force * 1.8;
+            this.x -= (dx / dist) * force * 1.2;
+            this.y -= (dy / dist) * force * 1.2;
           }
         }
       }
 
       draw() {
-        const currentAlpha = this.baseAlpha + Math.sin(this.pulse) * 0.2;
+        const currentAlpha = this.baseAlpha + Math.sin(this.pulse) * 0.15;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(2, 132, 199, ${Math.max(currentAlpha, 0.15)})`;
-        ctx.shadowColor = '#0284c7';
-        ctx.shadowBlur = 8;
+        ctx.fillStyle = `rgba(2, 132, 199, ${Math.max(currentAlpha, 0.1)})`;
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
     }
 
@@ -140,7 +138,7 @@ const NeuralTechBackground = () => {
     }
 
     const connectParticles = () => {
-      const maxDistance = 140;
+      const maxDistance = 150;
       for (let a = 0; a < particles.length; a++) {
         for (let b = a + 1; b < particles.length; b++) {
           const dx = particles[a].x - particles[b].x;
@@ -152,13 +150,12 @@ const NeuralTechBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(particles[b].x, particles[b].y);
-            ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.22})`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.18})`;
+            ctx.lineWidth = 0.9;
             ctx.stroke();
           }
         }
 
-        // Connect to mouse cursor
         if (mouse.x !== null && mouse.y !== null) {
           const dx = particles[a].x - mouse.x;
           const dy = particles[a].y - mouse.y;
@@ -168,8 +165,8 @@ const NeuralTechBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity * 0.45})`;
-            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity * 0.35})`;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
@@ -200,51 +197,233 @@ const NeuralTechBackground = () => {
     <div className="auth-background-neural-wrapper">
       <canvas ref={canvasRef} className="neural-canvas-layer" />
       <div className="grid-blueprint-overlay" />
-
-      {/* Floating 3D Tech Hologram Badges in Background */}
-      <div className="floating-hologram-badge holo-1">
-        <span className="holo-icon">🧠</span>
-        <div className="holo-info">
-          <strong>Gemini 3.6 Flash</strong>
-          <small>Neural Engine Active</small>
-        </div>
-      </div>
-
-      <div className="floating-hologram-badge holo-2">
-        <span className="holo-icon">📊</span>
-        <div className="holo-info">
-          <strong>ATS 98% Match</strong>
-          <small>Resume Keyword Scorer</small>
-        </div>
-      </div>
-
-      <div className="floating-hologram-badge holo-3">
-        <span className="holo-icon">⚡</span>
-        <div className="holo-info">
-          <strong>120+ Curated DSA</strong>
-          <small>FAANG LeetCode Matrix</small>
-        </div>
-      </div>
-
-      <div className="floating-hologram-badge holo-4">
-        <span className="holo-icon">🎯</span>
-        <div className="holo-info">
-          <strong>AI Mock Copilot</strong>
-          <small>Real-Time Verbal Scoring</small>
-        </div>
-      </div>
-
-      <div className="floating-hologram-badge holo-5">
-        <span className="holo-icon">🔒</span>
-        <div className="holo-info">
-          <strong>256-Bit Guard</strong>
-          <small>Enterprise JWT Auth</small>
-        </div>
-      </div>
-
       <div className="ambient-blob blob-1"></div>
       <div className="ambient-blob blob-2"></div>
       <div className="ambient-blob blob-3"></div>
+    </div>
+  );
+};
+
+// Project Details & AI Voice Narration Modal
+const ProjectOverviewModal = ({ isOpen, onClose }) => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const speechRef = useRef(null);
+
+  const NARRATION_TEXT = 
+    "Welcome to CareerPilot AI, your intelligent placement and career copilot. " +
+    "Engineered for students, job seekers, and aspiring software engineers, CareerPilot AI equips you with ATS resume scoring, " +
+    "Gemini 3.6 Flash verbal mock interviews, over 120 curated coding sandbox challenges, and verified FAANG hiring roadmaps. " +
+    "Let CareerPilot AI power your journey to landing your dream tech career!";
+
+  // Stop speech synthesis on modal close or unmount
+  const stopVoice = () => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      stopVoice();
+    }
+  }, [isOpen]);
+
+  const handleToggleVoice = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Speech Synthesis is not supported in this browser.');
+      return;
+    }
+
+    if (isSpeaking) {
+      stopVoice();
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(NARRATION_TEXT);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.05;
+
+    // Pick English natural voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Karen')) && v.lang.startsWith('en')) || voices.find(v => v.lang.startsWith('en'));
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    speechRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="project-modal-backdrop" onClick={onClose}>
+      <div className="project-modal-card" onClick={(e) => e.stopPropagation()}>
+        {/* Modal Top Bar */}
+        <div className="modal-top-header">
+          <div className="modal-badge-group">
+            <div className="modal-logo-icon">
+              <Compass size={22} className="compass-spin" />
+            </div>
+            <div>
+              <h3 className="modal-project-title">CareerPilot <span className="ai-gradient-text">AI</span></h3>
+              <p className="modal-project-tagline">Next-Gen Placement & Career Intelligence Platform</p>
+            </div>
+          </div>
+          <button type="button" className="modal-close-btn" onClick={onClose}>
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* AI Voice Narration Banner */}
+        <div className={`ai-voice-narrator-bar ${isSpeaking ? 'active-speaking' : ''}`}>
+          <div className="narrator-left">
+            <div className="narrator-soundwave">
+              {isSpeaking ? (
+                <>
+                  <span></span><span></span><span></span><span></span><span></span>
+                </>
+              ) : (
+                <Sparkles size={18} className="text-primary" />
+              )}
+            </div>
+            <div className="narrator-text">
+              <strong>{isSpeaking ? 'AI Voice Assistant Speaking...' : 'Interactive AI Voice Introduction'}</strong>
+              <small>Listen to an overview of CareerPilot AI</small>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            className={`voice-action-btn ${isSpeaking ? 'btn-stop' : 'btn-play'}`}
+            onClick={handleToggleVoice}
+          >
+            {isSpeaking ? (
+              <>
+                <VolumeX size={16} />
+                <span>Stop Voice</span>
+              </>
+            ) : (
+              <>
+                <Volume2 size={16} />
+                <span>Play Voice Intro</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Modal Scrollable Body */}
+        <div className="modal-content-body">
+          {/* Target Audience Section */}
+          <div className="overview-section">
+            <h4 className="section-title">
+              <span className="section-num">01</span> Kiske Liye Hai Yeh Platform? (Target Audience)
+            </h4>
+            <div className="target-cards-grid">
+              <div className="target-card">
+                <span className="target-emoji">🎓</span>
+                <strong>Students & Freshers</strong>
+                <p>College placement rounds, campus interviews, aur foundational DSA clear karne ke liye.</p>
+              </div>
+              <div className="target-card">
+                <span className="target-emoji">💻</span>
+                <strong>Aspiring Software Engineers</strong>
+                <p>Product companies aur FAANG interview patterns ko target karne wale developers ke liye.</p>
+              </div>
+              <div className="target-card">
+                <span className="target-emoji">🚀</span>
+                <strong>Career Pivoters & Switchers</strong>
+                <p>Non-tech se tech me switch ya high-paying tech jobs achieve karne ke liye structured roadmaps.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Core Features Section */}
+          <div className="overview-section">
+            <h4 className="section-title">
+              <span className="section-num">02</span> Hamare Key Features & Capabilities
+            </h4>
+            <div className="features-list-grid">
+              <div className="feature-box">
+                <div className="feat-header">
+                  <Sparkles size={16} className="text-primary" />
+                  <strong>1. ATS Resume Analyzer Engine</strong>
+                </div>
+                <p>Real-time resume parse karta hai, 0-100 ATS score deta hai, aur missing tech keywords ki instant checklist provide karta hai.</p>
+              </div>
+
+              <div className="feature-box">
+                <div className="feat-header">
+                  <Brain size={16} className="text-primary" />
+                  <strong>2. AI Verbal Mock Interviews (Gemini 3.6 Flash)</strong>
+                </div>
+                <p>Live speech-to-speech audio interview leta hai, answer clarity aur technical precision ko 10-point scale par grade karta hai.</p>
+              </div>
+
+              <div className="feature-box">
+                <div className="feat-header">
+                  <Code2 size={16} className="text-primary" />
+                  <strong>3. 120+ DSA Coding Sandbox</strong>
+                </div>
+                <p>LeetCode style interactive editor with test runner, execution runtime metrics, aur permanent progress syncing.</p>
+              </div>
+
+              <div className="feature-box">
+                <div className="feat-header">
+                  <Briefcase size={16} className="text-primary" />
+                  <strong>4. Company-Specific Prep Matrices</strong>
+                </div>
+                <p>Google, Amazon, Microsoft, Uber jaise 50+ top firms ke verified hiring rounds, previous interview questions aur tips.</p>
+              </div>
+
+              <div className="feature-box">
+                <div className="feat-header">
+                  <Compass size={16} className="text-primary" />
+                  <strong>5. 24/7 AI Career Advisor Copilot</strong>
+                </div>
+                <p>Instant answers, personalized learning paths, portfolio reviews, aur skill gap analysis on demand.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Why Choose Us */}
+          <div className="overview-section">
+            <h4 className="section-title">
+              <span className="section-num">03</span> CareerPilot AI Kyu Choose Kare? (Why Use Us)
+            </h4>
+            <div className="why-us-banner">
+              <div className="why-point">
+                <CheckCircle2 size={18} className="text-success" />
+                <div>
+                  <strong>All-in-One Placement Suite:</strong> Resume scanner, Coding IDE, aur Mock interviewer ke liye alag alag subscription lene ki zaroorat nahi.
+                </div>
+              </div>
+              <div className="why-point">
+                <CheckCircle2 size={18} className="text-success" />
+                <div>
+                  <strong>Powered by Gemini 3.6 Flash:</strong> Sub-second AI response time aur accurate technical feedback.
+                </div>
+              </div>
+              <div className="why-point">
+                <CheckCircle2 size={18} className="text-success" />
+                <div>
+                  <strong>100% Free & Open Access:</strong> Instant 1-click guest login se recruiter aur student bina friction ke explore kar sakte hain.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="modal-bottom-footer">
+          <button type="button" className="btn-modal-gotit" onClick={onClose}>
+            Got It! Start Exploring CareerPilot AI
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -257,12 +436,17 @@ const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [targetTrack, setTargetTrack] = useState('fullstack');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [targetTrack, setTargetTrack] = useState('student');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Project details modal state
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
   // Interactive Left Showcase State
   const [activeTabIdx, setActiveTabIdx] = useState(0);
@@ -301,12 +485,27 @@ const Login = () => {
   };
 
   const passStrength = getPasswordStrength(password);
+  const isPasswordMatch = mode === 'signup' && confirmPassword.length > 0 && password === confirmPassword;
+  const isPasswordMismatch = mode === 'signup' && confirmPassword.length > 0 && password !== confirmPassword;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setMessage('');
+
+    // Signup Validation
+    if (mode === 'signup') {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match. Please verify your password confirmation.');
+        return;
+      }
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long.');
+        return;
+      }
+    }
+
+    setLoading(true);
 
     try {
       if (mode === 'signin') {
@@ -322,6 +521,7 @@ const Login = () => {
           setName('');
           setEmail('');
           setPassword('');
+          setConfirmPassword('');
         }
       } else if (mode === 'forgot') {
         const data = await forgotPassword(email);
@@ -354,8 +554,14 @@ const Login = () => {
 
   return (
     <div className="auth-ultra-page">
-      {/* Interactive Neural Synapse Canvas & AI Background */}
-      <NeuralTechBackground />
+      {/* Interactive Clean Neural Synapse Canvas & AI Background */}
+      <NeuralCanvasBackground />
+
+      {/* Project Overview Details & AI Voice Modal */}
+      <ProjectOverviewModal 
+        isOpen={isProjectModalOpen} 
+        onClose={() => setIsProjectModalOpen(false)} 
+      />
 
       {/* Main Glassmorphic Split Card */}
       <div className="auth-master-card">
@@ -365,14 +571,23 @@ const Login = () => {
           onMouseEnter={() => setIsHoveredShowcase(true)}
           onMouseLeave={() => setIsHoveredShowcase(false)}
         >
-          {/* Top Brand Tag */}
+          {/* Top Brand Tag with Click-To-View-Details Action */}
           <div className="showcase-brand-header">
-            <div className="brand-badge-pill">
+            <button 
+              type="button" 
+              className="brand-badge-pill interactive-brand-btn"
+              onClick={() => setIsProjectModalOpen(true)}
+              title="Click to view full CareerPilot AI project features & listen to AI Voice introduction"
+            >
               <div className="brand-logo-icon">
                 <Compass size={22} className="compass-spin" />
               </div>
               <span className="brand-text">CareerPilot <strong className="ai-gradient-text">AI</strong></span>
-            </div>
+              <span className="info-dot-badge">
+                <Info size={12} />
+                <span>About</span>
+              </span>
+            </button>
             <div className="engine-status-tag">
               <span className="live-dot-pulse"></span>
               <span>Gemini 3.6 Flash Active</span>
@@ -730,6 +945,37 @@ const Login = () => {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Confirm Password field on Signup */}
+            {mode === 'signup' && (
+              <div className="form-field-group">
+                <div className="field-label-row">
+                  <label className="field-label" htmlFor="auth-confirm-pass">Confirm Password</label>
+                  {isPasswordMatch && <span className="pass-match-tag success">✅ Passwords match</span>}
+                  {isPasswordMismatch && <span className="pass-match-tag error">❌ Passwords do not match</span>}
+                </div>
+                <div className="field-input-wrap">
+                  <Lock size={18} className="field-icon" />
+                  <input
+                    id="auth-confirm-pass"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    className={`field-control ${isPasswordMismatch ? 'input-error' : isPasswordMatch ? 'input-success' : ''}`}
+                    placeholder="Repeat password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="pass-visibility-btn"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
             )}
 
