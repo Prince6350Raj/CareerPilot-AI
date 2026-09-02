@@ -54,9 +54,26 @@ const CAREER_TRACKS = [
   { id: 'security', label: 'Cybersecurity', icon: '🛡️' }
 ];
 
-// Interactive Clean Neural Synapse Canvas Component
-const NeuralCanvasBackground = () => {
+// Interactive Dynamic Theme Neural Synapse Canvas Component
+const NeuralCanvasBackground = ({ theme = 'whiteblue' }) => {
   const canvasRef = useRef(null);
+
+  const THEME_COLORS = {
+    whiteblue: { node: 'rgba(2, 132, 199, ', line: 'rgba(2, 132, 199, ', mouse: 'rgba(37, 99, 235, ' },
+    dark: { node: 'rgba(168, 85, 247, ', line: 'rgba(99, 102, 241, ', mouse: 'rgba(168, 85, 247, ' },
+    light: { node: 'rgba(59, 130, 246, ', line: 'rgba(37, 99, 235, ', mouse: 'rgba(2, 132, 199, ' },
+    cyberpunk: { node: 'rgba(234, 179, 8, ', line: 'rgba(234, 179, 8, ', mouse: 'rgba(249, 115, 22, ' },
+    emerald: { node: 'rgba(16, 185, 129, ', line: 'rgba(16, 185, 129, ', mouse: 'rgba(5, 150, 105, ' },
+    sakura: { node: 'rgba(236, 72, 153, ', line: 'rgba(219, 39, 119, ', mouse: 'rgba(147, 51, 234, ' },
+    ocean: { node: 'rgba(6, 182, 212, ', line: 'rgba(8, 145, 178, ', mouse: 'rgba(14, 165, 233, ' },
+    goldlight: { node: 'rgba(217, 119, 6, ', line: 'rgba(245, 158, 11, ', mouse: 'rgba(217, 119, 6, ' },
+    redlight: { node: 'rgba(239, 68, 68, ', line: 'rgba(220, 38, 38, ', mouse: 'rgba(239, 68, 68, ' },
+    orangelight: { node: 'rgba(249, 115, 22, ', line: 'rgba(234, 88, 12, ', mouse: 'rgba(249, 115, 22, ' },
+    greenlight: { node: 'rgba(34, 197, 94, ', line: 'rgba(22, 163, 74, ', mouse: 'rgba(34, 197, 94, ' },
+    skyblue: { node: 'rgba(14, 165, 233, ', line: 'rgba(2, 132, 199, ', mouse: 'rgba(14, 165, 233, ' }
+  };
+
+  const activeColors = THEME_COLORS[theme] || THEME_COLORS.whiteblue;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -128,7 +145,7 @@ const NeuralCanvasBackground = () => {
         const currentAlpha = this.baseAlpha + Math.sin(this.pulse) * 0.15;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(2, 132, 199, ${Math.max(currentAlpha, 0.1)})`;
+        ctx.fillStyle = `${activeColors.node}${Math.max(currentAlpha, 0.1)})`;
         ctx.fill();
       }
     }
@@ -150,7 +167,7 @@ const NeuralCanvasBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(particles[b].x, particles[b].y);
-            ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.18})`;
+            ctx.strokeStyle = `${activeColors.line}${opacity * 0.22})`;
             ctx.lineWidth = 0.9;
             ctx.stroke();
           }
@@ -165,7 +182,7 @@ const NeuralCanvasBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity * 0.35})`;
+            ctx.strokeStyle = `${activeColors.mouse}${opacity * 0.4})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -191,7 +208,7 @@ const NeuralCanvasBackground = () => {
       window.removeEventListener('mouseleave', handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [theme]);
 
   return (
     <div className="auth-background-neural-wrapper">
@@ -560,7 +577,7 @@ const Login = () => {
   const currentTab = SHOWCASE_TABS[activeTabIdx];
 
   return (
-    <div className="auth-ultra-page">
+    <div className="auth-ultra-page" data-theme={theme}>
       {/* Top Right Floating Theme Switcher */}
       <div className="login-theme-selector-wrapper">
         <div className="theme-pill-glass">
@@ -588,7 +605,7 @@ const Login = () => {
       </div>
 
       {/* Interactive Clean Neural Synapse Canvas & AI Background */}
-      <NeuralCanvasBackground />
+      <NeuralCanvasBackground theme={theme} />
 
       {/* Project Overview Details & AI Voice Modal */}
       <ProjectOverviewModal 
