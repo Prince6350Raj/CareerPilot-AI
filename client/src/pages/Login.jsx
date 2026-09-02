@@ -459,23 +459,23 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
           {/* Target Audience Section */}
           <div className="overview-section">
             <h4 className="section-title">
-              <span className="section-num">01</span> Kiske Liye Hai Yeh Platform? (Target Audience)
+              <span className="section-num">01</span> Who is this Platform For? (Target Audience)
             </h4>
             <div className="target-cards-grid">
               <div className="target-card">
                 <span className="target-emoji">🎓</span>
                 <strong>Students & Freshers</strong>
-                <p>College placement rounds, campus interviews, aur foundational DSA clear karne ke liye.</p>
+                <p>Master college placement drives, campus interviews, and foundational Data Structures & Algorithms.</p>
               </div>
               <div className="target-card">
                 <span className="target-emoji">💻</span>
                 <strong>Aspiring Software Engineers</strong>
-                <p>Product companies aur FAANG interview patterns ko target karne wale developers ke liye.</p>
+                <p>Target product companies, high-growth tech startups, and FAANG technical interview loops.</p>
               </div>
               <div className="target-card">
                 <span className="target-emoji">🚀</span>
                 <strong>Career Pivoters & Switchers</strong>
-                <p>Non-tech se tech me switch ya high-paying tech jobs achieve karne ke liye structured roadmaps.</p>
+                <p>Transition into tech and secure high-paying developer roles with structured career roadmaps.</p>
               </div>
             </div>
           </div>
@@ -483,7 +483,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
           {/* Core Features Section */}
           <div className="overview-section">
             <h4 className="section-title">
-              <span className="section-num">02</span> Hamare Key Features & Capabilities
+              <span className="section-num">02</span> Core Features & Capabilities
             </h4>
             <div className="features-list-grid">
               <div className="feature-box">
@@ -491,7 +491,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
                   <Sparkles size={16} className="text-primary" />
                   <strong>1. ATS Resume Analyzer Engine</strong>
                 </div>
-                <p>Real-time resume parse karta hai, 0-100 ATS score deta hai, aur missing tech keywords ki instant checklist provide karta hai.</p>
+                <p>Parses resumes in real time, generates 0-100 ATS scores, and provides instant checklists of missing keywords.</p>
               </div>
 
               <div className="feature-box">
@@ -499,7 +499,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
                   <Brain size={16} className="text-primary" />
                   <strong>2. AI Verbal Mock Interviews (Gemini 3.6 Flash)</strong>
                 </div>
-                <p>Live speech-to-speech audio interview leta hai, answer clarity aur technical precision ko 10-point scale par grade karta hai.</p>
+                <p>Conducts interactive voice interviews, grading communication clarity and technical accuracy on a 10-point scale.</p>
               </div>
 
               <div className="feature-box">
@@ -507,7 +507,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
                   <Code2 size={16} className="text-primary" />
                   <strong>3. 120+ DSA Coding Sandbox</strong>
                 </div>
-                <p>LeetCode style interactive editor with test runner, execution runtime metrics, aur permanent progress syncing.</p>
+                <p>LeetCode-style interactive code editor with multi-language test runners, runtime metrics, and permanent progress tracking.</p>
               </div>
 
               <div className="feature-box">
@@ -515,7 +515,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
                   <Briefcase size={16} className="text-primary" />
                   <strong>4. Company-Specific Prep Matrices</strong>
                 </div>
-                <p>Google, Amazon, Microsoft, Uber jaise 50+ top firms ke verified hiring rounds, previous interview questions aur tips.</p>
+                <p>Verified hiring rounds, past interview questions, and insider tips for 50+ top firms including Google, Amazon, and Microsoft.</p>
               </div>
 
               <div className="feature-box">
@@ -523,7 +523,7 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
                   <Compass size={16} className="text-primary" />
                   <strong>5. 24/7 AI Career Advisor Copilot</strong>
                 </div>
-                <p>Instant answers, personalized learning paths, portfolio reviews, aur skill gap analysis on demand.</p>
+                <p>Instant career guidance, personalized learning paths, portfolio reviews, and on-demand skill gap analysis.</p>
               </div>
             </div>
           </div>
@@ -531,25 +531,25 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
           {/* Why Choose Us */}
           <div className="overview-section">
             <h4 className="section-title">
-              <span className="section-num">03</span> CareerPilot AI Kyu Choose Kare? (Why Use Us)
+              <span className="section-num">03</span> Why Choose CareerPilot AI?
             </h4>
             <div className="why-us-banner">
               <div className="why-point">
                 <CheckCircle2 size={18} className="text-success" />
                 <div>
-                  <strong>All-in-One Placement Suite:</strong> Resume scanner, Coding IDE, aur Mock interviewer ke liye alag alag subscription lene ki zaroorat nahi.
+                  <strong>All-in-One Placement Suite:</strong> Eliminate multiple paid subscriptions—all resume tools, coding IDE, and mock interviews are unified in one place.
                 </div>
               </div>
               <div className="why-point">
                 <CheckCircle2 size={18} className="text-success" />
                 <div>
-                  <strong>Powered by Gemini 3.6 Flash:</strong> Sub-second AI response time aur accurate technical feedback.
+                  <strong>Powered by Gemini 3.6 Flash:</strong> Experience sub-second AI response times and highly accurate technical feedback.
                 </div>
               </div>
               <div className="why-point">
                 <CheckCircle2 size={18} className="text-success" />
                 <div>
-                  <strong>100% Free & Open Access:</strong> Instant 1-click guest login se recruiter aur student bina friction ke explore kar sakte hain.
+                  <strong>100% Free & Open Access:</strong> Instant 1-click guest access allows recruiters and students to explore every feature with zero friction.
                 </div>
               </div>
             </div>
