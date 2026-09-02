@@ -272,10 +272,45 @@ exports.resetPassword = async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
-    await user.save();
+// @desc    1-Click Instant Guest / Demo Login (For recruiters & reviewers)
+// @route   POST /api/auth/guest-login
+// @access  Public
+exports.guestLogin = async (req, res, next) => {
+  try {
+    const demoEmail = 'guest.developer@careerpilot.ai';
+    let user = await User.findOne({ email: demoEmail });
+    if (!user) {
+      user = await User.create({
+        name: 'Guest Developer',
+        email: demoEmail,
+        password: 'GuestPassword@2026',
+        isVerified: true,
+        role: 'user',
+        profile: {
+          title: 'Full Stack AI Engineer',
+          experienceLevel: 'Entry',
+          skills: ['React', 'Node.js', 'Python', 'DSA', 'Tailwind CSS', 'System Design'],
+          targetRoles: ['Software Engineer', 'Full Stack Developer', 'AI Engineer']
+        }
+      });
+    }
 
-    res.status(200).json({ success: true, message: 'Password reset successful. You can now log in.' });
+    const token = generateToken(user._id);
+    await logActivity(user._id, 'Guest Demo Login', 'Recruiter/Guest 1-click test session started');
+
+    res.status(200).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profile: user.profile
+      }
+    });
   } catch (error) {
     next(error);
   }
 };
+

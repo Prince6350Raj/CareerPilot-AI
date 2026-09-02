@@ -1,28 +1,109 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, Brain, Cpu, Activity, Briefcase, GraduationCap, Target, TrendingUp, Award } from 'lucide-react';
+import { 
+  Compass, Mail, Lock, User, ArrowRight, Eye, EyeOff, Sparkles, 
+  Brain, Briefcase, Target, Award, CheckCircle2, ShieldCheck, 
+  Zap, Code2, Check, Stars
+} from 'lucide-react';
 import './Login.css';
 
+const SHOWCASE_TABS = [
+  {
+    id: 'resume',
+    icon: Sparkles,
+    title: 'ATS Resume Engine',
+    subtitle: 'Score 90+ with real-time keyword optimization',
+    tag: 'ATS 96% Match',
+    previewType: 'resume'
+  },
+  {
+    id: 'interview',
+    icon: Brain,
+    title: 'AI Mock Interview',
+    subtitle: 'Verbal speech assessments powered by Gemini 3.6 Flash',
+    tag: 'Live Evaluation',
+    previewType: 'interview'
+  },
+  {
+    id: 'sandbox',
+    icon: Code2,
+    title: 'DSA Coding Sandbox',
+    subtitle: '120+ Curated LeetCode problems with 0ms execution',
+    tag: 'Multi-Language',
+    previewType: 'sandbox'
+  },
+  {
+    id: 'company',
+    icon: Briefcase,
+    title: 'Company Prep Guides',
+    subtitle: 'Verified interview rounds for Google, Amazon, Microsoft',
+    tag: '50+ Tech Firms',
+    previewType: 'company'
+  }
+];
+
+const CAREER_TRACKS = [
+  { id: 'fullstack', label: 'Full Stack SDE', icon: '🚀' },
+  { id: 'ai_ml', label: 'AI & ML Engineer', icon: '🧠' },
+  { id: 'cloud', label: 'Cloud & DevOps', icon: '☁️' },
+  { id: 'dsa', label: 'DSA & FAANG Prep', icon: '🎯' },
+  { id: 'mobile', label: 'Mobile App Dev', icon: '📱' },
+  { id: 'security', label: 'Cybersecurity', icon: '🛡️' }
+];
+
 const Login = () => {
-  const { login, register, forgotPassword } = useContext(AuthContext);
+  const { login, register, guestLogin, forgotPassword } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState('signin'); // signin, signup, forgot
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light'); // Sync with global theme (default light/frosted glass)
+  const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [targetTrack, setTargetTrack] = useState('fullstack');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // Sync theme selection to document root attributes
+  // Interactive Left Showcase State
+  const [activeTabIdx, setActiveTabIdx] = useState(0);
+  const [isHoveredShowcase, setIsHoveredShowcase] = useState(false);
+
+  // Auto-rotate showcase tabs every 5 seconds if not hovered
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    if (isHoveredShowcase) return;
+    const interval = setInterval(() => {
+      setActiveTabIdx((prev) => (prev + 1) % SHOWCASE_TABS.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isHoveredShowcase]);
+
+  // Password strength calculation
+  const getPasswordStrength = (pass) => {
+    if (!pass) return { score: 0, text: '', color: '#e2e8f0' };
+    let score = 0;
+    if (pass.length >= 8) score += 1;
+    if (/[A-Z]/.test(pass)) score += 1;
+    if (/[0-9]/.test(pass)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pass)) score += 1;
+
+    switch (score) {
+      case 1:
+        return { score: 25, text: 'Weak', color: '#ef4444' };
+      case 2:
+        return { score: 50, text: 'Fair', color: '#f59e0b' };
+      case 3:
+        return { score: 75, text: 'Good', color: '#3b82f6' };
+      case 4:
+        return { score: 100, text: 'Strong', color: '#10b981' };
+      default:
+        return { score: 0, text: '', color: '#e2e8f0' };
+    }
+  };
+
+  const passStrength = getPasswordStrength(password);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,252 +113,496 @@ const Login = () => {
 
     try {
       if (mode === 'signin') {
-        sessionStorage.clear(); // Reset welcomes for a fresh session
+        sessionStorage.clear();
         await login(email, password);
         navigate('/dashboard');
       } else if (mode === 'signup') {
         const data = await register(name, email, password);
-        setMessage(data.message || 'Registration successful! Check your email console for the verification link.');
-        setName('');
-        setEmail('');
-        setPassword('');
+        if (data.token) {
+          navigate('/dashboard');
+        } else {
+          setMessage(data.message || 'Account created successfully! Check email for verification.');
+          setName('');
+          setEmail('');
+          setPassword('');
+        }
       } else if (mode === 'forgot') {
         const data = await forgotPassword(email);
-        setMessage(data.message || 'Password reset link simulated in server console.');
+        setMessage(data.message || 'Password reset instructions sent to your email.');
         setEmail('');
       }
     } catch (err) {
-      setError(err.message || 'An error occurred. Please try again.');
+      setError(err.message || 'Authentication error. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
-  const themeClassMap = {
-    'dark': 'space-blue',
-    'light': 'frosted-glass',
-    'cyberpunk': 'cyberpunk-gold',
-    'emerald': 'emerald-forest',
-    'sakura': 'frosted-slate',
-    'ocean': 'ocean-blue',
-    'goldlight': 'golden-pastel',
-    'whiteblue': 'white-blue'
+  const handleGuestDemoLogin = async () => {
+    setGuestLoading(true);
+    setError('');
+    setMessage('');
+    try {
+      sessionStorage.clear();
+      await guestLogin();
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Could not start guest session. Please try regular login.');
+    } finally {
+      setGuestLoading(false);
+    }
   };
 
-  const currentThemeClass = themeClassMap[theme] || 'frosted-glass';
+  const currentTab = SHOWCASE_TABS[activeTabIdx];
 
   return (
-    <div className={`login-container theme-${currentThemeClass}`}>
-      {/* Theme Selector Dropdown */}
-      <div className="theme-selector-container">
-        <select 
-          value={theme} 
-          onChange={(e) => setTheme(e.target.value)}
-          className="theme-select-control"
+    <div className="auth-ultra-page">
+      {/* Background Ambience & Engineering Grid */}
+      <div className="auth-background-grid">
+        <div className="grid-overlay"></div>
+        <div className="ambient-blob blob-1"></div>
+        <div className="ambient-blob blob-2"></div>
+        <div className="ambient-blob blob-3"></div>
+      </div>
+
+      {/* Main Glassmorphic Split Card */}
+      <div className="auth-master-card">
+        {/* ================= LEFT SIDE: INTERACTIVE SHOWCASE ================= */}
+        <div 
+          className="auth-showcase-panel"
+          onMouseEnter={() => setIsHoveredShowcase(true)}
+          onMouseLeave={() => setIsHoveredShowcase(false)}
         >
-          <option value="dark">🌌 Space Blue</option>
-          <option value="light">❄️ Frosted Glass</option>
-          <option value="cyberpunk">⚡ Cyberpunk Gold</option>
-          <option value="emerald">🌲 Emerald Forest</option>
-          <option value="sakura">🌸 Frosted Slate</option>
-          <option value="ocean">🌊 Ocean Blue</option>
-          <option value="goldlight">👑 Golden Pastel</option>
-          <option value="whiteblue">💎 White, Grey & Blue</option>
-        </select>
-      </div>
-
-      {/* Floating Animated Particles & Career Icons in Background */}
-      <div className="background-decorations">
-        <div className="glow-circle glow-1"></div>
-        <div className="glow-circle glow-2"></div>
-        <div className="glow-circle glow-3"></div>
-        
-        {/* Floating Career Path Indicators */}
-        <div className="career-icon-float cif-1">
-          <Briefcase size={48} strokeWidth={1} />
-        </div>
-        <div className="career-icon-float cif-2">
-          <GraduationCap size={58} strokeWidth={1} />
-        </div>
-        <div className="career-icon-float cif-3">
-          <Target size={52} strokeWidth={1} />
-        </div>
-        <div className="career-icon-float cif-4">
-          <TrendingUp size={44} strokeWidth={1} />
-        </div>
-        <div className="career-icon-float cif-5">
-          <Award size={48} strokeWidth={1} />
-        </div>
-        <div className="career-icon-float cif-6">
-          <Brain size={50} strokeWidth={1} />
-        </div>
-      </div>
-
-      <div className="login-split-wrapper">
-        {/* Left Side: Product Showcase */}
-        <div className="login-showcase animate-slide-in-left">
-          <div className="showcase-header">
-            <div className="brand-logo-glow">
-              <Compass size={44} className="brand-logo-icon-pulse" />
+          {/* Top Brand Tag */}
+          <div className="showcase-brand-header">
+            <div className="brand-badge-pill">
+              <div className="brand-logo-icon">
+                <Compass size={22} className="compass-spin" />
+              </div>
+              <span className="brand-text">CareerPilot <strong className="ai-gradient-text">AI</strong></span>
             </div>
-            <h1 className="brand-title">CareerPilot <span className="highlight-ai">AI</span></h1>
-            <p className="showcase-subtitle">Your Ultimate Intelligent Placement & Career Copilot</p>
+            <div className="engine-status-tag">
+              <span className="live-dot-pulse"></span>
+              <span>Gemini 3.6 Flash Active</span>
+            </div>
           </div>
 
-          <p className="showcase-desc">
-            An advanced AI-powered ecosystem designed to analyze profiles, optimize resumes, guide company-specific preparations, and simulate mock interviews in real-time.
-          </p>
+          <div className="showcase-headline-block">
+            <h2 className="showcase-main-title">
+              Accelerate Your <span className="title-gradient">Dream Tech Career</span>
+            </h2>
+            <p className="showcase-subtext">
+              The all-in-one neural ecosystem to optimize resumes, master 120+ coding challenges, and clear FAANG technical interviews.
+            </p>
+          </div>
 
-          <div className="features-grid">
-            <div className="feature-item-glow">
-              <div className="feat-icon-box"><Sparkles size={20} /></div>
-              <div>
-                <h4>Resume Analyzer</h4>
-                <p>Real-time ATS parsing & score optimization checklist</p>
+          {/* Interactive Live Demo Simulation Widget */}
+          <div className="live-demo-interactive-widget">
+            <div className="widget-topbar">
+              <div className="widget-dots">
+                <span className="dot dot-red"></span>
+                <span className="dot dot-yellow"></span>
+                <span className="dot dot-green"></span>
               </div>
+              <div className="widget-title-badge">
+                <currentTab.icon size={14} />
+                <span>{currentTab.title}</span>
+              </div>
+              <span className="widget-status-badge">{currentTab.tag}</span>
             </div>
-            <div className="feature-item-glow">
-              <div className="feat-icon-box"><Brain size={20} /></div>
-              <div>
-                <h4>Simulated Interviews</h4>
-                <p>Gemini AI powered realistic verbal mock assessments</p>
-              </div>
+
+            <div className="widget-body">
+              {currentTab.previewType === 'resume' && (
+                <div className="preview-resume-content">
+                  <div className="ats-score-meter-row">
+                    <div className="ats-circle-badge">
+                      <span className="ats-num">96</span>
+                      <span className="ats-lbl">ATS SCORE</span>
+                    </div>
+                    <div className="ats-meter-details">
+                      <div className="meter-label-row">
+                        <strong>Software Architect Match</strong>
+                        <span className="text-success font-bold">Excellent Match</span>
+                      </div>
+                      <div className="ats-progress-track">
+                        <div className="ats-progress-fill" style={{ width: '96%' }}></div>
+                      </div>
+                      <div className="ats-tags-row">
+                        <span className="ats-tag">✅ React 19</span>
+                        <span className="ats-tag">✅ Python FastAPI</span>
+                        <span className="ats-tag">✅ System Design</span>
+                        <span className="ats-tag">✅ MongoDB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentTab.previewType === 'interview' && (
+                <div className="preview-interview-content">
+                  <div className="speech-wave-banner">
+                    <div className="soundwave-anim">
+                      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span className="speech-status">Verbal Answer Analysis Stream</span>
+                  </div>
+                  <div className="chat-mini-dialog">
+                    <div className="mini-bubble ai">
+                      <strong>AI Interviewer:</strong> "How do you optimize React render cycles in large-scale trees?"
+                    </div>
+                    <div className="mini-bubble user">
+                      <strong>Candidate:</strong> "By using useMemo, React.memo with custom comparison, and state colocation..."
+                    </div>
+                  </div>
+                  <div className="interview-score-chip">
+                    <CheckCircle2 size={15} color="#10b981" />
+                    <span>Clarity: <strong>9.4/10</strong> • Technical Precision: <strong>9.8/10</strong></span>
+                  </div>
+                </div>
+              )}
+
+              {currentTab.previewType === 'sandbox' && (
+                <div className="preview-sandbox-content">
+                  <div className="sandbox-header-row">
+                    <span className="sandbox-prob-title">Problem #242 • Valid Anagram</span>
+                    <span className="sandbox-badge-easy">Easy</span>
+                  </div>
+                  <div className="mini-code-window">
+                    <code>
+                      <span className="kw">function</span> <span className="fn">isAnagram</span>(s, t) &#123;<br/>
+                      &nbsp;&nbsp;<span className="kw">if</span> (s.length !== t.length) <span className="kw">return</span> <span className="bool">false</span>;<br/>
+                      &nbsp;&nbsp;<span className="kw">return</span> s.split(<span className="str">''</span>).sort().join(<span className="str">''</span>) === t.split(<span className="str">''</span>).sort().join(<span className="str">''</span>);<br/>
+                      &#125;
+                    </code>
+                  </div>
+                  <div className="sandbox-test-status">
+                    <span className="test-pass-pill">✅ 3/3 Testcases Passed</span>
+                    <span className="test-time">⚡ Runtime: 0.2ms</span>
+                  </div>
+                </div>
+              )}
+
+              {currentTab.previewType === 'company' && (
+                <div className="preview-company-content">
+                  <div className="company-logos-row">
+                    <span className="comp-pill active">Google</span>
+                    <span className="comp-pill">Microsoft</span>
+                    <span className="comp-pill">Amazon</span>
+                    <span className="comp-pill">Uber</span>
+                  </div>
+                  <div className="company-rounds-grid">
+                    <div className="round-card">
+                      <span className="round-idx">R1</span>
+                      <div>
+                        <strong>Online Assessment</strong>
+                        <p>Graph BFS / DP Hard</p>
+                      </div>
+                    </div>
+                    <div className="round-card">
+                      <span className="round-idx">R2</span>
+                      <div>
+                        <strong>System Design</strong>
+                        <p>Distributed Caching & Sharding</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="feature-item-glow">
-              <div className="feat-icon-box"><Briefcase size={20} /></div>
-              <div>
-                <h4>Company Prep Guides</h4>
-                <p>Verified round structures & roadmaps for top tech firms</p>
-              </div>
+          </div>
+
+          {/* Interactive Feature Selectors */}
+          <div className="showcase-tabs-nav">
+            {SHOWCASE_TABS.map((tab, idx) => {
+              const Icon = tab.icon;
+              const isActive = activeTabIdx === idx;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`showcase-nav-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveTabIdx(idx)}
+                >
+                  <div className="nav-icon-wrap">
+                    <Icon size={16} />
+                  </div>
+                  <div className="nav-text-wrap">
+                    <span className="nav-title">{tab.title}</span>
+                    <span className="nav-sub">{tab.subtitle}</span>
+                  </div>
+                  {isActive && <div className="active-glow-bar" />}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Trust proof bar */}
+          <div className="showcase-trust-bar">
+            <div className="trust-item">
+              <ShieldCheck size={16} className="text-primary" />
+              <span>256-Bit Encrypted</span>
             </div>
-            <div className="feature-item-glow">
-              <div className="feat-icon-box"><Activity size={20} /></div>
-              <div>
-                <h4>Telemetry & Logs</h4>
-                <p>Real-time server query stream & system diagnostics cockpit</p>
-              </div>
+            <div className="trust-item">
+              <Zap size={16} className="text-primary" />
+              <span>Sub-second AI Speed</span>
+            </div>
+            <div className="trust-item">
+              <Award size={16} className="text-primary" />
+              <span>10,000+ Placements</span>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Interactive Frosted Card */}
-        <div className="login-form-side animate-scale-up">
-          <div className="login-box glass-card">
-            <div className="login-header">
-              <h2 className="form-greeting">
-                {mode === 'signin' && 'Welcome Back'}
-                {mode === 'signup' && 'Create Account'}
-                {mode === 'forgot' && 'Reset Password'}
-              </h2>
-              <p className="brand-tagline">
-                {mode === 'signin' && 'Sign in to access your AI Career Copilot'}
-                {mode === 'signup' && 'Start your career optimization journey'}
-                {mode === 'forgot' && 'Enter your email to regain platform access'}
-              </p>
+        {/* ================= RIGHT SIDE: AUTHENTICATION FORM ================= */}
+        <div className="auth-form-panel">
+          {/* Mode Switcher Pill Slider */}
+          <div className="auth-mode-pill-container">
+            <button
+              type="button"
+              className={`mode-tab-btn ${mode === 'signin' ? 'active' : ''}`}
+              onClick={() => { setMode('signin'); setError(''); setMessage(''); }}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              className={`mode-tab-btn ${mode === 'signup' ? 'active' : ''}`}
+              onClick={() => { setMode('signup'); setError(''); setMessage(''); }}
+            >
+              Create Account
+            </button>
+          </div>
+
+          {/* Form Header */}
+          <div className="auth-form-header">
+            <h1 className="auth-heading">
+              {mode === 'signin' && 'Welcome Back'}
+              {mode === 'signup' && 'Get Started Free'}
+              {mode === 'forgot' && 'Reset Password'}
+            </h1>
+            <p className="auth-subheading">
+              {mode === 'signin' && 'Enter your credentials to access your personal AI Copilot workspace.'}
+              {mode === 'signup' && 'Create your account in seconds to begin optimizing your career.'}
+              {mode === 'forgot' && 'Enter your registered email address to receive password reset link.'}
+            </p>
+          </div>
+
+          {/* Alerts */}
+          {error && (
+            <div className="auth-alert error-banner">
+              <span>⚠️ {error}</span>
             </div>
+          )}
+          {message && (
+            <div className="auth-alert success-banner">
+              <span>✅ {message}</span>
+            </div>
+          )}
 
-            {error && <div className="alert-message error-alert">{error}</div>}
-            {message && <div className="alert-message success-alert">{message}</div>}
+          {/* 1-Click Instant Guest / Recruiter Demo Button */}
+          {mode === 'signin' && (
+            <div className="guest-quick-access-box">
+              <button
+                type="button"
+                className="guest-demo-btn"
+                onClick={handleGuestDemoLogin}
+                disabled={guestLoading}
+              >
+                <div className="guest-btn-content">
+                  <div className="guest-icon-pulse">
+                    <Stars size={18} />
+                  </div>
+                  <div className="guest-btn-texts">
+                    <strong>Explore as Guest Developer</strong>
+                    <span>1-Click Instant Demo • No credentials required</span>
+                  </div>
+                </div>
+                <ArrowRight size={18} className="guest-arrow" />
+              </button>
 
-            <form onSubmit={handleSubmit} className="login-form">
-              {mode === 'signup' && (
-                <div className="form-group">
-                  <label className="form-label" htmlFor="reg-name">Full Name</label>
-                  <div className="input-with-icon">
-                    <User size={18} className="input-icon" />
+              <div className="auth-divider-row">
+                <span className="divider-line"></span>
+                <span className="divider-text">OR CONTINUE WITH EMAIL</span>
+                <span className="divider-line"></span>
+              </div>
+            </div>
+          )}
+
+          {/* Main Form */}
+          <form onSubmit={handleSubmit} className="auth-inputs-form">
+            {mode === 'signup' && (
+              <>
+                <div className="form-field-group">
+                  <label className="field-label" htmlFor="auth-name">Full Name</label>
+                  <div className="field-input-wrap">
+                    <User size={18} className="field-icon" />
                     <input
+                      id="auth-name"
                       type="text"
-                      id="reg-name"
-                      className="form-control"
-                      placeholder="John Doe"
+                      className="field-control"
+                      placeholder="e.g. Prince Raj"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
                   </div>
                 </div>
-              )}
 
-              <div className="form-group">
-                <label className="form-label" htmlFor="login-email">Email Address</label>
-                <div className="input-with-icon">
-                  <Mail size={18} className="input-icon" />
-                  <input
-                    type="email"
-                    id="login-email"
-                    className="form-control"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              {mode !== 'forgot' && (
-                <div className="form-group">
-                  <div className="label-row">
-                    <label className="form-label" htmlFor="login-password">Password</label>
-                    {mode === 'signin' && (
-                      <span className="form-link-span" onClick={() => { setMode('forgot'); setError(''); setMessage(''); }}>
-                        Forgot?
-                      </span>
-                    )}
+                {/* Interactive Career Track Picker */}
+                <div className="form-field-group">
+                  <label className="field-label">Target Role / Track</label>
+                  <div className="track-picker-grid">
+                    {CAREER_TRACKS.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        className={`track-pill-btn ${targetTrack === t.id ? 'selected' : ''}`}
+                        onClick={() => setTargetTrack(t.id)}
+                      >
+                        <span className="track-emoji">{t.icon}</span>
+                        <span className="track-name">{t.label}</span>
+                        {targetTrack === t.id && <Check size={12} className="track-check" />}
+                      </button>
+                    ))}
                   </div>
-                  <div className="input-with-icon">
-                    <Lock size={18} className="input-icon" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      id="login-password"
-                      className="form-control"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
+                </div>
+              </>
+            )}
+
+            <div className="form-field-group">
+              <label className="field-label" htmlFor="auth-email">Email Address</label>
+              <div className="field-input-wrap">
+                <Mail size={18} className="field-icon" />
+                <input
+                  id="auth-email"
+                  type="email"
+                  className="field-control"
+                  placeholder="name@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {mode !== 'forgot' && (
+              <div className="form-field-group">
+                <div className="field-label-row">
+                  <label className="field-label" htmlFor="auth-pass">Password</label>
+                  {mode === 'signin' && (
                     <button
                       type="button"
-                      className="password-toggle-btn"
-                      onClick={() => setShowPassword(!showPassword)}
+                      className="forgot-link-btn"
+                      onClick={() => { setMode('forgot'); setError(''); setMessage(''); }}
                     >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      Forgot password?
                     </button>
-                  </div>
+                  )}
                 </div>
-              )}
+                <div className="field-input-wrap">
+                  <Lock size={18} className="field-icon" />
+                  <input
+                    id="auth-pass"
+                    type={showPassword ? 'text' : 'password'}
+                    className="field-control"
+                    placeholder="••••••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="pass-visibility-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
 
-              <button type="submit" className="btn btn-primary login-submit-btn" disabled={loading}>
-                <span>{loading ? 'Processing...' : mode === 'signin' ? 'Sign In' : mode === 'signup' ? 'Create Account' : 'Send Instructions'}</span>
-                {!loading && <ArrowRight size={18} />}
-              </button>
-            </form>
+                {/* Live Password Strength Meter on Signup */}
+                {mode === 'signup' && password.length > 0 && (
+                  <div className="password-strength-container">
+                    <div className="strength-bar-track">
+                      <div 
+                        className="strength-bar-fill"
+                        style={{ 
+                          width: `${passStrength.score}%`, 
+                          background: passStrength.color 
+                        }}
+                      />
+                    </div>
+                    <div className="strength-caption-row">
+                      <span>Strength: <strong style={{ color: passStrength.color }}>{passStrength.text}</strong></span>
+                      <span className="strength-hint">8+ chars with numbers & symbols</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
-            <div className="login-footer">
-              {mode === 'signin' && (
-                <p>
-                  New to CareerPilot?{' '}
-                  <span className="form-link-span highlight-link" onClick={() => { setMode('signup'); setError(''); setMessage(''); }}>
-                    Sign Up Now
+            {/* Primary Submit Button */}
+            <button 
+              type="submit" 
+              className="auth-primary-submit-btn" 
+              disabled={loading || guestLoading}
+            >
+              {loading ? (
+                <div className="btn-spinner-row">
+                  <span className="spinner-dot"></span>
+                  <span>Authenticating...</span>
+                </div>
+              ) : (
+                <>
+                  <span>
+                    {mode === 'signin' && 'Sign In to Workspace'}
+                    {mode === 'signup' && 'Create Free Account'}
+                    {mode === 'forgot' && 'Send Reset Instructions'}
                   </span>
-                </p>
+                  <ArrowRight size={18} />
+                </>
               )}
-              {mode === 'signup' && (
-                <p>
-                  Already have an account?{' '}
-                  <span className="form-link-span highlight-link" onClick={() => { setMode('signin'); setError(''); setMessage(''); }}>
-                    Sign In
-                  </span>
-                </p>
-              )}
-              {mode === 'forgot' && (
-                <p>
-                  Remember password?{' '}
-                  <span className="form-link-span highlight-link" onClick={() => { setMode('signin'); setError(''); setMessage(''); }}>
-                    Back to Sign In
-                  </span>
-                </p>
-              )}
-            </div>
+            </button>
+          </form>
+
+          {/* Form Footer Switcher */}
+          <div className="auth-footer-navigation">
+            {mode === 'signin' && (
+              <p>
+                Don't have an account yet?{' '}
+                <button
+                  type="button"
+                  className="footer-nav-link"
+                  onClick={() => { setMode('signup'); setError(''); setMessage(''); }}
+                >
+                  Create an account
+                </button>
+              </p>
+            )}
+            {mode === 'signup' && (
+              <p>
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  className="footer-nav-link"
+                  onClick={() => { setMode('signin'); setError(''); setMessage(''); }}
+                >
+                  Sign in here
+                </button>
+              </p>
+            )}
+            {mode === 'forgot' && (
+              <p>
+                Remembered your password?{' '}
+                <button
+                  type="button"
+                  className="footer-nav-link"
+                  onClick={() => { setMode('signin'); setError(''); setMessage(''); }}
+                >
+                  Back to Sign In
+                </button>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -286,3 +611,4 @@ const Login = () => {
 };
 
 export default Login;
+

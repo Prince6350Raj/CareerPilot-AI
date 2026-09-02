@@ -171,6 +171,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const guestLogin = async () => {
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/auth/guest-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.message || 'Guest login failed');
+      }
+      localStorage.setItem('token', data.token);
+      setToken(data.token);
+      setUser(data.user);
+      setIsAuthenticated(true);
+      return data;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -182,6 +204,7 @@ export const AuthProvider = ({ children }) => {
         register,
         verifyEmail,
         login,
+        guestLogin,
         logout,
         forgotPassword,
         resetPassword,
