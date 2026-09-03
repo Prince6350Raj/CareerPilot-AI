@@ -111,6 +111,16 @@ const ResumeAnalyzer = () => {
     '--theme-text-light': currentTheme.text
   };
 
+  const formatLinkUrl = (rawUrl, type) => {
+    if (!rawUrl) return '';
+    let url = rawUrl.trim();
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    if (type === 'linkedin' && !url.includes('linkedin.com')) return `https://linkedin.com/in/${url.replace(/^@/, '')}`;
+    if (type === 'github' && !url.includes('github.com')) return `https://github.com/${url.replace(/^@/, '')}`;
+    if (type === 'leetcode' && !url.includes('leetcode.com')) return `https://leetcode.com/${url.replace(/^@/, '')}`;
+    return `https://${url}`;
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -342,43 +352,69 @@ const ResumeAnalyzer = () => {
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF } = await import('jspdf');
 
-      const originalStyle = element.style.cssText;
+      const originalStyle = element.getAttribute('style') || '';
+      
+      // Standard A4 container dimensions (794px width x 1123px height at 96 DPI)
       element.style.width = '794px';
-      element.style.background = '#ffffff';
-      element.style.color = '#000000';
-      element.style.padding = '30px';
+      element.style.minHeight = '1123px';
+      element.style.maxHeight = '1123px';
       element.style.boxShadow = 'none';
+      element.style.border = 'none';
+      element.style.background = '#ffffff';
+
+      // Capture all link elements positions to embed real clickable PDF links
+      const linkElements = Array.from(element.querySelectorAll('a[href]'));
+      const containerRect = element.getBoundingClientRect();
+      const linkData = linkElements.map(link => {
+        const rect = link.getBoundingClientRect();
+        return {
+          url: link.href,
+          xRatio: (rect.left - containerRect.left) / containerRect.width,
+          yRatio: (rect.top - containerRect.top) / containerRect.height,
+          wRatio: rect.width / containerRect.width,
+          hRatio: rect.height / containerRect.height
+        };
+      }).filter(item => item.url && item.wRatio > 0 && item.hRatio > 0);
 
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: 794
       });
 
-      element.style.cssText = originalStyle;
+      element.setAttribute('style', originalStyle);
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // Strict 1-Page A4 PDF document
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      });
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      const pdfWidth = 210;
+      const pdfHeight = 297;
 
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
+      // Draw exactly 1 single page image
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
-      pdf.save(`${personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+      // Add real clickable link annotations on top of the PDF
+      linkData.forEach(item => {
+        const linkX = item.xRatio * pdfWidth;
+        const linkY = item.yRatio * pdfHeight;
+        const linkW = item.wRatio * pdfWidth;
+        const linkH = item.hRatio * pdfHeight;
+        pdf.link(linkX, linkY, linkW, linkH, { url: item.url });
+      });
+
+      const safeName = (personal.fullName || 'Resume').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+      pdf.save(`${safeName}_1Page_ATS_Resume.pdf`);
     } catch (err) {
-      console.error('Failed to generate PDF:', err);
+      console.error('Failed to generate 1-page PDF:', err);
     }
   };
 
@@ -1181,62 +1217,85 @@ const ResumeAnalyzer = () => {
                 <div className="builder-preview-panel">
                   <div className="preview-header-bar">
                     <span>A4 LIVE RESUME PREVIEW</span>
+                    <span className="preview-badge-single-page">1-PAGE ATS GUARANTEED</span>
                   </div>
-                     <div className="preview-canvas-card" id="resume-preview-container" style={canvasStyles}>
+                  <div className="preview-canvas-card" id="resume-preview-container" style={canvasStyles}>
                     {selectedTemplate === 'classic' && (
                       <div className="template-classic-root" style={{ textAlign: 'left', color: '#1a1a1a' }}>
-                        <div className="preview-header-center" style={{ borderBottom: '2px solid var(--theme-primary)', paddingBottom: '0.75rem', textAlign: 'center', marginBottom: '1.25rem' }}>
+                        <div className="preview-header-center">
                           {profileImage && (
-                            <div className="p-photo-wrapper" style={{ marginBottom: '0.75rem', display: 'flex', justifyContent: 'center' }}>
-                              <img src={profileImage} alt="Profile" className="p-photo-classic" style={{ width: '85px', height: '85px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-primary)' }} />
+                            <div className="p-photo-wrapper" style={{ marginBottom: '0.45rem', display: 'flex', justifyContent: 'center' }}>
+                              <img src={profileImage} alt="Profile" className="p-photo-classic" style={{ width: '75px', height: '75px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid var(--theme-primary, #1e3a8a)' }} />
                             </div>
                           )}
-                          <h1 className="p-fullname" style={{ color: 'var(--theme-primary)', fontSize: '1.75rem', fontWeight: 800, margin: 0 }}>{personal.fullName || 'YOUR NAME'}</h1>
-                          {personal.title && <p className="p-title" style={{ color: 'var(--theme-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '4px 0 0 0' }}>{personal.title}</p>}
-                          <div className="p-contact-row" style={{ display: 'flex', justifyContent: 'center', gap: '0.3rem', fontSize: '0.75rem', flexWrap: 'wrap', marginTop: '6px', color: '#4b5563' }}>
-                            {personal.email && <span>{personal.email}</span>}
-                            {personal.phone && <span> • {personal.phone}</span>}
-                            {personal.location && <span> • {personal.location}</span>}
+                          <h1 className="p-fullname">{personal.fullName || 'YOUR NAME'}</h1>
+                          {personal.title && <p className="p-title">{personal.title}</p>}
+                          <div className="p-contact-row">
+                            {personal.email && (
+                              <a href={`mailto:${personal.email}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none' }}>
+                                ✉ {personal.email}
+                              </a>
+                            )}
+                            {personal.phone && (
+                              <a href={`tel:${personal.phone.split(',')[0].trim()}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none' }}>
+                                • 📞 {personal.phone}
+                              </a>
+                            )}
+                            {personal.location && <span>• 📍 {personal.location}</span>}
                           </div>
-                          <div className="p-contact-row" style={{ display: 'flex', justifyContent: 'center', gap: '0.3rem', fontSize: '0.75rem', flexWrap: 'wrap', marginTop: '2px', color: '#4b5563' }}>
-                            {personal.linkedin && <span>LinkedIn: {personal.linkedin}</span>}
-                            {personal.github && <span> • GitHub: {personal.github}</span>}
-                            {personal.leetcode && <span> • LeetCode: {personal.leetcode}</span>}
-                          </div>
+                          {(personal.linkedin || personal.github || personal.leetcode) && (
+                            <div className="p-contact-row" style={{ marginTop: '2px', gap: '0.6rem' }}>
+                              {personal.linkedin && (
+                                <a href={formatLinkUrl(personal.linkedin, 'linkedin')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">
+                                  LinkedIn
+                                </a>
+                              )}
+                              {personal.github && (
+                                <a href={formatLinkUrl(personal.github, 'github')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">
+                                  • GitHub
+                                </a>
+                              )}
+                              {personal.leetcode && (
+                                <a href={formatLinkUrl(personal.leetcode, 'leetcode')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">
+                                  • LeetCode
+                                </a>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                         {personal.summary && (
-                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PROFESSIONAL SUMMARY</h3>
-                            <p className="p-text" style={{ fontSize: '0.8rem', lineHeight: 1.45, color: '#374151', margin: 0 }}>{personal.summary}</p>
+                          <div className="preview-section">
+                            <h3 className="p-section-title">PROFESSIONAL SUMMARY</h3>
+                            <p className="p-text">{personal.summary}</p>
                           </div>
                         )}
 
                         {experience.some(e => e.company) && (
-                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>WORK EXPERIENCE</h3>
+                          <div className="preview-section">
+                            <h3 className="p-section-title">WORK EXPERIENCE</h3>
                             {experience.filter(e => e.company).map((exp, i) => (
-                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
-                                <div className="p-item-header" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
+                              <div key={i} className="p-item-node">
+                                <div className="p-item-header">
                                   <span>{exp.company} — <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{exp.position}</span></span>
-                                  <span style={{ color: 'var(--theme-secondary)', fontWeight: 'normal' }}>{exp.duration}</span>
+                                  <span style={{ color: 'var(--theme-secondary, #4b5563)', fontWeight: 'normal' }}>{exp.duration}</span>
                                 </div>
-                                <p className="p-item-desc" style={{ fontSize: '0.75rem', lineHeight: 1.4, color: '#4b5563', margin: '2px 0 0 0', whiteSpace: 'pre-wrap' }}>{exp.description}</p>
+                                <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{exp.description}</p>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {education.some(e => e.institution) && (
-                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>EDUCATION</h3>
+                          <div className="preview-section">
+                            <h3 className="p-section-title">EDUCATION</h3>
                             {education.filter(e => e.institution).map((edu, i) => (
-                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
-                                <div className="p-item-header" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
+                              <div key={i} className="p-item-node">
+                                <div className="p-item-header">
                                   <span>{edu.degree}</span>
-                                  <span style={{ color: 'var(--theme-secondary)', fontWeight: 'normal' }}>{edu.duration}</span>
+                                  <span style={{ color: 'var(--theme-secondary, #4b5563)', fontWeight: 'normal' }}>{edu.duration}</span>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#4b5563', marginTop: '2px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#4b5563', marginTop: '1px' }}>
                                   <span>{edu.institution}</span>
                                   {edu.grade && <span style={{ fontWeight: 600 }}>{edu.grade}</span>}
                                 </div>
@@ -1246,26 +1305,26 @@ const ResumeAnalyzer = () => {
                         )}
 
                         {projects.some(p => p.name) && (
-                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>PERSONAL PROJECTS</h3>
+                          <div className="preview-section">
+                            <h3 className="p-section-title">PERSONAL PROJECTS</h3>
                             {projects.filter(p => p.name).map((proj, i) => (
-                              <div key={i} className="p-item-node" style={{ marginBottom: '0.5rem' }}>
-                                <div className="p-item-header" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#111111' }}>
-                                  <span>{proj.name} — <span style={{ fontWeight: 'normal', fontSize: '0.75rem', color: 'var(--theme-secondary)' }}>{proj.tech}</span></span>
+                              <div key={i} className="p-item-node">
+                                <div className="p-item-header">
+                                  <span>{proj.name} — <span style={{ fontWeight: 'normal', fontSize: '0.68rem', color: 'var(--theme-secondary, #4b5563)' }}>{proj.tech}</span></span>
                                 </div>
-                                <p className="p-item-desc" style={{ fontSize: '0.75rem', lineHeight: 1.4, color: '#4b5563', margin: '2px 0 0 0', whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                                <p className="p-item-desc" style={{ whiteSpace: 'pre-wrap' }}>{proj.description}</p>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {certificates.some(c => c.title) && (
-                          <div className="preview-section" style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>CERTIFICATES</h3>
+                          <div className="preview-section">
+                            <h3 className="p-section-title">CERTIFICATES</h3>
                             {certificates.filter(c => c.title).map((cert, i) => (
-                              <div key={i} style={{ fontSize: '0.75rem', color: '#374151', marginBottom: '3px', display: 'flex', justifyContent: 'space-between' }}>
-                                <span>• <strong>{cert.title}</strong>: | {cert.organization}</span>
-                                <span style={{ color: 'var(--theme-secondary)' }}>| {cert.date}</span>
+                              <div key={i} style={{ fontSize: '0.7rem', color: '#374151', marginBottom: '2px', display: 'flex', justifyContent: 'space-between' }}>
+                                <span>• <strong>{cert.title}</strong>: {cert.organization}</span>
+                                <span style={{ color: 'var(--theme-secondary, #4b5563)' }}>{cert.date}</span>
                               </div>
                             ))}
                           </div>
@@ -1273,17 +1332,17 @@ const ResumeAnalyzer = () => {
 
                         {skills && (
                           <div className="preview-section" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>TECHNICAL SKILLS</h3>
-                            <p className="p-text" style={{ fontSize: '0.8rem', lineHeight: 1.45, color: '#374151', margin: 0, whiteSpace: 'pre-wrap' }}>{skills}</p>
+                            <h3 className="p-section-title">TECHNICAL SKILLS</h3>
+                            <p className="p-text" style={{ whiteSpace: 'pre-wrap' }}>{skills}</p>
                           </div>
                         )}
 
                         {languages && (
-                          <div className="preview-section" style={{ borderBottom: 'none', paddingBottom: 0, marginTop: '0.75rem' }}>
-                            <h3 className="p-section-title" style={{ color: 'var(--theme-primary)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em', borderBottom: '1px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>LANGUAGES</h3>
-                            <ul style={{ margin: '4px 0 0 0', paddingLeft: '1.2rem', fontSize: '0.8rem', color: '#374151' }}>
+                          <div className="preview-section" style={{ borderBottom: 'none', paddingBottom: 0, marginTop: '0.35rem' }}>
+                            <h3 className="p-section-title">LANGUAGES</h3>
+                            <ul style={{ margin: '2px 0 0 0', paddingLeft: '1.2rem', fontSize: '0.72rem', color: '#374151' }}>
                               {languages.split(',').map((lang, idx) => (
-                                <li key={idx} style={{ marginBottom: '2px' }}>{lang.trim()}</li>
+                                <li key={idx} style={{ marginBottom: '1px' }}>{lang.trim()}</li>
                               ))}
                             </ul>
                           </div>
@@ -1292,54 +1351,54 @@ const ResumeAnalyzer = () => {
                     )}
 
                     {selectedTemplate === 'sidebar' && (
-                      <div className="template-sidebar-root" style={{ display: 'grid', gridTemplateColumns: '3fr 7fr', minHeight: '297mm', margin: '-2.5rem -2rem', overflow: 'hidden' }}>
-                        {/* Left Column (Gray/Light Blue Sidebar background) */}
-                        <div className="template-sidebar-col" style={{ backgroundColor: '#f1f5f9', color: '#1e293b', padding: '2.5rem 1.25rem', borderRight: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', gap: '1.75rem', textAlign: 'left' }}>
+                      <div className="template-sidebar-root">
+                        {/* Left Column (Sidebar) */}
+                        <div className="template-sidebar-col">
                           <div style={{ textAlign: 'center' }}>
                             {profileImage ? (
-                              <img src={profileImage} alt="Profile" style={{ width: '110px', height: '110px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-primary)', display: 'inline-block', marginBottom: '0.5rem' }} />
+                              <img src={profileImage} alt="Profile" style={{ width: '85px', height: '85px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid var(--theme-primary, #1e3a8a)', display: 'inline-block', marginBottom: '0.35rem' }} />
                             ) : (
-                              <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#cbd5e1', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '3px dashed #94a3b8', marginBottom: '0.5rem', fontSize: '0.8rem', color: '#64748b' }}>Photo</div>
+                              <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: '#e2e8f0', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #94a3b8', marginBottom: '0.35rem', fontSize: '0.7rem', color: '#64748b' }}>Photo</div>
                             )}
                           </div>
 
                           <div>
-                            <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>C O N T A C T</h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.72rem', color: '#334155' }}>
+                            <h3 style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.1em', borderBottom: '2px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.4rem', textTransform: 'uppercase', color: 'var(--theme-primary, #1e3a8a)', textAlign: 'center' }}>CONTACT</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.7rem', color: '#334155' }}>
                               {personal.phone && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                                   <span>📞</span>
-                                  <span>{personal.phone}</span>
+                                  <a href={`tel:${personal.phone.split(',')[0].trim()}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none' }}>{personal.phone}</a>
                                 </div>
                               )}
                               {personal.email && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                                   <span>✉</span>
-                                  <span style={{ wordBreak: 'break-all' }}>{personal.email}</span>
+                                  <a href={`mailto:${personal.email}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none', wordBreak: 'break-all' }}>{personal.email}</a>
                                 </div>
                               )}
                               {personal.location && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                                   <span>📍</span>
                                   <span>{personal.location}</span>
                                 </div>
                               )}
                               {personal.linkedin && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                                  <span>in</span>
-                                  <span style={{ wordBreak: 'break-all' }}>{personal.linkedin}</span>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                                  <span style={{ fontWeight: 700 }}>in</span>
+                                  <a href={formatLinkUrl(personal.linkedin, 'linkedin')} target="_blank" rel="noopener noreferrer" className="p-clickable-link" style={{ wordBreak: 'break-all' }}>LinkedIn</a>
                                 </div>
                               )}
                               {personal.github && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                                  <span>gh</span>
-                                  <span style={{ wordBreak: 'break-all' }}>{personal.github}</span>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                                  <span style={{ fontWeight: 700 }}>gh</span>
+                                  <a href={formatLinkUrl(personal.github, 'github')} target="_blank" rel="noopener noreferrer" className="p-clickable-link" style={{ wordBreak: 'break-all' }}>GitHub</a>
                                 </div>
                               )}
                               {personal.leetcode && (
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                                  <span>lc</span>
-                                  <span style={{ wordBreak: 'break-all' }}>{personal.leetcode}</span>
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                                  <span style={{ fontWeight: 700 }}>lc</span>
+                                  <a href={formatLinkUrl(personal.leetcode, 'leetcode')} target="_blank" rel="noopener noreferrer" className="p-clickable-link" style={{ wordBreak: 'break-all' }}>LeetCode</a>
                                 </div>
                               )}
                             </div>
@@ -1347,15 +1406,15 @@ const ResumeAnalyzer = () => {
 
                           {education.some(e => e.institution) && (
                             <div>
-                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>E D U C A T I O N</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.72rem', color: '#334155' }}>
+                              <h3 style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.1em', borderBottom: '2px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.4rem', textTransform: 'uppercase', color: 'var(--theme-primary, #1e3a8a)', textAlign: 'center' }}>EDUCATION</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.7rem', color: '#334155' }}>
                                 {education.filter(e => e.institution).map((edu, i) => (
-                                  <div key={i} style={{ borderBottom: i < education.length - 1 ? '1px dashed #cbd5e1' : 'none', paddingBottom: '0.5rem' }}>
-                                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '2px' }}>{edu.degree}</div>
-                                    <div style={{ fontSize: '0.68rem', color: '#64748b', marginBottom: '4px' }}>{edu.institution}</div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', fontWeight: 600 }}>
+                                  <div key={i} style={{ borderBottom: i < education.length - 1 ? '1px dashed #cbd5e1' : 'none', paddingBottom: '0.35rem' }}>
+                                    <div style={{ fontWeight: 800, color: '#0f172a' }}>{edu.degree}</div>
+                                    <div style={{ fontSize: '0.66rem', color: '#64748b' }}>{edu.institution}</div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.66rem', fontWeight: 600 }}>
                                       <span>{edu.duration}</span>
-                                      {edu.grade && <span style={{ color: 'var(--theme-secondary)' }}>{edu.grade}</span>}
+                                      {edu.grade && <span style={{ color: 'var(--theme-secondary, #4b5563)' }}>{edu.grade}</span>}
                                     </div>
                                   </div>
                                 ))}
@@ -1365,8 +1424,8 @@ const ResumeAnalyzer = () => {
 
                           {skills && (
                             <div>
-                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>S K I L L S</h3>
-                              <div style={{ fontSize: '0.72rem', color: '#334155', whiteSpace: 'pre-wrap', lineHeight: '1.4' }}>
+                              <h3 style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.1em', borderBottom: '2px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.4rem', textTransform: 'uppercase', color: 'var(--theme-primary, #1e3a8a)', textAlign: 'center' }}>SKILLS</h3>
+                              <div style={{ fontSize: '0.68rem', color: '#334155', whiteSpace: 'pre-wrap', lineHeight: '1.35' }}>
                                 {skills}
                               </div>
                             </div>
@@ -1374,50 +1433,42 @@ const ResumeAnalyzer = () => {
 
                           {languages && (
                             <div>
-                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.12em', borderBottom: '2px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase', color: 'var(--theme-primary)', textAlign: 'center' }}>L A N G U A G E S</h3>
-                              <ul style={{ margin: 0, paddingLeft: '1.2rem', fontSize: '0.75rem', color: '#334155' }}>
+                              <h3 style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.1em', borderBottom: '2px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.4rem', textTransform: 'uppercase', color: 'var(--theme-primary, #1e3a8a)', textAlign: 'center' }}>LANGUAGES</h3>
+                              <ul style={{ margin: 0, paddingLeft: '1rem', fontSize: '0.7rem', color: '#334155' }}>
                                 {languages.split(',').map((lang, idx) => (
-                                  <li key={idx} style={{ marginBottom: '2px' }}>{lang.trim()}</li>
+                                  <li key={idx} style={{ marginBottom: '1px' }}>{lang.trim()}</li>
                                 ))}
                               </ul>
                             </div>
                           )}
                         </div>
 
-                        {/* Right Column (Timeline Thread) */}
-                        <div className="template-sidebar-body" style={{ padding: '2.5rem 2rem', display: 'flex', flexDirection: 'column', gap: '1.75rem', backgroundColor: '#ffffff', color: '#1a1a1a', textAlign: 'left', position: 'relative' }}>
-                          
-                          {/* Vertical timeline line */}
-                          <div className="vertical-timeline-line" style={{ position: 'absolute', left: '1.95rem', top: '10.5rem', bottom: '2.5rem', width: '2px', backgroundColor: '#cbd5e1', zIndex: 1 }}></div>
-
-                          {/* Top Name Box Banner */}
-                          <div style={{ backgroundColor: 'var(--theme-primary)', padding: '1.5rem', border: '3px double #ffffff', outline: '8px solid var(--theme-primary)', textAlign: 'center', marginBottom: '1rem', color: '#ffffff' }}>
-                            <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '0.15rem', margin: 0, color: '#ffffff' }}>{personal.fullName || 'YOUR NAME'}</h1>
-                            {personal.title && <p style={{ fontSize: '0.85rem', letterSpacing: '0.1rem', textTransform: 'uppercase', opacity: 0.9, marginTop: '6px', margin: '6px 0 0 0', color: '#ffffff' }}>{personal.title}</p>}
+                        {/* Right Column (Content Body) */}
+                        <div className="template-sidebar-body">
+                          {/* Top Name Banner */}
+                          <div style={{ backgroundColor: 'var(--theme-primary, #1e3a8a)', padding: '1rem', textAlign: 'center', marginBottom: '0.5rem', color: '#ffffff', borderRadius: '4px' }}>
+                            <h1 style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '0.1rem', margin: 0, color: '#ffffff' }}>{personal.fullName || 'YOUR NAME'}</h1>
+                            {personal.title && <p style={{ fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.9, margin: '4px 0 0 0', color: '#ffffff' }}>{personal.title}</p>}
                           </div>
 
                           {personal.summary && (
-                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
-                              {/* Bullet node on timeline */}
-                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
-                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>S U M M A R Y</h3>
-                              <p style={{ fontSize: '0.78rem', lineHeight: 1.5, color: '#374151', margin: 0 }}>{personal.summary}</p>
+                            <div>
+                              <h3 style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.06em', borderBottom: '1.5px solid #0f172a', paddingBottom: '2px', marginBottom: '0.35rem', textTransform: 'uppercase' }}>SUMMARY</h3>
+                              <p style={{ fontSize: '0.72rem', lineHeight: 1.35, color: '#374151', margin: 0 }}>{personal.summary}</p>
                             </div>
                           )}
 
                           {experience.some(e => e.company) && (
-                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
-                              {/* Bullet node on timeline */}
-                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
-                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>I N T E R N S H I P   E X P E R I E N C E</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div>
+                              <h3 style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.06em', borderBottom: '1.5px solid #0f172a', paddingBottom: '2px', marginBottom: '0.35rem', textTransform: 'uppercase' }}>EXPERIENCE</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                                 {experience.filter(e => e.company).map((exp, i) => (
-                                  <div key={i} style={{ fontSize: '0.75rem' }}>
+                                  <div key={i} style={{ fontSize: '0.72rem' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, color: '#0f172a' }}>
                                       <span>• {exp.company} — <span style={{ fontWeight: 'normal', fontStyle: 'italic' }}>{exp.position}</span></span>
-                                      <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary)' }}>{exp.duration}</span>
+                                      <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary, #4b5563)' }}>{exp.duration}</span>
                                     </div>
-                                    <p style={{ margin: '4px 0 0 0', lineHeight: 1.45, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.8rem' }}>{exp.description}</p>
+                                    <p style={{ margin: '2px 0 0 0', lineHeight: 1.35, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.6rem' }}>{exp.description}</p>
                                   </div>
                                 ))}
                               </div>
@@ -1425,17 +1476,15 @@ const ResumeAnalyzer = () => {
                           )}
 
                           {projects.some(p => p.name) && (
-                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
-                              {/* Bullet node on timeline */}
-                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
-                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>P R O J E C T S</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                            <div>
+                              <h3 style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.06em', borderBottom: '1.5px solid #0f172a', paddingBottom: '2px', marginBottom: '0.35rem', textTransform: 'uppercase' }}>PROJECTS</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                                 {projects.filter(p => p.name).map((proj, i) => (
-                                  <div key={i} style={{ fontSize: '0.75rem' }}>
-                                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '2px' }}>
-                                      • {proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.7rem', color: 'var(--theme-secondary)' }}>({proj.tech})</span>
+                                  <div key={i} style={{ fontSize: '0.72rem' }}>
+                                    <div style={{ fontWeight: 800, color: '#0f172a', marginBottom: '1px' }}>
+                                      • {proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.68rem', color: 'var(--theme-secondary, #4b5563)' }}>({proj.tech})</span>
                                     </div>
-                                    <p style={{ margin: '4px 0 0 0', lineHeight: 1.45, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.8rem' }}>{proj.description}</p>
+                                    <p style={{ margin: '2px 0 0 0', lineHeight: 1.35, color: '#4b5563', whiteSpace: 'pre-wrap', paddingLeft: '0.6rem' }}>{proj.description}</p>
                                   </div>
                                 ))}
                               </div>
@@ -1443,15 +1492,13 @@ const ResumeAnalyzer = () => {
                           )}
 
                           {certificates.some(c => c.title) && (
-                            <div style={{ position: 'relative', paddingLeft: '1.5rem' }}>
-                              {/* Bullet node on timeline */}
-                              <div style={{ position: 'absolute', left: '-0.33rem', top: '0.2rem', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--theme-primary)', border: '2px solid #ffffff', zIndex: 2 }}></div>
-                              <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.1em', borderBottom: '1.5px solid #0f172a', paddingBottom: '3px', marginBottom: '0.75rem', textTransform: 'uppercase' }}>C E R T I F I C A T E S</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', paddingLeft: '0.5rem' }}>
+                            <div>
+                              <h3 style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0f172a', letterSpacing: '0.06em', borderBottom: '1.5px solid #0f172a', paddingBottom: '2px', marginBottom: '0.35rem', textTransform: 'uppercase' }}>CERTIFICATES</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', paddingLeft: '0.3rem' }}>
                                 {certificates.filter(c => c.title).map((cert, i) => (
-                                  <div key={i} style={{ fontSize: '0.75rem', color: '#374151', display: 'flex', justifyContent: 'space-between' }}>
-                                    <span>• <strong>{cert.title}</strong>: | {cert.organization}</span>
-                                    <span style={{ color: 'var(--theme-secondary)' }}>| {cert.date}</span>
+                                  <div key={i} style={{ fontSize: '0.7rem', color: '#374151', display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>• <strong>{cert.title}</strong>: {cert.organization}</span>
+                                    <span style={{ color: 'var(--theme-secondary, #4b5563)' }}>{cert.date}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1462,42 +1509,42 @@ const ResumeAnalyzer = () => {
                     )}
 
                     {selectedTemplate === 'banner' && (
-                      <div className="template-banner-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '297mm', margin: '-2.5rem -2rem', backgroundColor: '#ffffff', color: '#1a1a1a', textAlign: 'left' }}>
+                      <div className="template-banner-root">
                         {/* Top banner */}
-                        <div style={{ backgroundColor: 'var(--theme-primary)', color: 'var(--theme-text-light)', padding: '2.5rem 2rem 2rem 2rem', position: 'relative' }}>
+                        <div className="template-banner-header">
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: '0', color: 'var(--theme-text-light)' }}>{personal.fullName || 'YOUR NAME'}</h1>
-                              {personal.title && <p style={{ fontSize: '0.9rem', opacity: 0.9, marginTop: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--theme-text-light)', margin: '4px 0 0 0' }}>{personal.title}</p>}
+                              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, margin: '0', color: 'var(--theme-text-light, #ffffff)' }}>{personal.fullName || 'YOUR NAME'}</h1>
+                              {personal.title && <p style={{ fontSize: '0.8rem', opacity: 0.9, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '3px 0 0 0', color: 'var(--theme-text-light, #ffffff)' }}>{personal.title}</p>}
                             </div>
                             {profileImage && (
-                              <img src={profileImage} alt="Profile" style={{ width: '90px', height: '90px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--theme-text-light)', display: 'inline-block' }} />
+                              <img src={profileImage} alt="Profile" style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover', border: '2.5px solid var(--theme-text-light, #ffffff)', display: 'inline-block' }} />
                             )}
                           </div>
                         </div>
 
                         {/* Split columns layout below */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', padding: '2rem', flex: 1 }}>
+                        <div className="template-banner-columns">
                           {/* Left Column: Summary, Exp, Projects */}
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                             {personal.summary && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Professional Summary</h3>
-                                <p style={{ fontSize: '0.78rem', lineHeight: 1.45, color: '#374151', margin: 0 }}>{personal.summary}</p>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Professional Summary</h3>
+                                <p style={{ fontSize: '0.72rem', lineHeight: 1.35, color: '#374151', margin: 0 }}>{personal.summary}</p>
                               </div>
                             )}
 
                             {experience.some(e => e.company) && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Work Experience</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Work Experience</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                                   {experience.filter(e => e.company).map((exp, i) => (
-                                    <div key={i} style={{ fontSize: '0.75rem' }}>
+                                    <div key={i} style={{ fontSize: '0.72rem' }}>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, color: '#111111' }}>
                                         <span>{exp.company} — {exp.position}</span>
-                                        <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary)' }}>{exp.duration}</span>
+                                        <span style={{ fontWeight: 'normal', color: 'var(--theme-secondary, #4b5563)' }}>{exp.duration}</span>
                                       </div>
-                                      <p style={{ margin: '3px 0 0 0', lineHeight: 1.4, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{exp.description}</p>
+                                      <p style={{ margin: '2px 0 0 0', lineHeight: 1.35, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{exp.description}</p>
                                     </div>
                                   ))}
                                 </div>
@@ -1506,12 +1553,12 @@ const ResumeAnalyzer = () => {
 
                             {projects.some(p => p.name) && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Personal Projects</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Personal Projects</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                                   {projects.filter(p => p.name).map((proj, i) => (
-                                    <div key={i} style={{ fontSize: '0.75rem' }}>
-                                      <div style={{ fontWeight: 700, color: '#111111' }}>{proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.68rem', color: 'var(--theme-secondary)' }}>({proj.tech})</span></div>
-                                      <p style={{ margin: '2px 0 0 0', lineHeight: 1.4, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{proj.description}</p>
+                                    <div key={i} style={{ fontSize: '0.72rem' }}>
+                                      <div style={{ fontWeight: 700, color: '#111111' }}>{proj.name} <span style={{ fontWeight: 'normal', fontSize: '0.66rem', color: 'var(--theme-secondary, #4b5563)' }}>({proj.tech})</span></div>
+                                      <p style={{ margin: '2px 0 0 0', lineHeight: 1.35, color: '#4b5563', whiteSpace: 'pre-wrap' }}>{proj.description}</p>
                                     </div>
                                   ))}
                                 </div>
@@ -1520,27 +1567,37 @@ const ResumeAnalyzer = () => {
                           </div>
 
                           {/* Right Column: Contact, Education, Skills */}
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', borderLeft: '1px solid #e5e7eb', paddingLeft: '1.5rem' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', borderLeft: '1px solid #e5e7eb', paddingLeft: '1rem' }}>
                             <div>
-                              <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Contact Info</h3>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.72rem', color: '#4b5563' }}>
-                                {personal.email && <div>✉ {personal.email}</div>}
-                                {personal.phone && <div>📞 {personal.phone}</div>}
+                              <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Contact Info</h3>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.7rem', color: '#4b5563' }}>
+                                {personal.email && (
+                                  <div>✉ <a href={`mailto:${personal.email}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none' }}>{personal.email}</a></div>
+                                )}
+                                {personal.phone && (
+                                  <div>📞 <a href={`tel:${personal.phone.split(',')[0].trim()}`} className="p-clickable-link" style={{ color: 'inherit', textDecoration: 'none' }}>{personal.phone}</a></div>
+                                )}
                                 {personal.location && <div>📍 {personal.location}</div>}
-                                {personal.linkedin && <div>in: {personal.linkedin}</div>}
-                                {personal.github && <div>gh: {personal.github}</div>}
-                                {personal.leetcode && <div>lc: {personal.leetcode}</div>}
+                                {personal.linkedin && (
+                                  <div>in: <a href={formatLinkUrl(personal.linkedin, 'linkedin')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">LinkedIn</a></div>
+                                )}
+                                {personal.github && (
+                                  <div>gh: <a href={formatLinkUrl(personal.github, 'github')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">GitHub</a></div>
+                                )}
+                                {personal.leetcode && (
+                                  <div>lc: <a href={formatLinkUrl(personal.leetcode, 'leetcode')} target="_blank" rel="noopener noreferrer" className="p-clickable-link">LeetCode</a></div>
+                                )}
                               </div>
                             </div>
 
                             {education.some(e => e.institution) && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Education</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Education</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                                   {education.filter(e => e.institution).map((edu, i) => (
-                                    <div key={i} style={{ fontSize: '0.72rem' }}>
+                                    <div key={i} style={{ fontSize: '0.68rem' }}>
                                       <div style={{ fontWeight: 700, color: '#111111' }}>{edu.institution}</div>
-                                      <div style={{ color: 'var(--theme-secondary)', margin: '1px 0' }}>{edu.duration}</div>
+                                      <div style={{ color: 'var(--theme-secondary, #4b5563)', margin: '1px 0' }}>{edu.duration}</div>
                                       <div style={{ color: '#4b5563' }}>{edu.degree} {edu.grade && <span style={{ fontWeight: 600 }}>({edu.grade})</span>}</div>
                                     </div>
                                   ))}
@@ -1550,8 +1607,8 @@ const ResumeAnalyzer = () => {
 
                             {certificates.some(c => c.title) && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Certificates</h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.72rem' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Certificates</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', fontSize: '0.68rem' }}>
                                   {certificates.filter(c => c.title).map((cert, i) => (
                                     <div key={i} style={{ color: '#374151' }}>
                                       • <strong>{cert.title}</strong>: {cert.organization} ({cert.date})
@@ -1563,8 +1620,8 @@ const ResumeAnalyzer = () => {
 
                             {skills && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Skills</h3>
-                                <div style={{ fontSize: '0.72rem', whiteSpace: 'pre-wrap', lineHeight: '1.4' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Skills</h3>
+                                <div style={{ fontSize: '0.68rem', whiteSpace: 'pre-wrap', lineHeight: '1.35' }}>
                                   {skills}
                                 </div>
                               </div>
@@ -1572,10 +1629,10 @@ const ResumeAnalyzer = () => {
 
                             {languages && (
                               <div>
-                                <h3 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--theme-primary)', borderBottom: '1.5px solid var(--theme-primary)', paddingBottom: '3px', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Languages</h3>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                                <h3 style={{ fontSize: '0.76rem', fontWeight: 800, color: 'var(--theme-primary, #1e3a8a)', borderBottom: '1.5px solid var(--theme-primary, #1e3a8a)', paddingBottom: '2px', marginBottom: '0.3rem', textTransform: 'uppercase' }}>Languages</h3>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
                                   {languages.split(',').map((s, i) => (
-                                    <span key={i} style={{ fontSize: '0.68rem', padding: '0.15rem 0.4rem', background: '#f3f4f6', color: '#374151', borderRadius: '3px', border: '1px solid #e5e7eb' }}>
+                                    <span key={i} style={{ fontSize: '0.65rem', padding: '0.1rem 0.35rem', background: '#f3f4f6', color: '#374151', borderRadius: '3px', border: '1px solid #e5e7eb' }}>
                                       {s.trim()}
                                     </span>
                                   ))}

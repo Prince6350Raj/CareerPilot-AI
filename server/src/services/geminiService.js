@@ -119,21 +119,30 @@ exports.analyzeResume = async (resumeText) => {
     });
 
     const prompt = `
-      You are an ATS (Applicant Tracking System) parser. Analyze this raw text extracted from a resume:
+      You are an enterprise Applicant Tracking System (ATS) and expert technical recruiter. 
+      Analyze this raw text extracted from a candidate's resume with STRICT, REALISTIC, and UNBIASED scoring:
+      
       "${resumeText}"
 
-      Return a JSON object containing:
+      SCORING CALIBRATION GUIDELINES (DO NOT OVER-INFLATE):
+      - 30-50: Poor/Incomplete: Missing key sections (no projects/work experience), very few skills (<4), no metrics, bad structure.
+      - 51-68: Average/Beginner: Has basic sections and skills, but lacking quantifiable metrics, no action verbs, vague descriptions, no links.
+      - 69-82: Good/Competitive: Solid skills, clear projects and education, some measurable impact, good technical keywords.
+      - 83-94: Exceptional/Top-tier: Rich quantifiable metrics (% and scale numbers), strong action verbs, modern tech stack, live GitHub/LinkedIn links, clear production experience.
+      - 95-100: Reserved ONLY for flawless, senior industry-standard resumes with extraordinary measurable achievements.
+
+      Return a valid JSON object strictly matching this schema:
       {
-        "atsScore": number (0-100),
+        "atsScore": integer between 30 and 96,
         "detectedSkills": [string],
         "suggestedSkills": [string],
         "breakdown": {
-          "formatting": number (0-100),
-          "impactPhrases": number (0-100),
-          "keywordMatch": number (0-100),
-          "redundancies": number (0-100)
+          "formatting": integer between 30 and 95,
+          "impactPhrases": integer between 30 and 95,
+          "keywordMatch": integer between 30 and 95,
+          "redundancies": integer between 30 and 95
         },
-        "feedback": [string]
+        "feedback": [string (specific actionable feedback on how to improve ATS score)]
       }
     `;
 
@@ -337,111 +346,122 @@ function getMockResumeAnalysis(resumeText = '') {
     'python': 'Python',
     'java': 'Java',
     'c++': 'C++',
+    'c#': 'C#',
+    'golang': 'Go',
+    'rust': 'Rust',
     'html': 'HTML5',
     'css': 'CSS3',
-    'react': 'React',
+    'tailwind': 'Tailwind CSS',
+    'react': 'React.js',
     'angular': 'Angular',
     'vue': 'Vue.js',
+    'next.js': 'Next.js',
+    'nextjs': 'Next.js',
     'node': 'Node.js',
     'express': 'Express.js',
+    'nest': 'NestJS',
     'mongodb': 'MongoDB',
-    'sql': 'SQL / Database',
+    'sql': 'SQL',
+    'postgresql': 'PostgreSQL',
     'postgres': 'PostgreSQL',
     'mysql': 'MySQL',
+    'redis': 'Redis',
     'docker': 'Docker',
     'kubernetes': 'Kubernetes',
     'aws': 'AWS Cloud',
+    'azure': 'Azure Cloud',
+    'gcp': 'Google Cloud',
     'git': 'Git & GitHub',
     'typescript': 'TypeScript',
     'django': 'Django',
     'flask': 'Flask',
-    'spring': 'Spring Boot'
+    'spring': 'Spring Boot',
+    'graphql': 'GraphQL',
+    'rest': 'RESTful APIs',
+    'dsa': 'Data Structures & Algorithms'
   };
 
   const detectedSkills = [];
   for (const [key, value] of Object.entries(skillKeywords)) {
-    if (text.includes(key)) {
+    if (text.includes(key) && !detectedSkills.includes(value)) {
       detectedSkills.push(value);
     }
   }
 
   // Fallback if no skills are matched
   if (detectedSkills.length === 0) {
-    detectedSkills.push('Microsoft Office', 'Communication', 'Technical Writing');
+    detectedSkills.push('Communication', 'Problem Solving', 'Documentation');
   }
 
-  // 2. Suggest missing skills based on what they have
-  const allPotentialSkills = ['TypeScript', 'Node.js', 'Express.js', 'MongoDB', 'Docker', 'Kubernetes', 'AWS Cloud', 'Python', 'React', 'SQL / Database'];
+  // 2. Suggest missing skills based on modern industry standards
+  const allPotentialSkills = ['TypeScript', 'Next.js', 'Docker', 'AWS Cloud', 'PostgreSQL', 'Redis', 'GraphQL', 'Tailwind CSS', 'Kubernetes', 'CI/CD'];
   const suggestedSkills = allPotentialSkills.filter(s => !detectedSkills.includes(s)).slice(0, 5);
 
-  // 3. Realistic Dynamic ATS Score Calculation
-  const baseScore = 20;
+  // 3. Authentic & Realistic ATS Score Calculation
+  // A. Skill Score (Max 25): Needs at least 8-10 skills to reach top
+  const skillScore = Math.min(25, Math.round(detectedSkills.length * 2.2));
   
-  // A. Skill Score (Max 25)
-  const skillScore = Math.min(25, detectedSkills.length * 2.5);
-  
-  // B. Section Structure (Max 20)
+  // B. Section Structure (Max 20): Check for core structural sections
   let sectionScore = 0;
-  if (text.includes('education') || text.includes('university') || text.includes('college')) sectionScore += 5;
-  if (text.includes('experience') || text.includes('work') || text.includes('employment')) sectionScore += 5;
+  if (text.includes('education') || text.includes('university') || text.includes('college') || text.includes('b.tech') || text.includes('btech')) sectionScore += 5;
+  if (text.includes('experience') || text.includes('intern') || text.includes('work') || text.includes('employment')) sectionScore += 5;
   if (text.includes('project')) sectionScore += 5;
-  if (text.includes('contact') || text.includes('email') || text.includes('phone')) sectionScore += 5;
+  if (text.includes('contact') || text.includes('@') || text.includes('phone') || text.includes('email')) sectionScore += 5;
 
-  // C. Action Verbs (Max 15)
+  // C. Action Verbs & Leadership (Max 15)
   let verbScore = 0;
-  const actionVerbs = ['developed', 'optimized', 'designed', 'built', 'led', 'managed', 'created', 'implemented'];
+  const actionVerbs = ['developed', 'optimized', 'designed', 'built', 'architected', 'spearheaded', 'automated', 'engineered', 'implemented', 'reduced', 'scaled'];
+  let matchedVerbs = 0;
   actionVerbs.forEach(verb => {
-    if (text.includes(verb)) verbScore += 3;
+    if (text.includes(verb)) matchedVerbs++;
   });
-  verbScore = Math.min(15, verbScore);
+  verbScore = Math.min(15, Math.round(matchedVerbs * 2.2));
 
-  // D. Quantitative achievements & numbers (Max 15)
+  // D. Quantitative impact & Metrics (Max 15): numbers, %, $, scale
   let metricsScore = 0;
-  const hasNumbers = /\d+/.test(text);
-  const hasPercent = /%/.test(text);
-  const hasImpactWords = /reduced|increased|improved|saved|latency|performance/.test(text);
-  if (hasNumbers) metricsScore += 5;
-  if (hasPercent) metricsScore += 5;
-  if (hasImpactWords) metricsScore += 5;
+  const numMatches = text.match(/\d+[\s%kKmMxXbB+]?/g) || [];
+  if (numMatches.length >= 4) metricsScore += 6;
+  else if (numMatches.length >= 1) metricsScore += 3;
+  if (text.includes('%') || /increased|decreased|reduced|boosted|saved|scaled/.test(text)) metricsScore += 5;
+  if (/latency|throughput|roi|revenue|users|queries|traffic|production|live/.test(text)) metricsScore += 4;
+  metricsScore = Math.min(15, metricsScore);
 
-  // E. Profile Links (Max 15)
+  // E. Live links & Professional Profiles (Max 10)
   let linksScore = 0;
-  if (text.includes('github.com')) linksScore += 5;
-  if (text.includes('linkedin.com')) linksScore += 5;
-  if (text.includes('http') || text.includes('www.')) linksScore += 5;
-  linksScore = Math.min(15, linksScore);
+  if (text.includes('github.com') || text.includes('github:')) linksScore += 4;
+  if (text.includes('linkedin.com') || text.includes('linkedin:')) linksScore += 4;
+  if (text.includes('leetcode.com') || text.includes('portfolio') || text.includes('http')) linksScore += 2;
+  linksScore = Math.min(10, linksScore);
 
-  // Combine Scores
-  const calculatedATS = Math.round(baseScore + skillScore + sectionScore + verbScore + metricsScore + linksScore);
-  const atsScore = Math.min(95, Math.max(30, calculatedATS));
+  // Raw Score between 35 and 94
+  const rawScore = 15 + skillScore + sectionScore + verbScore + metricsScore + linksScore;
+  const atsScore = Math.min(94, Math.max(35, rawScore));
 
-  // 4. Dynamic breakdown
-  const keywordMatch = Math.round(Math.min(100, 30 + (skillScore * 2.8)));
-  const formatting = Math.round(Math.min(100, 40 + (sectionScore * 3)));
-  const impactPhrases = Math.round(Math.min(100, 40 + (verbScore * 2.5) + (metricsScore * 1.5)));
-  const redundancies = text.length > 2500 ? 60 : 88;
+  // Breakdown
+  const keywordMatch = Math.min(95, Math.max(35, Math.round(30 + (skillScore * 2.5))));
+  const formatting = Math.min(95, Math.max(40, Math.round(35 + (sectionScore * 3))));
+  const impactPhrases = Math.min(95, Math.max(30, Math.round(25 + (verbScore * 2.4) + (metricsScore * 2.2))));
+  const redundancies = text.length > 3200 ? 55 : text.length > 2200 ? 70 : 85;
 
-  // 5. Dynamic feedback items
+  // Granular Feedback
   const feedback = [];
-  if (detectedSkills.length < 5) {
-    feedback.push('Add more core technical skills and programming languages to pass basic ATS keyword filters.');
-  }
-  if (verbScore < 9) {
-    feedback.push('Use strong action verbs (e.g. "Developed", "Optimized", "Designed") at the start of your experience bullet points.');
+  if (detectedSkills.length < 6) {
+    feedback.push('Increase your technical keyword density by listing specific tools, libraries, and frameworks.');
   }
   if (metricsScore < 10) {
-    feedback.push('Include quantitative achievements (e.g. "reduced system latency by 15%" or "increased page load speeds by 20%").');
+    feedback.push('Add measurable outcomes to your bullet points (e.g., "Reduced response latency by 35% across 5,000 daily users").');
   }
-  if (linksScore < 10) {
-    feedback.push('Link your active GitHub or LinkedIn profile in the contact section to enhance visibility.');
+  if (verbScore < 9) {
+    feedback.push('Start each experience and project bullet with high-impact power action verbs like "Architected", "Spearheaded", or "Optimized".');
+  }
+  if (linksScore < 7) {
+    feedback.push('Add clickable links to your live GitHub repositories, LinkedIn profile, or deployed project URLs.');
   }
   if (sectionScore < 15) {
-    feedback.push('Ensure your sections are clearly divided (Experience, Education, Projects).');
+    feedback.push('Ensure standard ATS heading labels like "Work Experience", "Projects", and "Education" are clearly formatted.');
   }
-  
-  // Standard fallbacks if list is too small
   if (feedback.length < 2) {
-    feedback.push('Excellent layout. Consider tailoring keywords directly to specific target jobs to maximize relevance.');
+    feedback.push('Strong resume structure. Tailor key phrases toward specific target job descriptions to maximize recruiter search matches.');
   }
 
   return {
