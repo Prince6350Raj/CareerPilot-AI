@@ -736,7 +736,17 @@ const Login = () => {
       />
 
       {/* Main Glassmorphic Split Card */}
-      <div className="auth-master-card">
+      <div className="auth-master-card tech-glow-card">
+        {/* SoftSynth Style HUD 4-Corner Targeting Brackets */}
+        <div className="vh-corners">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        {/* Ambient Laser Scan Beam */}
+        <div className="vh-scan" />
+
         {/* ================= LEFT SIDE: INTERACTIVE SHOWCASE ================= */}
         <div 
           className="auth-showcase-panel"
@@ -760,8 +770,8 @@ const Login = () => {
                 <span>About</span>
               </span>
             </button>
-            <div className="engine-status-tag">
-              <span className="live-dot-pulse"></span>
+            <div className="engine-status-tag tech-pill-float">
+              <span className="pill-status-dot"></span>
               <span>Gemini 3.6 Flash Active</span>
             </div>
           </div>

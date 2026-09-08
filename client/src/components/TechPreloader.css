@@ -1,0 +1,304 @@
+/* ==========================================================================
+   FUTURISTIC TECH PRELOADER & ENTRANCE ANIMATION (SoftSynth Inspired)
+   ========================================================================== */
+
+.tech-preloader-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #060e1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.tech-preloader-backdrop.fade-out {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+/* Ambient Laser Grid & Scan Line */
+.tp-grid-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(249, 115, 22, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.8;
+}
+
+.tp-glow-orb-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.22) 0%, transparent 65%);
+  top: -150px;
+  left: -100px;
+  pointer-events: none;
+  animation: tpBlobFloat1 8s ease-in-out infinite alternate;
+}
+
+.tp-glow-orb-2 {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.24) 0%, transparent 65%);
+  bottom: -100px;
+  right: -80px;
+  pointer-events: none;
+  animation: tpBlobFloat2 10s ease-in-out infinite alternate;
+}
+
+.tp-scan-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.8) 50%, transparent 100%);
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.9);
+  pointer-events: none;
+  animation: tpScanAnim 3.5s ease-in-out infinite;
+}
+
+/* Central Card */
+.tp-center-box {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 440px;
+  width: 90%;
+  padding: 2.5rem 2rem;
+  background: rgba(10, 25, 47, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(249, 115, 22, 0.15);
+}
+
+/* Corner brackets */
+.tp-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tp-corners span {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(249, 115, 22, 0.8);
+}
+
+.tp-corners span:nth-child(1) { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 8px; }
+.tp-corners span:nth-child(2) { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 8px; }
+.tp-corners span:nth-child(3) { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 8px; }
+.tp-corners span:nth-child(4) { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 8px; }
+
+/* Rotating Orbit Rings */
+.tp-orbit-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.tp-ring-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px dashed rgba(249, 115, 22, 0.6);
+  animation: tpSpinClockwise 8s linear infinite;
+}
+
+.tp-ring-inner {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  animation: tpSpinCounter 4s linear infinite;
+}
+
+.tp-logo-center {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #1d4ed8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(249, 115, 22, 0.65);
+  animation: tpPulseScale 2s ease-in-out infinite alternate;
+}
+
+.tp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.tp-brand-name {
+  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.tp-brand-ai {
+  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tp-status-msg {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  min-height: 22px;
+  letter-spacing: 0.02em;
+  animation: tpFadeIn 0.3s ease;
+}
+
+/* Progress Track */
+.tp-progress-box {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.tp-progress-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.tp-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f97316 0%, #fb923c 60%, #38bdf8 100%);
+  border-radius: 10px;
+  transition: width 0.15s ease-out;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.8);
+}
+
+.tp-percent-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tp-percent-num {
+  color: #f97316;
+  font-weight: 800;
+}
+
+/* Tech Pills Row */
+.tp-pills-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  animation: tpPillFloat 3.5s ease-in-out infinite alternate;
+}
+
+.tp-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: tpDotPulse 1.5s ease-in-out infinite;
+}
+
+/* Keyframe Animations */
+@keyframes tpSpinClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tpSpinCounter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes tpPulseScale {
+  0% { transform: scale(0.95); box-shadow: 0 0 16px rgba(249, 115, 22, 0.5); }
+  100% { transform: scale(1.05); box-shadow: 0 0 32px rgba(249, 115, 22, 0.9); }
+}
+
+@keyframes tpBlobFloat1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.1); }
+}
+
+@keyframes tpBlobFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, -40px) scale(1.15); }
+}
+
+@keyframes tpScanAnim {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.8; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes tpPillFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+@keyframes tpDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+@keyframes tpFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

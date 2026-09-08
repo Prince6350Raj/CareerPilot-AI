@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import TechBackgroundOverlay from './TechBackgroundOverlay';
 import { Menu } from 'lucide-react';
 
 const Layout = () => {
@@ -16,6 +17,9 @@ const Layout = () => {
 
   return (
     <div className="app-container">
+      {/* High-Tech Ambient Grid, Laser Scan & Particle Synapse Background */}
+      <TechBackgroundOverlay />
+
       {/* Mobile Top Header Bar */}
       <div className="mobile-header glass-card">
         <button className="mobile-menu-btn" onClick={toggleSidebar} aria-label="Toggle Navigation">

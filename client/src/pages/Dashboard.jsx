@@ -324,7 +324,17 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-view-container">
-      <div className="dashboard-heading-row">
+      <div className="dashboard-heading-row tech-glow-card" style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* SoftSynth HUD 4-Corner Targeting Brackets */}
+        <div className="vh-corners">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        {/* SoftSynth Ambient Laser Scan Line */}
+        <div className="vh-scan" />
+
         <div>
           <h1 className="page-title">
             {getGreeting()}, <span className="dynamic-pop-name">{user?.name || 'Explorer'}</span>!

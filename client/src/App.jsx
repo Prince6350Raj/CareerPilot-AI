@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
+import TechPreloader from './components/TechPreloader';
 
 // Pages
 import Login from './pages/Login';
@@ -54,6 +55,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <TechPreloader />
       <ScrollToTop />
       <AuthProvider>
         <Routes>
