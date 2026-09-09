@@ -1,5 +1,5 @@
 /* ==========================================================================
-   FUTURISTIC TECH PRELOADER & ENTRANCE ANIMATION (SoftSynth Inspired)
+   FUTURISTIC TECH PRELOADER & MENTOR DEMO MODE (SoftSynth Inspired)
    ========================================================================== */
 
 .tech-preloader-backdrop {
@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 1;
   pointer-events: all;
 }
@@ -22,7 +22,7 @@
   pointer-events: none;
 }
 
-/* Ambient Laser Grid & Scan Line */
+/* Ambient Laser Grid */
 .tp-grid-bg {
   position: absolute;
   inset: 0;
@@ -58,17 +58,6 @@
   animation: tpBlobFloat2 10s ease-in-out infinite alternate;
 }
 
-.tp-scan-laser {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, rgba(249, 115, 22, 0.8) 50%, transparent 100%);
-  box-shadow: 0 0 16px rgba(249, 115, 22, 0.9);
-  pointer-events: none;
-  animation: tpScanAnim 3.5s ease-in-out infinite;
-}
-
 /* Central Card */
 .tp-center-box {
   position: relative;
@@ -77,15 +66,58 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 440px;
+  max-width: 460px;
   width: 90%;
-  padding: 2.5rem 2rem;
-  background: rgba(10, 25, 47, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(249, 115, 22, 0.25);
+  padding: 2.25rem 2rem;
+  background: rgba(10, 25, 47, 0.85);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(249, 115, 22, 0.35);
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(249, 115, 22, 0.15);
+}
+
+/* Close & Demo controls on top right */
+.tp-top-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.tp-btn-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tp-btn-close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.tp-mentor-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  color: #f97316;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* Corner brackets */
@@ -99,7 +131,7 @@
   position: absolute;
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(249, 115, 22, 0.8);
+  border: 2px solid rgba(249, 115, 22, 0.85);
 }
 
 .tp-corners span:nth-child(1) { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 8px; }
@@ -115,7 +147,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .tp-ring-outer {
@@ -131,8 +163,8 @@
   inset: 8px;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-top-color: #3b82f6;
-  border-bottom-color: #3b82f6;
+  border-top-color: #38bdf8;
+  border-bottom-color: #38bdf8;
   animation: tpSpinCounter 4s linear infinite;
 }
 
@@ -153,7 +185,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
 }
 
 .tp-brand-name {
@@ -177,10 +209,9 @@
   font-size: 0.82rem;
   font-weight: 600;
   color: #94a3b8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   min-height: 22px;
   letter-spacing: 0.02em;
-  animation: tpFadeIn 0.3s ease;
 }
 
 /* Progress Track */
@@ -230,6 +261,7 @@
   gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 1.25rem;
 }
 
 .tp-pill {
@@ -243,7 +275,6 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #cbd5e1;
-  animation: tpPillFloat 3.5s ease-in-out infinite alternate;
 }
 
 .tp-pill-dot {
@@ -252,7 +283,58 @@
   border-radius: 50%;
   background: #10b981;
   box-shadow: 0 0 8px #10b981;
-  animation: tpDotPulse 1.5s ease-in-out infinite;
+}
+
+/* Interactive Action Buttons on Complete */
+.tp-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.tp-btn-primary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+  transition: all 0.2s ease;
+}
+
+.tp-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(249, 115, 22, 0.6);
+}
+
+.tp-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  padding: 0.7rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tp-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 /* Keyframe Animations */
@@ -279,26 +361,4 @@
 @keyframes tpBlobFloat2 {
   0% { transform: translate(0, 0) scale(1); }
   100% { transform: translate(-30px, -40px) scale(1.15); }
-}
-
-@keyframes tpScanAnim {
-  0% { top: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 0.8; }
-  100% { top: 100%; opacity: 0; }
-}
-
-@keyframes tpPillFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-4px); }
-}
-
-@keyframes tpDotPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
-}
-
-@keyframes tpFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
 }

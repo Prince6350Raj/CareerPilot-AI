@@ -76,19 +76,7 @@
   animation: tbgBlobPulse 9s ease-in-out infinite alternate;
 }
 
-/* 3. Futuristic Laser Scan Line */
-.tbg-scan-beam {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--primary, rgba(249, 115, 22, 0.45)) 50%, transparent 100%);
-  box-shadow: 0 0 14px var(--primary-glow, rgba(249, 115, 22, 0.4));
-  pointer-events: none;
-  animation: tbgLaserScan 6s ease-in-out infinite;
-}
-
-/* 4. Canvas Particles Layer */
+/* 3. Canvas Particles Layer */
 .tbg-particle-canvas {
   position: absolute;
   inset: 0;
@@ -114,11 +102,4 @@
 @keyframes tbgBlobPulse {
   0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.5; }
   100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-}
-
-@keyframes tbgLaserScan {
-  0% { top: 0%; opacity: 0; }
-  12% { opacity: 0.8; }
-  88% { opacity: 0.6; }
-  100% { top: 100%; opacity: 0; }
 }

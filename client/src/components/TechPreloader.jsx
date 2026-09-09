@@ -1,25 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Compass, Sparkles, Cpu, Zap, Activity } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Compass, Sparkles, Cpu, Zap, Activity, X, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
 import './TechPreloader.css';
 
 const TECH_STEPS = [
   { threshold: 20, message: '⚡ Initializing AI Neural Synapse Engine...' },
   { threshold: 50, message: '🔮 Booting Gemini 3.6 Flash Copilot...' },
   { threshold: 80, message: '🚀 Calibrating AST Sandbox & ATS Scorer...' },
-  { threshold: 100, message: '✨ Welcome to CareerPilot AI' }
+  { threshold: 100, message: '✨ System Ready • CareerPilot AI' }
 ];
 
 const TechPreloader = ({ onFinish }) => {
+  const [isOpen, setIsOpen] = useState(true);
   const [progress, setProgress] = useState(0);
   const [statusMsg, setStatusMsg] = useState(TECH_STEPS[0].message);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [isDone, setIsDone] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
 
-  useEffect(() => {
+  // Function to start or restart preloader diagnostics
+  const startDiagnostics = () => {
+    setIsOpen(true);
+    setIsFadingOut(false);
+    setProgress(0);
+    setStatusMsg(TECH_STEPS[0].message);
+
     const startTime = Date.now();
-    const duration = 1400; // 1.4 seconds total animation duration
+    const duration = 1800; // 1.8s smooth diagnostic sweep
 
     const interval = setInterval(() => {
+      if (isPausedRef.current) return;
+
       const elapsed = Date.now() - startTime;
       const currentProgress = Math.min(100, Math.floor((elapsed / duration) * 100));
 
@@ -30,20 +40,45 @@ const TechPreloader = ({ onFinish }) => {
 
       if (currentProgress >= 100) {
         clearInterval(interval);
-        setTimeout(() => {
-          setIsFadingOut(true);
-          setTimeout(() => {
-            setIsDone(true);
-            if (onFinish) onFinish();
-          }, 600);
-        }, 300);
       }
     }, 25);
+  };
 
-    return () => clearInterval(interval);
-  }, [onFinish]);
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
-  if (isDone) return null;
+  useEffect(() => {
+    startDiagnostics();
+
+    // Listen for global trigger events anywhere in the app (e.g., from mentor demo button)
+    const handleTrigger = () => {
+      setIsPaused(false);
+      startDiagnostics();
+    };
+
+    window.addEventListener('show-tech-preloader', handleTrigger);
+    return () => window.removeEventListener('show-tech-preloader', handleTrigger);
+  }, []);
+
+  const handleDismiss = () => {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      if (onFinish) onFinish();
+    }, 500);
+  };
+
+  const handleTogglePause = () => {
+    setIsPaused(!isPaused);
+  };
+
+  const handleReplay = () => {
+    setIsPaused(false);
+    startDiagnostics();
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className={`tech-preloader-backdrop ${isFadingOut ? 'fade-out' : ''}`}>
@@ -51,10 +86,22 @@ const TechPreloader = ({ onFinish }) => {
       <div className="tp-grid-bg" />
       <div className="tp-glow-orb-1" />
       <div className="tp-glow-orb-2" />
-      <div className="tp-scan-laser" />
 
       {/* Central Glass Card */}
       <div className="tp-center-box">
+        {/* Top Controls for Mentor Inspection */}
+        <div className="tp-top-controls">
+          <span className="tp-mentor-tag">Mentor Demo Mode</span>
+          <button 
+            type="button" 
+            className="tp-btn-close" 
+            onClick={handleDismiss} 
+            title="Dismiss Diagnostics"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
         {/* HUD 4-Corner Targeting Brackets */}
         <div className="tp-corners">
           <span />
@@ -109,6 +156,27 @@ const TechPreloader = ({ onFinish }) => {
             <span className="tp-pill-dot" style={{ background: '#f97316', boxShadow: '0 0 8px #f97316' }} />
             <span>96% ATS Matrix</span>
           </div>
+        </div>
+
+        {/* Interactive Actions for User / Mentor */}
+        <div className="tp-actions-row">
+          <button 
+            type="button" 
+            className="tp-btn-primary"
+            onClick={handleDismiss}
+          >
+            <span>Explore Workspace</span>
+            <ArrowRight size={15} />
+          </button>
+          <button 
+            type="button" 
+            className="tp-btn-secondary"
+            onClick={handleReplay}
+            title="Replay Animation"
+          >
+            <RotateCcw size={14} />
+            <span>Replay</span>
+          </button>
         </div>
       </div>
     </div>

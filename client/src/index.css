@@ -71,6 +71,31 @@
   --bg-header-banner: linear-gradient(135deg, hsla(215, 30%, 94%, 0.8) 0%, hsla(215, 30%, 88%, 0.85) 100%);
 }
 
+/* Blue & Orange SoftSynth Theme Overrides */
+:root[data-theme="blue-orange"] {
+  --bg-dark: hsl(222, 47%, 7%); /* #060e1d deep midnight navy */
+  --bg-card: hsla(222, 40%, 12%, 0.85); /* Frosted midnight glass */
+  --border-color: hsla(24, 95%, 53%, 0.28); /* Vibrant orange/amber glow border */
+  --text-primary: hsl(210, 40%, 98%); /* Crisp white */
+  --text-secondary: hsl(215, 20%, 75%); /* Slate light */
+  --text-muted: hsl(215, 15%, 55%);
+  
+  --primary: hsl(24, 98%, 52%); /* Electric SoftSynth Orange #f97316 */
+  --primary-glow: hsla(24, 98%, 52%, 0.35);
+  --primary-hover: hsl(24, 100%, 58%);
+  
+  --secondary: hsl(217, 91%, 60%); /* Royal Electric Blue #2563eb */
+  --secondary-glow: hsla(217, 91%, 60%, 0.30);
+  
+  --glass-border: 1px solid hsla(24, 95%, 53%, 0.30);
+  --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7);
+  
+  --bg-item: hsla(222, 45%, 9%, 0.7);
+  --bg-item-hover: hsla(24, 98%, 52%, 0.15);
+  --bg-input: hsla(222, 45%, 6%, 0.9);
+  --bg-header-banner: linear-gradient(135deg, hsla(222, 45%, 13%, 0.9) 0%, hsla(222, 45%, 7%, 0.98) 100%);
+}
+
 /* Midnight Gold Theme Overrides (Black and Yellow) */
 :root[data-theme="cyberpunk"] {
   --bg-dark: hsl(0, 0%, 4%); /* Matte Obsidian Black background */
@@ -871,27 +896,7 @@ h1, h2, h3, h4, h5, h6 {
 .vh-corners span:nth-child(3) { bottom: 8px; left: 8px; border-right: 0; border-top: 0; border-bottom-left-radius: 6px; }
 .vh-corners span:nth-child(4) { bottom: 8px; right: 8px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
 
-/* 2. SoftSynth Laser Scan Beam */
-.vh-scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--primary, #f97316) 50%, transparent 100%);
-  box-shadow: 0 0 14px var(--primary-glow, rgba(249, 115, 22, 0.6));
-  animation: vhScanAnim 5s ease-in-out infinite;
-  z-index: 4;
-  pointer-events: none;
-}
-
-@keyframes vhScanAnim {
-  0% { top: 0%; opacity: 0; }
-  8% { opacity: 0.85; }
-  92% { opacity: 0.65; }
-  100% { top: 100%; opacity: 0; }
-}
-
-/* 3. Floating Tech Badge / Pill */
+/* 2. Floating Tech Badge / Pill */
 .tech-pill-float {
   display: inline-flex;
   align-items: center;

@@ -332,8 +332,6 @@ const Dashboard = () => {
           <span />
           <span />
         </div>
-        {/* SoftSynth Ambient Laser Scan Line */}
-        <div className="vh-scan" />
 
         <div>
           <h1 className="page-title">

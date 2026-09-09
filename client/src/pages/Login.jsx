@@ -59,6 +59,15 @@ const NeuralCanvasBackground = ({ theme = 'whiteblue' }) => {
   const canvasRef = useRef(null);
 
   const THEME_PRESETS = {
+    'blue-orange': { 
+      isDark: true,
+      nodeRGB: '249, 115, 22', 
+      lineRGB: '249, 115, 22', 
+      mouseRGB: '56, 189, 248',
+      baseAlpha: 0.8,
+      lineAlpha: 0.5,
+      glowAlpha: 0.95
+    },
     whiteblue: { 
       isDark: false,
       nodeRGB: '2, 132, 199', 
@@ -557,9 +566,25 @@ const ProjectOverviewModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Modal Footer */}
-        <div className="modal-bottom-footer">
-          <button type="button" className="btn-modal-gotit" onClick={onClose}>
+        <div className="modal-bottom-footer" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button 
+            type="button" 
+            className="btn-modal-gotit" 
+            style={{ flex: 1 }}
+            onClick={onClose}
+          >
             Got It! Start Exploring CareerPilot AI
+          </button>
+          <button 
+            type="button" 
+            className="btn-modal-gotit" 
+            style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)', color: '#ffffff', border: 'none', minWidth: '180px' }}
+            onClick={() => {
+              onClose();
+              window.dispatchEvent(new CustomEvent('show-tech-preloader'));
+            }}
+          >
+            🎬 Launch AI Intro Showcase
           </button>
         </div>
       </div>
@@ -700,8 +725,18 @@ const Login = () => {
 
   return (
     <div className="auth-ultra-page" data-theme={theme}>
-      {/* Top Right Floating Theme Switcher */}
+      {/* Top Right Floating Bar (Theme Switcher + Mentor Intro Launcher) */}
       <div className="login-theme-selector-wrapper">
+        <button
+          type="button"
+          className="btn-mentor-intro-pill"
+          onClick={() => window.dispatchEvent(new CustomEvent('show-tech-preloader'))}
+          title="Click to replay full AI Launch Diagnostics (Mentor Demo Mode)"
+        >
+          <Sparkles size={14} className="text-primary" />
+          <span>AI Launch Intro</span>
+        </button>
+
         <div className="theme-pill-glass">
           <Palette size={15} className="theme-pill-icon" />
           <select
@@ -710,6 +745,7 @@ const Login = () => {
             className="theme-dropdown-select"
             aria-label="Select Theme"
           >
+            <option value="blue-orange">🔥 Blue & Orange (SoftSynth)</option>
             <option value="whiteblue">💎 White & Royal Blue</option>
             <option value="dark">🌌 Space Blue</option>
             <option value="light">❄️ Frosted Glass</option>
@@ -744,10 +780,8 @@ const Login = () => {
           <span />
           <span />
         </div>
-        {/* Ambient Laser Scan Beam */}
-        <div className="vh-scan" />
 
-        {/* ================= LEFT SIDE: INTERACTIVE SHOWCASE ================= */}
+        {/* ================= LEFT SIDE: STREAMLINED SHOWCASE ================= */}
         <div 
           className="auth-showcase-panel"
           onMouseEnter={() => setIsHoveredShowcase(true)}
@@ -762,7 +796,7 @@ const Login = () => {
               title="Click to view full CareerPilot AI project features & listen to AI Voice introduction"
             >
               <div className="brand-logo-icon">
-                <Compass size={22} className="compass-spin" />
+                <Compass size={20} className="compass-spin" />
               </div>
               <span className="brand-text">CareerPilot <strong className="ai-gradient-text">AI</strong></span>
               <span className="info-dot-badge">
@@ -785,24 +819,31 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Interactive Live Demo Simulation Widget */}
+          {/* Integrated Interactive Live Feature Simulation Widget */}
           <div className="live-demo-interactive-widget">
-            <div className="widget-topbar">
-              <div className="widget-dots">
-                <span className="dot dot-red"></span>
-                <span className="dot dot-yellow"></span>
-                <span className="dot dot-green"></span>
-              </div>
-              <div className="widget-title-badge">
-                <currentTab.icon size={14} />
-                <span>{currentTab.title}</span>
-              </div>
-              <span className="widget-status-badge">{currentTab.tag}</span>
+            {/* Built-in Feature Tabs Navigation */}
+            <div className="widget-category-tabs">
+              {SHOWCASE_TABS.map((tab, idx) => {
+                const Icon = tab.icon;
+                const isActive = activeTabIdx === idx;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className={`widget-tab-pill ${isActive ? 'active' : ''}`}
+                    onClick={() => setActiveTabIdx(idx)}
+                  >
+                    <Icon size={14} />
+                    <span>{tab.title}</span>
+                  </button>
+                );
+              })}
             </div>
 
+            {/* Widget Main Body Simulation */}
             <div className="widget-body">
               {currentTab.previewType === 'resume' && (
-                <div className="preview-resume-content">
+                <div className="preview-resume-content animate-fade-in">
                   <div className="ats-score-meter-row">
                     <div className="ats-circle-badge">
                       <span className="ats-num">96</span>
@@ -828,7 +869,7 @@ const Login = () => {
               )}
 
               {currentTab.previewType === 'interview' && (
-                <div className="preview-interview-content">
+                <div className="preview-interview-content animate-fade-in">
                   <div className="speech-wave-banner">
                     <div className="soundwave-anim">
                       <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
@@ -851,7 +892,7 @@ const Login = () => {
               )}
 
               {currentTab.previewType === 'sandbox' && (
-                <div className="preview-sandbox-content">
+                <div className="preview-sandbox-content animate-fade-in">
                   <div className="sandbox-header-row">
                     <span className="sandbox-prob-title">Problem #242 • Valid Anagram</span>
                     <span className="sandbox-badge-easy">Easy</span>
@@ -872,7 +913,7 @@ const Login = () => {
               )}
 
               {currentTab.previewType === 'company' && (
-                <div className="preview-company-content">
+                <div className="preview-company-content animate-fade-in">
                   <div className="company-logos-row">
                     <span className="comp-pill active">Google</span>
                     <span className="comp-pill">Microsoft</span>
@@ -898,45 +939,36 @@ const Login = () => {
                 </div>
               )}
             </div>
+
+            {/* Sub-status footer bar */}
+            <div className="widget-bottom-footer">
+              <div className="widget-dots-indicator">
+                {SHOWCASE_TABS.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`indicator-dot ${activeTabIdx === idx ? 'active' : ''}`}
+                    onClick={() => setActiveTabIdx(idx)}
+                    aria-label={`Slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+              <span className="widget-tag-pill">{currentTab.tag}</span>
+            </div>
           </div>
 
-          {/* Interactive Feature Selectors */}
-          <div className="showcase-tabs-nav">
-            {SHOWCASE_TABS.map((tab, idx) => {
-              const Icon = tab.icon;
-              const isActive = activeTabIdx === idx;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  className={`showcase-nav-btn ${isActive ? 'active' : ''}`}
-                  onClick={() => setActiveTabIdx(idx)}
-                >
-                  <div className="nav-icon-wrap">
-                    <Icon size={16} />
-                  </div>
-                  <div className="nav-text-wrap">
-                    <span className="nav-title">{tab.title}</span>
-                    <span className="nav-sub">{tab.subtitle}</span>
-                  </div>
-                  {isActive && <div className="active-glow-bar" />}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Trust proof bar */}
+          {/* Clean Trust Metrics */}
           <div className="showcase-trust-bar">
             <div className="trust-item">
-              <ShieldCheck size={16} className="text-primary" />
+              <ShieldCheck size={15} className="text-primary" />
               <span>256-Bit Encrypted</span>
             </div>
             <div className="trust-item">
-              <Zap size={16} className="text-primary" />
+              <Zap size={15} className="text-primary" />
               <span>Sub-second AI Speed</span>
             </div>
             <div className="trust-item">
-              <Award size={16} className="text-primary" />
+              <Award size={15} className="text-primary" />
               <span>10,000+ Placements</span>
             </div>
           </div>

@@ -56,8 +56,9 @@ const TechBackgroundOverlay = () => {
 
       // Get current theme primary color dynamically
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-      let r = 249, g = 115, b = 22; // default orange/amber
-      if (theme === 'dark') { r = 168; g = 85; b = 247; } // purple
+      let r = 249, g = 115, b = 22; // default orange/amber (SoftSynth blue-orange)
+      if (theme === 'blue-orange') { r = 249; g = 115; b = 22; }
+      else if (theme === 'dark') { r = 168; g = 85; b = 247; } // purple
       else if (theme === 'whiteblue' || theme === 'ocean') { r = 37; g = 99; b = 235; } // blue
       else if (theme === 'cyberpunk') { r = 234; g = 179; b = 8; } // gold
       else if (theme === 'emerald') { r = 16; g = 185; b = 129; } // emerald
@@ -128,7 +129,6 @@ const TechBackgroundOverlay = () => {
       <div className="tbg-blob-primary" />
       <div className="tbg-blob-secondary" />
       <div className="tbg-blob-center" />
-      <div className="tbg-scan-beam" />
       <canvas ref={canvasRef} className="tbg-particle-canvas" />
     </div>
   );
