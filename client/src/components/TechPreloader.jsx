@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Compass, Sparkles, Cpu, Zap, Activity, X, ArrowRight, Play, Pause, RotateCcw } from 'lucide-react';
+import NeuralCanvasBackground from './NeuralCanvasBackground';
 import './TechPreloader.css';
 
 const TECH_STEPS = [
@@ -117,10 +118,8 @@ const TechPreloader = ({ onFinish }) => {
 
   return (
     <div className={`tech-preloader-backdrop ${isFadingOut ? 'fade-out' : ''}`} data-theme={theme}>
-      {/* Background Animated Tech Mesh & Glow Orbs */}
-      <div className="tp-grid-bg" />
-      <div className="tp-glow-orb-1" />
-      <div className="tp-glow-orb-2" />
+      {/* Interactive Neural Synapse Canvas Background */}
+      <NeuralCanvasBackground theme={theme} />
 
       {/* Central Glass Card */}
       <div className="tp-center-box">

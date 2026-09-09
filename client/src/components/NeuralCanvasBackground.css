@@ -1,0 +1,75 @@
+/* Background Ambience & Interactive Dynamic Synapse Grid */
+.auth-background-neural-wrapper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.neural-canvas-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto; /* allows interactive mouse attraction */
+  z-index: 1;
+}
+
+.grid-blueprint-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at center, transparent 20%, var(--bg-dark, #ffffff) 95%),
+    linear-gradient(to right, var(--border-color, rgba(2, 132, 199, 0.18)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-color, rgba(2, 132, 199, 0.18)) 1px, transparent 1px);
+  background-size: 100% 100%, 38px 38px, 38px 38px;
+  opacity: 0.85;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.75;
+  animation: floatAmbient 16s ease-in-out infinite alternate;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blob-1 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, var(--primary, #0284c7) 0%, var(--primary-glow, rgba(2, 132, 199, 0.35)) 45%, transparent 70%);
+  opacity: 0.22;
+  top: -15%;
+  left: -10%;
+}
+
+.blob-2 {
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, var(--secondary, #2563eb) 0%, var(--secondary-glow, rgba(59, 130, 246, 0.35)) 45%, transparent 70%);
+  opacity: 0.20;
+  bottom: -20%;
+  right: -10%;
+  animation-delay: -6s;
+}
+
+.blob-3 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--primary, #0284c7) 0%, var(--primary-glow, rgba(147, 197, 253, 0.35)) 50%, transparent 70%);
+  opacity: 0.18;
+  top: 25%;
+  left: 30%;
+  animation-delay: -10s;
+}
+
+@keyframes floatAmbient {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -25px) scale(1.08); }
+  100% { transform: translate(-20px, 20px) scale(0.96); }
+}
