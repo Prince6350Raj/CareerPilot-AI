@@ -44,16 +44,6 @@ const SHOWCASE_TABS = [
   }
 ];
 
-const CAREER_TRACKS = [
-  { id: 'student', label: 'Student / Fresher', icon: '🎓' },
-  { id: 'fullstack', label: 'Full Stack SDE', icon: '🚀' },
-  { id: 'ai_ml', label: 'AI & ML Engineer', icon: '🧠' },
-  { id: 'cloud', label: 'Cloud & DevOps', icon: '☁️' },
-  { id: 'dsa', label: 'DSA & FAANG Prep', icon: '🎯' },
-  { id: 'mobile', label: 'Mobile App Dev', icon: '📱' },
-  { id: 'security', label: 'Cybersecurity', icon: '🛡️' }
-];
-
 // Interactive High-Contrast Dynamic Neural Synapse Canvas Component
 const NeuralCanvasBackground = ({ theme = 'whiteblue' }) => {
   const canvasRef = useRef(null);
@@ -602,7 +592,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [targetTrack, setTargetTrack] = useState('student');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -725,8 +714,8 @@ const Login = () => {
 
   return (
     <div className="auth-ultra-page" data-theme={theme}>
-      {/* Top Right Floating Bar (Theme Switcher + Mentor Intro Launcher) */}
-      <div className="login-theme-selector-wrapper">
+      {/* Top Navigation Bar (Theme Switcher + Mentor Intro Launcher) */}
+      <div className="auth-top-navbar">
         <button
           type="button"
           className="btn-mentor-intro-pill"
@@ -804,10 +793,6 @@ const Login = () => {
                 <span>About</span>
               </span>
             </button>
-            <div className="engine-status-tag tech-pill-float">
-              <span className="pill-status-dot"></span>
-              <span>Gemini 3.6 Flash Active</span>
-            </div>
           </div>
 
           <div className="showcase-headline-block">
@@ -1052,42 +1037,21 @@ const Login = () => {
           {/* Main Form */}
           <form onSubmit={handleSubmit} className="auth-inputs-form">
             {mode === 'signup' && (
-              <>
-                <div className="form-field-group">
-                  <label className="field-label" htmlFor="auth-name">Full Name</label>
-                  <div className="field-input-wrap">
-                    <User size={18} className="field-icon" />
-                    <input
-                      id="auth-name"
-                      type="text"
-                      className="field-control"
-                      placeholder="e.g. Prince Raj"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
+              <div className="form-field-group">
+                <label className="field-label" htmlFor="auth-name">Full Name</label>
+                <div className="field-input-wrap">
+                  <User size={18} className="field-icon" />
+                  <input
+                    id="auth-name"
+                    type="text"
+                    className="field-control"
+                    placeholder="e.g. Prince Raj"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
                 </div>
-
-                {/* Interactive Career Track Picker */}
-                <div className="form-field-group">
-                  <label className="field-label">Target Role / Track</label>
-                  <div className="track-picker-grid">
-                    {CAREER_TRACKS.map((t) => (
-                      <button
-                        key={t.id}
-                        type="button"
-                        className={`track-pill-btn ${targetTrack === t.id ? 'selected' : ''}`}
-                        onClick={() => setTargetTrack(t.id)}
-                      >
-                        <span className="track-emoji">{t.icon}</span>
-                        <span className="track-name">{t.label}</span>
-                        {targetTrack === t.id && <Check size={12} className="track-check" />}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
+              </div>
             )}
 
             <div className="form-field-group">
