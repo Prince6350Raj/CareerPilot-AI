@@ -1005,35 +1005,6 @@ const Login = () => {
             </div>
           )}
 
-          {/* 1-Click Instant Guest / Recruiter Demo Button */}
-          {mode === 'signin' && (
-            <div className="guest-quick-access-box">
-              <button
-                type="button"
-                className="guest-demo-btn"
-                onClick={handleGuestDemoLogin}
-                disabled={guestLoading}
-              >
-                <div className="guest-btn-content">
-                  <div className="guest-icon-pulse">
-                    <Stars size={18} />
-                  </div>
-                  <div className="guest-btn-texts">
-                    <strong>Explore as Guest Developer</strong>
-                    <span>1-Click Instant Demo • No credentials required</span>
-                  </div>
-                </div>
-                <ArrowRight size={18} className="guest-arrow" />
-              </button>
-
-              <div className="auth-divider-row">
-                <span className="divider-line"></span>
-                <span className="divider-text">OR CONTINUE WITH EMAIL</span>
-                <span className="divider-line"></span>
-              </div>
-            </div>
-          )}
-
           {/* Main Form */}
           <form onSubmit={handleSubmit} className="auth-inputs-form">
             {mode === 'signup' && (
@@ -1180,6 +1151,29 @@ const Login = () => {
               )}
             </button>
           </form>
+
+          {/* 1-Click Instant Guest / Recruiter Demo Button Below Form */}
+          {mode === 'signin' && (
+            <div className="guest-quick-access-box">
+              <div className="auth-divider-row">
+                <span className="divider-line"></span>
+                <span className="divider-text">OR EXPLORE INSTANTLY</span>
+                <span className="divider-line"></span>
+              </div>
+
+              <button
+                type="button"
+                className="guest-demo-btn"
+                onClick={handleGuestDemoLogin}
+                disabled={guestLoading}
+                title="1-Click Instant Guest Demo • No credentials required"
+              >
+                <Stars size={16} className="text-primary" />
+                <span>Explore as Guest Developer</span>
+                <span className="guest-fast-tag">1-Click Demo</span>
+              </button>
+            </div>
+          )}
 
           {/* Form Footer Switcher */}
           <div className="auth-footer-navigation">
