@@ -734,7 +734,7 @@ const Login = () => {
             className="theme-dropdown-select"
             aria-label="Select Theme"
           >
-            <option value="blue-orange">🔥 Blue & Orange (SoftSynth)</option>
+            <option value="blue-orange">🔥 Blue & Orange</option>
             <option value="whiteblue">💎 White & Royal Blue</option>
             <option value="dark">🌌 Space Blue</option>
             <option value="light">❄️ Frosted Glass</option>
@@ -982,7 +982,7 @@ const Login = () => {
           {/* Form Header */}
           <div className="auth-form-header">
             <h1 className="auth-heading">
-              {mode === 'signin' && 'Welcome'}
+              {mode === 'signin' && 'Welcome!'}
               {mode === 'signup' && 'Get Started Free'}
               {mode === 'forgot' && 'Reset Password'}
             </h1>

@@ -15,10 +15,45 @@ const TechPreloader = ({ onFinish }) => {
   const [statusMsg, setStatusMsg] = useState(TECH_STEPS[0].message);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [theme, setTheme] = useState(
+    () => document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'whiteblue'
+  );
   const isPausedRef = useRef(false);
+
+  // Sync theme in real-time with document attribute or storage
+  useEffect(() => {
+    const updateCurrentTheme = () => {
+      const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'whiteblue';
+      setTheme(current);
+    };
+
+    updateCurrentTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          updateCurrentTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    const handleStorage = () => updateCurrentTheme();
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
 
   // Function to start or restart preloader diagnostics
   const startDiagnostics = () => {
+    // Refresh theme on launch
+    const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'whiteblue';
+    setTheme(currentTheme);
+
     setIsOpen(true);
     setIsFadingOut(false);
     setProgress(0);
@@ -81,7 +116,7 @@ const TechPreloader = ({ onFinish }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={`tech-preloader-backdrop ${isFadingOut ? 'fade-out' : ''}`}>
+    <div className={`tech-preloader-backdrop ${isFadingOut ? 'fade-out' : ''}`} data-theme={theme}>
       {/* Background Animated Tech Mesh & Glow Orbs */}
       <div className="tp-grid-bg" />
       <div className="tp-glow-orb-1" />
