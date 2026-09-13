@@ -423,7 +423,7 @@ const Login = () => {
           type="button"
           className="btn-mentor-intro-pill"
           onClick={() => window.dispatchEvent(new CustomEvent('show-tech-preloader'))}
-          title="Click to replay full AI Launch Diagnostics (Mentor Demo Mode)"
+          title="Click to replay full AI Launch Diagnostics"
         >
           <Sparkles size={14} className="text-primary" />
           <span>AI Launch Intro</span>

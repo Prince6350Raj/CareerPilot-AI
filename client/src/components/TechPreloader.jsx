@@ -123,9 +123,8 @@ const TechPreloader = ({ onFinish }) => {
 
       {/* Central Glass Card */}
       <div className="tp-center-box">
-        {/* Top Controls for Mentor Inspection */}
+        {/* Top Controls */}
         <div className="tp-top-controls">
-          <span className="tp-mentor-tag">Mentor Demo Mode</span>
           <button 
             type="button" 
             className="tp-btn-close" 
