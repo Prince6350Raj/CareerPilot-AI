@@ -96,6 +96,81 @@
   --bg-header-banner: linear-gradient(135deg, hsla(222, 45%, 13%, 0.9) 0%, hsla(222, 45%, 7%, 0.98) 100%);
 }
 
+/* Blue Mobile Theme Overrides (Vibrant Mobile Lockscreen Midnight Royal Blue & Cyan) */
+:root[data-theme="blue-mobile"] {
+  --bg-dark: #060f2e; /* Deep midnight royal blue from mobile screen */
+  --bg-card: hsla(226, 65%, 13%, 0.88); /* Frosted royal blue glass card */
+  --border-color: hsla(200, 95%, 60%, 0.28); /* Cyan/electric blue glowing border */
+  --text-primary: #ffffff; /* Crisp pure white */
+  --text-secondary: #93c5fd; /* Soft ice cyan-blue */
+  --text-muted: #60a5fa;
+  
+  --primary: #0284c7; /* Electric Cyan Blue keypad button color */
+  --primary-glow: rgba(56, 189, 248, 0.35);
+  --primary-hover: #0369a1;
+  
+  --secondary: #f97316; /* Warm amber/orange flare accent */
+  --secondary-glow: rgba(249, 115, 22, 0.30);
+  
+  --glass-border: 1px solid hsla(200, 95%, 60%, 0.30);
+  --glass-shadow: 0 12px 40px 0 rgba(2, 6, 23, 0.75);
+  
+  --bg-item: hsla(226, 65%, 9%, 0.75);
+  --bg-item-hover: hsla(200, 95%, 60%, 0.18);
+  --bg-input: hsla(226, 70%, 7%, 0.92);
+  --bg-header-banner: linear-gradient(135deg, hsla(226, 65%, 15%, 0.95) 0%, hsla(226, 75%, 8%, 0.98) 100%);
+}
+
+/* White BG Theme Overrides (100% Fully Pure White Background, Dark Slate Typography) */
+:root[data-theme="white-bg"] {
+  --bg-dark: #ffffff; /* 100% Fully Pure White */
+  --bg-card: #ffffff; /* Pure white cards */
+  --border-color: #e2e8f0; /* Crisp clean slate-200 border */
+  --text-primary: #0f172a; /* Deep slate-900 high contrast */
+  --text-secondary: #334155; /* Slate-700 */
+  --text-muted: #64748b; /* Slate-500 */
+  
+  --primary: #2563eb; /* Modern vibrant royal blue */
+  --primary-glow: rgba(37, 99, 235, 0.12);
+  --primary-hover: #1d4ed8;
+  
+  --secondary: #0284c7; /* Vibrant cyan-blue */
+  --secondary-glow: rgba(2, 132, 199, 0.12);
+  
+  --glass-border: 1px solid #e2e8f0;
+  --glass-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.04);
+  
+  --bg-item: #f8fafc; /* Ultra clean light slate item */
+  --bg-item-hover: #f1f5f9;
+  --bg-input: #ffffff;
+  --bg-header-banner: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+:root[data-theme="white-bg"] h1,
+:root[data-theme="white-bg"] h2,
+:root[data-theme="white-bg"] h3,
+:root[data-theme="white-bg"] h4,
+:root[data-theme="white-bg"] h5,
+:root[data-theme="white-bg"] h6,
+:root[data-theme="white-bg"] .page-title {
+  color: #0f172a !important;
+}
+
+:root[data-theme="white-bg"] .glass-card,
+:root[data-theme="white-bg"] .card,
+:root[data-theme="white-bg"] .dashboard-card,
+:root[data-theme="white-bg"] .sidebar-container {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  backdrop-filter: none !important;
+}
+
+:root[data-theme="white-bg"] .nav-item.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
 /* Midnight Gold Theme Overrides (Black and Yellow) */
 :root[data-theme="cyberpunk"] {
   --bg-dark: hsl(0, 0%, 4%); /* Matte Obsidian Black background */

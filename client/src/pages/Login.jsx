@@ -438,6 +438,8 @@ const Login = () => {
             aria-label="Select Theme"
           >
             <option value="blue-orange">🔥 Blue & Orange</option>
+            <option value="blue-mobile">📱 Blue Mobile</option>
+            <option value="white-bg">⚪ White BG</option>
             <option value="whiteblue">💎 White & Royal Blue</option>
             <option value="dark">🌌 Space Blue</option>
             <option value="light">❄️ Frosted Glass</option>

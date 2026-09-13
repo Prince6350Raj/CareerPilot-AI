@@ -2,6 +2,24 @@ import React, { useEffect, useRef } from 'react';
 import './NeuralCanvasBackground.css';
 
 const THEME_PRESETS = {
+  'blue-mobile': { 
+    isDark: true,
+    nodeRGB: '56, 189, 248', 
+    lineRGB: '37, 99, 235', 
+    mouseRGB: '249, 115, 22',
+    baseAlpha: 0.85,
+    lineAlpha: 0.55,
+    glowAlpha: 0.95
+  },
+  'white-bg': { 
+    isDark: false,
+    nodeRGB: '37, 99, 235', 
+    lineRGB: '96, 165, 250', 
+    mouseRGB: '2, 132, 199',
+    baseAlpha: 0.65,
+    lineAlpha: 0.50,
+    glowAlpha: 0.85
+  },
   'blue-orange': { 
     isDark: true,
     nodeRGB: '249, 115, 22', 

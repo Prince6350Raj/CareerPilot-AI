@@ -21,6 +21,11 @@
   pointer-events: none;
 }
 
+:root[data-theme="blue-mobile"] .tbg-grid-mesh {
+  --tbg-grid-line: rgba(56, 189, 248, 0.055);
+}
+
+:root[data-theme="white-bg"] .tbg-grid-mesh,
 :root[data-theme="light"] .tbg-grid-mesh,
 :root[data-theme="whiteblue"] .tbg-grid-mesh {
   --tbg-grid-line: rgba(37, 99, 235, 0.04);

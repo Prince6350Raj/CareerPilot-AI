@@ -164,6 +164,8 @@ const Settings = () => {
 
   const themeList = [
     { id: 'blue-orange', name: 'Blue & Orange', color: '#f97316', type: 'dark', desc: 'Midnight navy blue with electric orange accents' },
+    { id: 'blue-mobile', name: 'Blue Mobile', color: '#0284c7', type: 'dark', desc: 'Mobile lockscreen deep royal blue with cyan and amber flares' },
+    { id: 'white-bg', name: 'White BG', color: '#ffffff', type: 'minimal', desc: 'Minimalist 100% pure white background with dark slate typography' },
     { id: 'dark', name: 'Space Blue', color: '#4f46e5', type: 'dark', desc: 'Deep galactic space blue interface' },
     { id: 'light', name: 'Frosted Glass', color: '#94a3b8', type: 'light', desc: 'Vibrant clean white-blue frosted view' },
     { id: 'whiteblue', name: 'White, Grey & Blue', color: '#2563eb', type: 'minimal', desc: 'Crisp white, cool grey & modern tech blue' },

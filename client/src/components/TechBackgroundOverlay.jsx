@@ -58,6 +58,8 @@ const TechBackgroundOverlay = () => {
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
       let r = 249, g = 115, b = 22; // default orange/amber (SoftSynth blue-orange)
       if (theme === 'blue-orange') { r = 249; g = 115; b = 22; }
+      else if (theme === 'blue-mobile') { r = 2; g = 132; b = 199; } // vibrant cyan-blue
+      else if (theme === 'white-bg') { r = 37; g = 99; b = 235; } // clean modern blue
       else if (theme === 'dark') { r = 168; g = 85; b = 247; } // purple
       else if (theme === 'whiteblue' || theme === 'ocean') { r = 37; g = 99; b = 235; } // blue
       else if (theme === 'cyberpunk') { r = 234; g = 179; b = 8; } // gold
