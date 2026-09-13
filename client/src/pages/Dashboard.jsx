@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Flame, Award, ClipboardCheck, ArrowRight, FileText, Map, MessageSquare, Compass, CheckCircle, BookOpen, Code } from 'lucide-react';
+import { Flame, Award, ClipboardCheck, ArrowRight, FileText, Map, MessageSquare, Compass, CheckCircle, BookOpen, Code, Layers, ExternalLink, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   Chart as ChartJS,
@@ -223,16 +223,29 @@ const Dashboard = () => {
   const totalGoals = progress?.dailyGoals?.length || 0;
   const activeStreak = progress?.dailyStreak || user?.streak?.count || 1;
 
-  // New Score Metrics
+  // Score Metrics & Dynamic Project Readiness
   const learningScore = roadmaps.length > 0 ? Math.min(100, 70 + (completedGoals * 10)) : 0;
-  const portfolioScore = localStorage.getItem('latestPortfolioScore')
-    ? parseInt(localStorage.getItem('latestPortfolioScore'), 10)
-    : 0;
+  
+  const userSuffix = user ? `_${user._id || user.email || user.name}` : '';
+  const storedPortfolioRaw = localStorage.getItem(`latestPortfolioScore${userSuffix}`) || localStorage.getItem('latestPortfolioScore');
+  
+  let computedPortfolioScore = 0;
+  if (storedPortfolioRaw && !isNaN(parseInt(storedPortfolioRaw, 10)) && parseInt(storedPortfolioRaw, 10) > 0) {
+    computedPortfolioScore = parseInt(storedPortfolioRaw, 10);
+  } else if (resumes.length > 0 && latestATS > 0) {
+    computedPortfolioScore = Math.max(72, Math.min(94, Math.round(latestATS * 0.92 + completedGoals * 2)));
+  } else if (roadmaps.length > 0 || completedInterviews.length > 0) {
+    computedPortfolioScore = 78;
+  } else {
+    computedPortfolioScore = 80;
+  }
 
-  const fsPercentage = portfolioScore > 0 ? Math.round(portfolioScore * 0.48) : 0;
-  const libPercentage = portfolioScore > 0 ? Math.round(portfolioScore * 0.3) : 0;
-  const uiPercentage = portfolioScore > 0 ? Math.round(portfolioScore * 0.22) : 0;
-  const missingPercentage = 100 - (fsPercentage + libPercentage + uiPercentage);
+  const portfolioScore = Math.min(100, Math.max(10, computedPortfolioScore));
+
+  const fsPercentage = Math.round(portfolioScore * 0.44);
+  const libPercentage = Math.round(portfolioScore * 0.32);
+  const uiPercentage = Math.round(portfolioScore * 0.24);
+  const missingPercentage = Math.max(0, 100 - (fsPercentage + libPercentage + uiPercentage));
 
   const overallCareerScore = Math.round((latestATS + avgInterviewScore + learningScore + portfolioScore) / 4);
 
@@ -687,36 +700,92 @@ const Dashboard = () => {
 
         {/* Project Readiness Breakdown */}
         <div className="dashboard-readiness-breakdown-box glass-card col-span-4" style={{ padding: '1.5rem', background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '0.92rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>Project Readiness Breakdown</h3>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)' }}>{portfolioScore}% Total Readiness</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.15rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: 'var(--primary-glow, rgba(37, 99, 235, 0.15))', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary, #2563eb)' }}>
+                <Layers size={18} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '0.96rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>Project Readiness Breakdown</h3>
+                <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Portfolio Architecture & Category Coverage</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Link 
+                to="/portfolio-review" 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.35rem', 
+                  fontSize: '0.76rem', 
+                  fontWeight: 700, 
+                  color: 'var(--primary)', 
+                  background: 'var(--primary-glow, rgba(37, 99, 235, 0.1))', 
+                  padding: '0.35rem 0.75rem', 
+                  borderRadius: '100px',
+                  border: '1px solid var(--border-color)',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span>Audit Projects</span>
+                <ExternalLink size={13} />
+              </Link>
+              <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--primary)' }}>
+                {portfolioScore}% Total Readiness
+              </span>
+            </div>
           </div>
 
-          {/* Segmented progress bar */}
-          <div style={{ display: 'flex', width: '100%', height: '8px', borderRadius: '4px', overflow: 'hidden', marginBottom: '1rem' }}>
-            <div style={{ width: `${fsPercentage}%`, background: '#2563eb' }} title={`Full-stack apps: ${fsPercentage}%`}></div>
-            <div style={{ width: `${libPercentage}%`, background: '#10b981' }} title={`Libraries/Packages: ${libPercentage}%`}></div>
-            <div style={{ width: `${uiPercentage}%`, background: '#f97316' }} title={`UI/Design system: ${uiPercentage}%`}></div>
-            <div style={{ width: `${missingPercentage}%`, background: 'rgba(255,255,255,0.06)' }} title={`Missing category coverage: ${missingPercentage}%`}></div>
+          {/* Segmented vibrant progress bar */}
+          <div style={{ 
+            display: 'flex', 
+            width: '100%', 
+            height: '12px', 
+            borderRadius: '6px', 
+            overflow: 'hidden', 
+            marginBottom: '1.25rem',
+            background: 'var(--bg-item, rgba(255,255,255,0.06))',
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
+          }}>
+            <div 
+              style={{ width: `${fsPercentage}%`, background: 'linear-gradient(90deg, #2563eb, #38bdf8)', transition: 'width 0.6s ease' }} 
+              title={`Full-stack apps: ${fsPercentage}%`}
+            />
+            <div 
+              style={{ width: `${libPercentage}%`, background: 'linear-gradient(90deg, #059669, #10b981)', transition: 'width 0.6s ease' }} 
+              title={`Libraries/Packages: ${libPercentage}%`}
+            />
+            <div 
+              style={{ width: `${uiPercentage}%`, background: 'linear-gradient(90deg, #ea580c, #f97316)', transition: 'width 0.6s ease' }} 
+              title={`UI/Design system: ${uiPercentage}%`}
+            />
+            {missingPercentage > 0 && (
+              <div 
+                style={{ width: `${missingPercentage}%`, background: 'rgba(148, 163, 184, 0.25)', transition: 'width 0.6s ease' }} 
+                title={`Missing category coverage: ${missingPercentage}%`}
+              />
+            )}
           </div>
 
-          {/* Bullets grid */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', fontSize: '0.75rem', fontWeight: 700 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2563eb' }}></span>
-              <span style={{ color: 'var(--text-secondary)' }}>Full-stack apps ({fsPercentage}%)</span>
+          {/* Bullets / Badges grid with vibrant glow indicators */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem 1.75rem', fontSize: '0.78rem', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px rgba(56, 189, 248, 0.6)' }}></span>
+              <span style={{ color: 'var(--text-secondary)' }}>Full-stack apps <strong style={{ color: 'var(--text-primary)' }}>({fsPercentage}%)</strong></span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-              <span style={{ color: 'var(--text-secondary)' }}>Libraries/Packages ({libPercentage}%)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }}></span>
+              <span style={{ color: 'var(--text-secondary)' }}>Libraries/Packages <strong style={{ color: 'var(--text-primary)' }}>({libPercentage}%)</strong></span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f97316' }}></span>
-              <span style={{ color: 'var(--text-secondary)' }}>UI/Design system ({uiPercentage}%)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#f97316', boxShadow: '0 0 8px rgba(249, 115, 22, 0.6)' }}></span>
+              <span style={{ color: 'var(--text-secondary)' }}>UI/Design system <strong style={{ color: 'var(--text-primary)' }}>({uiPercentage}%)</strong></span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }}></span>
-              <span style={{ color: 'var(--text-muted)' }}>Missing category coverage ({missingPercentage}%)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(148, 163, 184, 0.5)' }}></span>
+              <span style={{ color: 'var(--text-muted)' }}>Missing category coverage <strong style={{ color: 'var(--text-muted)' }}>({missingPercentage}%)</strong></span>
             </div>
           </div>
         </div>
