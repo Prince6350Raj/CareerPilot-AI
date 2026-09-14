@@ -1,5 +1,9 @@
 require('dotenv').config();
+const crypto = require('crypto');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+// In-memory persistent cache for resume analyses keyed by sha256 hash of normalized text
+const resumeAnalysisCache = new Map();
 
 // Primary Google Gemini AI model (2026 active version)
 const PRIMARY_GEMINI_MODEL = 'gemini-3.6-flash';
@@ -104,23 +108,42 @@ const parseAIResponse = (text) => {
 };
 
 /**
- * 1. Analyze Resume (ATS & Skill Analysis)
+ * 1. Analyze Resume (ATS & Skill Analysis - Deterministic & Cached)
  */
 exports.analyzeResume = async (resumeText) => {
+  if (!resumeText || !resumeText.trim()) {
+    return getMockResumeAnalysis(resumeText || '');
+  }
+
+  // Normalize text and compute deterministic SHA-256 fingerprint
+  const normalizedText = resumeText.trim().replace(/\r\n/g, '\n').replace(/\s+/g, ' ').toLowerCase();
+  const textHash = crypto.createHash('sha256').update(normalizedText).digest('hex');
+
+  // If already analyzed before, return exact cached analysis instantly
+  if (resumeAnalysisCache.has(textHash)) {
+    return JSON.parse(JSON.stringify(resumeAnalysisCache.get(textHash)));
+  }
+
   if (!genAI) {
     console.warn('⚠️ Gemini Key not found. Loading Mock Resume Analysis.');
-    return getMockResumeAnalysis(resumeText);
+    const mockResult = getMockResumeAnalysis(resumeText);
+    resumeAnalysisCache.set(textHash, mockResult);
+    return mockResult;
   }
 
   try {
     const model = genAI.getGenerativeModel({
       model: PRIMARY_GEMINI_MODEL,
-      generationConfig: { responseMimeType: 'application/json' }
+      generationConfig: { 
+        responseMimeType: 'application/json',
+        temperature: 0.0, // Strict zero temperature for maximum determinism & consistency
+        topP: 0.1
+      }
     });
 
     const prompt = `
       You are an enterprise Applicant Tracking System (ATS) and expert technical recruiter. 
-      Analyze this raw text extracted from a candidate's resume with STRICT, REALISTIC, and UNBIASED scoring:
+      Analyze this raw text extracted from a candidate's resume with STRICT, REALISTIC, and CONSISTENT scoring:
       
       "${resumeText}"
 
@@ -148,10 +171,25 @@ exports.analyzeResume = async (resumeText) => {
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    return parseAIResponse(response.text());
+    const parsed = parseAIResponse(response.text());
+
+    if (parsed && typeof parsed.atsScore === 'number') {
+      parsed.atsScore = Math.min(96, Math.max(30, Math.round(parsed.atsScore)));
+      if (!parsed.breakdown) {
+        parsed.breakdown = { formatting: 75, impactPhrases: 70, keywordMatch: 75, redundancies: 80 };
+      }
+      resumeAnalysisCache.set(textHash, parsed);
+      return parsed;
+    }
+
+    const fallback = getMockResumeAnalysis(resumeText);
+    resumeAnalysisCache.set(textHash, fallback);
+    return fallback;
   } catch (error) {
     console.error('Gemini Resume Parsing error:', error);
-    return getMockResumeAnalysis(resumeText);
+    const fallback = getMockResumeAnalysis(resumeText);
+    resumeAnalysisCache.set(textHash, fallback);
+    return fallback;
   }
 };
 

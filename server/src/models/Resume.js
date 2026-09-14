@@ -16,6 +16,10 @@ const ResumeSchema = new mongoose.Schema({
   parsedText: {
     type: String
   },
+  contentHash: {
+    type: String,
+    index: true
+  },
   atsScore: {
     type: Number,
     min: 0,

@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 const pdfParse = require('pdf-parse');
+const crypto = require('crypto');
 const Resume = require('../models/Resume');
 const Progress = require('../models/Progress');
 const User = require('../models/User');
@@ -75,12 +76,31 @@ exports.uploadResume = async (req, res, next) => {
     }
 
     const parsedText = pdfData.text;
+    const normalizedText = (parsedText || '').trim().replace(/\r\n/g, '\n').replace(/\s+/g, ' ').toLowerCase();
+    const contentHash = crypto.createHash('sha256').update(normalizedText).digest('hex');
 
-    // 2. Upload PDF file to Cloudinary (or save locally)
+    // Check if user already analyzed this exact resume before to guarantee identical, deterministic ATS score
+    const existingResume = await Resume.findOne({
+      userId: req.user.id,
+      $or: [{ contentHash }, { parsedText: parsedText }]
+    }).sort({ createdAt: -1 });
+
+    let analysis;
+    if (existingResume && existingResume.atsScore) {
+      analysis = {
+        atsScore: existingResume.atsScore,
+        breakdown: existingResume.breakdown,
+        detectedSkills: existingResume.detectedSkills,
+        suggestedSkills: existingResume.suggestedSkills,
+        feedback: existingResume.feedback
+      };
+    } else {
+      // 2. Send text to Gemini API for ATS score and analysis (cached by content hash)
+      analysis = await geminiService.analyzeResume(parsedText);
+    }
+
+    // 3. Upload PDF file to Cloudinary (or save locally)
     const uploadResult = await saveFile(req.file.buffer, req.file.originalname);
-
-    // 3. Send text to Gemini API for ATS score and analysis
-    const analysis = await geminiService.analyzeResume(parsedText);
 
     // 4. Save to MongoDB
     const resume = await Resume.create({
@@ -88,6 +108,7 @@ exports.uploadResume = async (req, res, next) => {
       fileUrl: uploadResult.secure_url,
       publicId: uploadResult.public_id,
       parsedText: parsedText,
+      contentHash: contentHash,
       atsScore: analysis.atsScore,
       breakdown: analysis.breakdown,
       detectedSkills: analysis.detectedSkills,
@@ -304,14 +325,35 @@ exports.analyzeBuiltResume = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Please provide resume text content' });
     }
 
-    // 1. Send text to Gemini API for ATS score and analysis
-    const analysis = await geminiService.analyzeResume(resumeText);
+    const normalizedText = (resumeText || '').trim().replace(/\r\n/g, '\n').replace(/\s+/g, ' ').toLowerCase();
+    const contentHash = crypto.createHash('sha256').update(normalizedText).digest('hex');
+
+    // Check if user already analyzed this exact resume content before
+    const existingResume = await Resume.findOne({
+      userId: req.user.id,
+      $or: [{ contentHash }, { parsedText: resumeText }]
+    }).sort({ createdAt: -1 });
+
+    let analysis;
+    if (existingResume && existingResume.atsScore) {
+      analysis = {
+        atsScore: existingResume.atsScore,
+        breakdown: existingResume.breakdown,
+        detectedSkills: existingResume.detectedSkills,
+        suggestedSkills: existingResume.suggestedSkills,
+        feedback: existingResume.feedback
+      };
+    } else {
+      // 1. Send text to Gemini API for ATS score and analysis
+      analysis = await geminiService.analyzeResume(resumeText);
+    }
 
     // 2. Save to MongoDB using a default dummy PDF path as it is generated/built
     const resume = await Resume.create({
       userId: req.user.id,
       fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       parsedText: resumeText,
+      contentHash: contentHash,
       atsScore: analysis.atsScore,
       breakdown: analysis.breakdown,
       detectedSkills: analysis.detectedSkills,
