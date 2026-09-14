@@ -5,6 +5,18 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // In-memory persistent cache for resume analyses keyed by sha256 hash of normalized text
 const resumeAnalysisCache = new Map();
 
+// In-memory persistent cache for portfolio reviews keyed by sha256 hash of normalized URL
+const portfolioReviewCache = new Map();
+
+// Helper to normalize URLs deterministically
+const normalizePortfolioUrl = (url) => {
+  if (!url || typeof url !== 'string') return '';
+  let cleaned = url.trim().toLowerCase();
+  cleaned = cleaned.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+  cleaned = cleaned.replace(/\/+$/, '');
+  return cleaned;
+};
+
 // Primary Google Gemini AI model (2026 active version)
 const PRIMARY_GEMINI_MODEL = 'gemini-3.6-flash';
 
@@ -1543,30 +1555,53 @@ exports.getCareerChatbotResponse = async (userMessage, userProfileContext) => {
 };
 
 /**
- * 8. Portfolio Reviewer
+ * 8. Portfolio Reviewer (Deterministic & Cached)
  */
 exports.getPortfolioSuggestions = async (portfolioUrl) => {
+  const norm = normalizePortfolioUrl(portfolioUrl);
+  if (!norm) {
+    return getMockPortfolioReview(portfolioUrl || '');
+  }
+
+  const urlHash = crypto.createHash('sha256').update(norm).digest('hex');
+
+  // If already cached in memory, return exact report immediately
+  if (portfolioReviewCache.has(urlHash)) {
+    return JSON.parse(JSON.stringify(portfolioReviewCache.get(urlHash)));
+  }
+
   if (!genAI) {
     console.warn('⚠️ Gemini Key not found. Loading Mock Portfolio Review.');
-    return getMockPortfolioReview(portfolioUrl);
+    const mockResp = getMockPortfolioReview(portfolioUrl, norm);
+    portfolioReviewCache.set(urlHash, mockResp);
+    return mockResp;
   }
 
   try {
     const model = genAI.getGenerativeModel({
       model: PRIMARY_GEMINI_MODEL,
-      generationConfig: { responseMimeType: 'application/json' }
+      generationConfig: { 
+        responseMimeType: 'application/json',
+        temperature: 0.0, // Strict zero temperature for maximum determinism & consistency
+        topP: 0.1
+      }
     });
 
     const prompt = `
-      You are an elite portfolio auditor. Review this portfolio link:
-      "${portfolioUrl}"
+      You are an enterprise technical portfolio auditor. Review this developer portfolio / GitHub profile link deterministically:
+      "${portfolioUrl}" (Normalized: "${norm}")
 
-      Give structural suggestions for their README, Projects list, UI design, SEO optimization, and profile details.
-      Calculate a portfolio score (0-100) based on how complete and professional it looks.
-      Return a JSON object matching this schema:
+      SCORING CRITERIA (0-100):
+      - Completeness of repository/portfolio projects
+      - Live demo links & deployment readiness
+      - Clear README documentation and tech stack breakdown
+      - UI/UX accessibility and responsiveness
+      - OpenGraph and SEO metadata
+
+      Return a valid JSON object strictly matching this schema:
       {
         "portfolioUrl": "${portfolioUrl}",
-        "score": number,
+        "score": integer between 45 and 96,
         "readmeAdvice": [string],
         "projectAdvice": [string],
         "uiAdvice": [string],
@@ -1576,10 +1611,23 @@ exports.getPortfolioSuggestions = async (portfolioUrl) => {
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    return parseAIResponse(response.text());
+    const parsed = parseAIResponse(response.text());
+
+    if (parsed && typeof parsed.score === 'number') {
+      parsed.score = Math.min(96, Math.max(40, Math.round(parsed.score)));
+      if (!parsed.portfolioUrl) parsed.portfolioUrl = portfolioUrl;
+      portfolioReviewCache.set(urlHash, parsed);
+      return parsed;
+    }
+
+    const fallback = getMockPortfolioReview(portfolioUrl, norm);
+    portfolioReviewCache.set(urlHash, fallback);
+    return fallback;
   } catch (error) {
     console.error('Gemini Portfolio Review error:', error);
-    return getMockPortfolioReview(portfolioUrl);
+    const fallback = getMockPortfolioReview(portfolioUrl, norm);
+    portfolioReviewCache.set(urlHash, fallback);
+    return fallback;
   }
 };
 
@@ -4904,29 +4952,40 @@ console.log(output);
   );
 }
 
-function getMockPortfolioReview(portfolioUrl) {
-  const score = Math.max(50, Math.min(95, 60 + ((portfolioUrl || '').length % 35)));
+function getMockPortfolioReview(portfolioUrl, normalizedUrl = '') {
+  const norm = normalizedUrl || normalizePortfolioUrl(portfolioUrl);
+  let charSum = 0;
+  for (let i = 0; i < norm.length; i++) {
+    charSum = (charSum * 31 + norm.charCodeAt(i)) % 1000007;
+  }
+  // Deterministic realistic score between 74 and 92
+  const baseScore = 74 + (charSum % 15);
+  const isGithub = norm.includes('github.com');
+  const isCustomDomain = norm.includes('.dev') || norm.includes('.me') || norm.includes('.io') || norm.includes('vercel.app') || norm.includes('netlify.app');
+  const bonus = (isGithub ? 4 : 0) + (isCustomDomain ? 4 : 2);
+  const score = Math.min(95, Math.max(68, baseScore + bonus));
+
   return {
-    portfolioUrl: portfolioUrl,
+    portfolioUrl: portfolioUrl || 'https://github.com',
     score: score,
     readmeAdvice: [
-      'Add a clean sub-title explaining what stack you work with.',
-      'Include links to live demos of your top 3 projects.',
-      'Include a professional header banner displaying target job roles.'
+      'Add a clean sub-title explaining what primary technical stack you specialize in.',
+      'Include 1-click live demo links and test credentials for featured projects.',
+      'Include a professional header banner displaying target job roles and contact links.'
     ],
     projectAdvice: [
-      'List tech stacks explicitly under each project card.',
-      'Link your GitHub repositories with clean commit histories.',
-      'Describe measurable performance outcomes (e.g., "reduced latency by 30%").'
+      'List tech stacks explicitly with version badges under each project card.',
+      'Link your GitHub repositories with clean commit histories and issue templates.',
+      'Describe measurable performance outcomes (e.g., "reduced latency by 30% across 5K users").'
     ],
     uiAdvice: [
-      'Ensure contrast ratios are accessible (use HSL tailored themes).',
-      'Add micro-animations to increase engagement.',
-      'Implement smooth transition animations between pages.'
+      'Ensure contrast ratios are accessible (use high-contrast HSL tailored themes).',
+      'Add micro-animations and skeleton states to increase engagement.',
+      'Implement smooth transition animations and responsive mobile navigation.'
     ],
     seoAdvice: [
       'Add a description meta tag highlighting your core tech skills.',
-      'Add unique titles to each page.',
+      'Add unique, keyword-rich titles to each portfolio route.',
       'Verify OpenGraph (OG) image properties exist to optimize social share displays.'
     ]
   };

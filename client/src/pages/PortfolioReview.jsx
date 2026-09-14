@@ -70,6 +70,8 @@ const PortfolioReview = () => {
     localStorage.setItem(`portfolio_checklist${userSuffix}`, JSON.stringify(next));
   };
 
+  const normalizeUrl = (u) => (u || '').trim().toLowerCase().replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/+$/, '');
+
   const handleReview = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     if (!portfolioUrl.trim()) return;
@@ -94,17 +96,18 @@ const PortfolioReview = () => {
         // Save to local storage history list
         const newAudit = {
           url: portfolioUrl.trim(),
-          score: data.data.score || 72,
+          score: data.data.score || 75,
           date: new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
           report: data.data
         };
 
         const userSuffix = user ? `_${user._id || user.email || user.name}` : '';
-        // Filter duplicates and prepend new audit
-        const updatedHistory = [newAudit, ...historyList.filter(h => h.url !== newAudit.url)].slice(0, 8);
+        // Filter duplicates by normalized URL and prepend new audit
+        const updatedHistory = [newAudit, ...historyList.filter(h => normalizeUrl(h.url) !== normalizeUrl(newAudit.url))].slice(0, 8);
         setHistoryList(updatedHistory);
         localStorage.setItem(`portfolio_audit_history${userSuffix}`, JSON.stringify(updatedHistory));
-        localStorage.setItem(`latestPortfolioScore${userSuffix}`, (data.data.score || 72).toString());
+        localStorage.setItem(`latestPortfolioScore${userSuffix}`, (data.data.score || 75).toString());
+        localStorage.setItem('latestPortfolioScore', (data.data.score || 75).toString());
       } else {
         setError(data.message || 'Failed to analyze portfolio.');
       }

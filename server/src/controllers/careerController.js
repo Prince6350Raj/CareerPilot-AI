@@ -1,6 +1,8 @@
+const crypto = require('crypto');
 const Roadmap = require('../models/Roadmap');
 const Resume = require('../models/Resume');
 const Progress = require('../models/Progress');
+const PortfolioAudit = require('../models/PortfolioAudit');
 const geminiService = require('../services/geminiService');
 const { logActivity } = require('../utils/activityLogger');
 
@@ -181,20 +183,59 @@ exports.getChatbotResponse = async (req, res, next) => {
   }
 };
 
-// @desc    Portfolio Reviewer
+// @desc    Portfolio Reviewer (Deterministic & Cached)
 // @route   POST /api/career/portfolio-review
 // @access  Private
 exports.getPortfolioReview = async (req, res, next) => {
   try {
     const { portfolioUrl } = req.body;
 
-    if (!portfolioUrl) {
-      return res.status(400).json({ success: false, message: 'Please provide a portfolioUrl' });
+    if (!portfolioUrl || typeof portfolioUrl !== 'string') {
+      return res.status(400).json({ success: false, message: 'Please provide a valid portfolioUrl' });
     }
 
-    const suggestions = await geminiService.getPortfolioSuggestions(portfolioUrl);
+    const trimmedUrl = portfolioUrl.trim();
+    const normalized = trimmedUrl.toLowerCase().replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/+$/, '');
+    const urlHash = crypto.createHash('sha256').update(normalized).digest('hex');
 
-    await logActivity(req.user.id, 'Portfolio Audit', `URL: ${portfolioUrl}`);
+    // 1. Check if user already audited this exact URL before
+    const existingAudit = await PortfolioAudit.findOne({
+      userId: req.user.id,
+      $or: [{ urlHash }, { portfolioUrl: trimmedUrl }]
+    }).sort({ createdAt: -1 });
+
+    let suggestions;
+    if (existingAudit && existingAudit.score) {
+      suggestions = {
+        portfolioUrl: trimmedUrl,
+        score: existingAudit.score,
+        readmeAdvice: existingAudit.readmeAdvice || [],
+        projectAdvice: existingAudit.projectAdvice || [],
+        uiAdvice: existingAudit.uiAdvice || [],
+        seoAdvice: existingAudit.seoAdvice || []
+      };
+    } else {
+      // 2. Compute deterministic portfolio audit
+      suggestions = await geminiService.getPortfolioSuggestions(trimmedUrl);
+
+      // 3. Persist to MongoDB for long-term consistency
+      try {
+        await PortfolioAudit.create({
+          userId: req.user.id,
+          portfolioUrl: trimmedUrl,
+          urlHash: urlHash,
+          score: suggestions.score || 75,
+          readmeAdvice: suggestions.readmeAdvice || [],
+          projectAdvice: suggestions.projectAdvice || [],
+          uiAdvice: suggestions.uiAdvice || [],
+          seoAdvice: suggestions.seoAdvice || []
+        });
+      } catch (saveErr) {
+        console.warn('PortfolioAudit database save warning:', saveErr.message);
+      }
+    }
+
+    await logActivity(req.user.id, 'Portfolio Audit', `URL: ${trimmedUrl} (Score: ${suggestions.score || 75}/100)`);
 
     res.status(200).json({
       success: true,
